@@ -25,6 +25,7 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import SearchIcon from '@material-ui/icons/Search';
 import AddIcon from '@material-ui/icons/Add';
+import Logo from '../../assets/images/Logo.svg'
 
 
 const drawerWidth = 325;
@@ -119,7 +120,8 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         borderRadius: '7px',
         backgroundColor: '#051D43',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        marginTop: '6em'
     },
     mainContent: {
         paddingTop: '2.5em'
@@ -132,6 +134,19 @@ const useStyles = makeStyles((theme) => ({
         marginRight: '0',
         color: '#3A66AA'
     },
+    logoContainer: {
+        position: 'absolute',
+        background: 'linear-gradient(to right bottom, rgba(26, 51, 90, 1), rgba(40, 69, 114, 1))',
+        width: '100%',
+        height: '15%'
+    },
+    logo: {
+        height: '8.5em',
+        width: '10.5em',
+        position: 'absolute',
+        marginLeft: '5.7em',
+        marginTop: '2.2em'
+    }
 }));
 
 const Main = () => {
@@ -172,13 +187,17 @@ const Main = () => {
     // Defining the structure for the drawer menu
     const drawer = (
         <div className={classes.drawer}>
+            {/* <div className={classes.logoContainer}>
+                Hello
+            </div> */}
+            <img className={classes.logo} src={Logo} alt="logo" />
             <div className={classes.workspace}>
                 <div className={classes.workspaceItem}>
                     <AddIcon style={{ height: '1.2em', width: '1.2em', color: '#3A66AA'}} />
                 </div>
             </div>
             <div className={classes.mainContent}>
-                <List style={{ color: 'white', marginTop: '4em'}}>
+                <List style={{ color: 'white', marginTop: '10em'}}>
                     <ListItem button style={{}}>
                         <ListItemIcon className={classes.menuIconColor}><QuestionAnswerIcon /></ListItemIcon>
                         <ListItemText primary='Threads' />
@@ -268,7 +287,7 @@ const Main = () => {
                             item xs={2}> 
                                 <AccountCircle className={classes.accountIcon} />
                                 <Typography
-                                style={{marginLeft: '0.5rem'}} variant='body1'>Miyu T.</Typography>
+                                style={{marginLeft: '1rem'}} variant='body1'>Miyu T.</Typography>
                             </Grid>
                         </Toolbar>
                     </AppBar>
