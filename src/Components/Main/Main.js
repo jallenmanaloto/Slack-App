@@ -26,6 +26,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import SearchIcon from '@material-ui/icons/Search';
 import AddIcon from '@material-ui/icons/Add';
 
+
 const drawerWidth = 325;
 
 const useStyles = makeStyles((theme) => ({
@@ -164,7 +165,7 @@ const Main = () => {
 
     const channelList = (
         <div className={classes.subMessages}>
-            <Typography variant='subtitle1' style={{fontSize: '0.95rem', fontWeight: 'lighter'}}># Sample</Typography>
+            <Typography variant='subtitle1' style={{fontSize: '0.95rem', fontWeight: 'lighter'}}># My Space</Typography>
         </div>
     )
 
@@ -267,7 +268,7 @@ const Main = () => {
                             item xs={2}> 
                                 <AccountCircle className={classes.accountIcon} />
                                 <Typography
-                                style={{marginLeft: '0.5rem'}} variant='body1'>Allen Manaloto</Typography>
+                                style={{marginLeft: '0.5rem'}} variant='body1'>Miyu T.</Typography>
                             </Grid>
                         </Toolbar>
                     </AppBar>
@@ -300,6 +301,8 @@ const Main = () => {
                     </Drawer>
                 </Hidden>
             </div>
+        
+        
         </div>
     )
 }
