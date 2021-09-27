@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react'
-import { makeStyles, useTheme } from '@material-ui/core/styles'
+import React, { useState, useEffect, useRef } from 'react'
+import { makeStyles } from '@material-ui/core/styles'
 import InputBase from '@material-ui/core/InputBase';
 import Button from '@material-ui/core/Button';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import SendIcon from '@material-ui/icons/Send';
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid';
@@ -16,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
         },
         height: '95vh',
         background: '#ECF0F1',
-        marginTop: '3em',
+        marginTop: '5em',
         position: 'fixed'
     },
     input: {
@@ -29,8 +28,10 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: '1%',
         marginBottom: '1rem',
         paddingLeft: '2em',
-        paddingBottom: '2em',
-        borderRadius: '4px'
+        paddingBottom: '2.5em',
+        borderRadius: '4px',
+        fontSize: '1rem',
+        outline: 'none'
     },
     sendIcon: {
         // marginRight: '2.5rem',
@@ -79,25 +80,33 @@ const useStyles = makeStyles((theme) => ({
 const Channel = () => {
 
     const classes = useStyles();
-    const [inputValue, setInputValue] = useState('');
-    const [messages, setMessages] = useState([])
-    
-    
+    const inputValue = useRef();
+    const [messages, setMessages] = useState([]);
+    const [messageStatus, setMessageStatus] = useState(false);
+    const messagesEnd = useRef();
+
+  
+    //Setting new messages appear on the display
     useEffect(() => {
-        if (localStorage.length == 0) {
+        if (localStorage.length === 0) {
             console.log('no message')
         } else {
             const message = JSON.parse(localStorage.getItem('message'))
+            scrollToBottom()
             setMessages([...message])
         }
-    }, [messages])
-    
-    const getInputValue = (e) => {
-        setInputValue(e.target.value)
+    },[messageStatus])
+
+    //function handling automatic scroll to bottom upon sending message
+    const scrollToBottom = () => {
+        messagesEnd.current.scrollIntoView({behavior: 'smooth'})
     }
+    
+    //function on sending messag
     const sendMessage = (e) => {
-        e.preventDefault();
-        messages.push(inputValue)
+        console.log(inputValue.current.value)
+        messages.push(inputValue.current.value)
+        setMessageStatus(!messageStatus)
         localStorage.setItem('message', JSON.stringify(messages))
     }
 
@@ -138,8 +147,8 @@ const Channel = () => {
                                 </Typography>
                             </div>
                             
-                            {messages.map((val) => 
-                                <div className={classes.message}>
+                            {messages.map((val, key) => 
+                                <div key={key} className={classes.message}>
                                 <img src={TMiBot} alt="bot" className={classes.user} />
                                 <div style={{display: 'flex'}}>
                                     <Typography
@@ -163,24 +172,31 @@ const Channel = () => {
                                             marginRight: '5em'}}
                                         variant='h6'>
                                         {val}
+                                        <div ref={messagesEnd} />
                                 </Typography>
-                            </div>
+                                
+                                 </div>
                             )}
                             
                         </Grid>
                     </Grid>
                 </div>
             </div>
-                <InputBase
-                onSubmit={sendMessage}
-                onChange={getInputValue}
+                {/* <InputBase
+                value={inputValue}
                 className={classes.input}
                 placeholder='Message #Channel-name'>
-                </InputBase>
+                </InputBase> */}
+                <input 
+                placeholder='Message #Channel-name'
+                className= {classes.input} 
+                ref={inputValue} 
+                type="text" />
                 <Button
                 type='submit'
                 onClick={sendMessage}
                 className={classes.button}><SendIcon className={classes.sendIcon}/></Button>
+                
         </div>
     )
 }

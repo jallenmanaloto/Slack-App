@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import AppBar from '@material-ui/core/AppBar';
@@ -10,7 +10,7 @@ import Collapse from '@material-ui/core/Collapse';
 import InputBase from '@material-ui/core/InputBase';
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
+
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -125,10 +125,6 @@ const useStyles = makeStyles((theme) => ({
     },
     mainContent: {
         paddingTop: '2.5em'
-    },
-    accountIcon: {
-        height: '2rem',
-        width: '2rem'
     },
     searchIcon: {
         marginRight: '0',
@@ -252,7 +248,7 @@ const Main = () => {
 
     return (
         <div>
-            <Grid spacing={2}> 
+            <Grid container spacing={3}> 
                     <AppBar 
                     className={classes.appBar}
                     elevation={0} 
@@ -287,7 +283,7 @@ const Main = () => {
                             item xs={2}> 
                                 <AccountCircle className={classes.accountIcon} />
                                 <Typography
-                                style={{marginLeft: '1rem'}} variant='body1'>Miyu T.</Typography>
+                                style={{marginLeft: '-3rem'}} variant='body1'>Miyu T.</Typography>
                             </Grid>
                         </Toolbar>
                     </AppBar>
