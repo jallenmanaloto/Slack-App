@@ -3,3 +3,31 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+/* body {
+  width: 100vw;
+  overflow: hidden;
+} */
+
+::-webkit-scrollbar {
+  width: 9px;
+  display: none;
+  transition: 0.8s ease-out;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(26, 51, 90, 0.363);
+  transition: 0.8s ease-out;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #233c64d8;
+  border-radius: 32.5px;
+  height: 25%;
+  transition: 0.8s ease-out;
+}
+
+.makeStyles-root-33:hover > ::-webkit-scrollbar {
+  display: block;
+  transition: 0.8s ease-out;
+}
