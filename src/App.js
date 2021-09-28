@@ -3,6 +3,7 @@ import Registration from './Components/Registration/Registration';
 import Login from './Components/Login/Login';
 import Main from './Components/Main/Main'
 import Channel from './Components/Channel/Channel';
+import HomeChannel from './Components/Channel/HomeChannel'
 
 
 function App() {
@@ -11,7 +12,7 @@ function App() {
       {/* <Registration/>
       <Login/> */}
       <Main />
-      <Channel />
+      <HomeChannel />
     </div>
   );
 }

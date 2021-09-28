@@ -1,4 +1,11 @@
 import React, { useState } from 'react';
+import { 
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+ } from 'react-router-dom';
+import AddChannelModal from '../Channel/AddChannelModal'
 import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -10,7 +17,6 @@ import Collapse from '@material-ui/core/Collapse';
 import InputBase from '@material-ui/core/InputBase';
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton';
-
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -154,6 +160,9 @@ const Main = () => {
     const [channelExpand, setChannelExpand] = useState(false)
     const [dmExpand, setDmExpand] = useState(false)
 
+    //state for the modal open
+    const [modalOpen, setModalOpen] = useState(false)
+
     //Function to handle expansion of Channel
     const handleChannelExpandToggle = () => {
         setChannelExpand(!channelExpand)
@@ -210,18 +219,21 @@ const Main = () => {
                         <ListItemIcon className={classes.menuIconColor}><MoreHorizIcon /></ListItemIcon>
                         <ListItemText primary='More' />
                     </ListItem>
-                    <ListItem onClick={handleChannelExpandToggle} button>
-                        <ListItemIcon
-                        className={classes.menuIconColor}
-                        >
-                        {channelExpand ? <ExpandMore /> : <ChevronRightIcon />}  
-                        </ListItemIcon>
-                        <ListItemText primary='Channels' />
-                    </ListItem>
+                        <ListItem onClick={handleChannelExpandToggle} button>
+                            <ListItemIcon
+                            className={classes.menuIconColor}
+                            >
+                            {channelExpand ? <ExpandMore /> : <ChevronRightIcon />}  
+                            </ListItemIcon>
+                            <ListItemText primary='Channels' />
+                        </ListItem>
                     <Collapse in={channelExpand} timeout='auto' unmountOnExit>
-                        <List>
-                            <ListItem button>
+                        <List style={{marginTop: '-0.8em'}}>
+                            <ListItem style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '2em'}} button>
                                 {channelList}
+                            </ListItem>
+                            <ListItem button onClick={() => setModalOpen(!modalOpen)}>
+                                <Typography style={{display: 'flex', alignItems: 'center', marginLeft: '5.5em', fontSize: '0.9rem', height: '1em'}}> <AddIcon />Add Channel</Typography>
                             </ListItem>
                         </List>
                     </Collapse>
@@ -242,83 +254,83 @@ const Main = () => {
                     </Collapse>
                 </List>
             </div>
-            
         </div>
     );
 
     return (
-        <div>
-            <Grid container spacing={3}> 
-                    <AppBar 
-                    className={classes.appBar}
-                    elevation={0} 
-                    backgroundColor='primary' > 
-                        <Toolbar className={classes.toolbar}>
-                            <Grid item xs={2}> 
-                                <IconButton 
-                                className={classes.menuButton}
-                                onClick={handleDrawerToggle}>
-                                    <MenuIcon style={{color: '#ECF0F1'}} />
-                                </IconButton>
-                            </Grid>
-                            <Grid item xs={7}> 
-                                <div>
-                                    <InputBase
-                                    className={classes.input}
-                                    placeholder='Search'
-                                    startAdornment={
-                                        <InputAdornment position='start'>
-                                            <SearchIcon className={classes.searchIcon} />
-                                        </InputAdornment>
-                                    } />
-                                </div>
-                            </Grid>
-                            <Grid 
-                            style={{
-                                display:'flex', 
-                                justifyContent: 'center', 
-                                marginLeft: '3em', 
-                                alignItems: 'center',
-                                cursor: 'pointer'}}
-                            item xs={2}> 
-                                <AccountCircle className={classes.accountIcon} />
-                                <Typography
-                                style={{marginLeft: '-3rem'}} variant='body1'>Miyu T.</Typography>
-                            </Grid>
-                        </Toolbar>
-                    </AppBar>
-                </Grid>
+        <Router>
             <div>
-                <Hidden smUp implementation="css">
-                    <Drawer
-                    classes={{
-                        paper: classes.drawerPaper
-                    }}
-                    variant="temporary"
-                    anchor="left"
-                    ModalProps={{
-                        keepMounted: true,
-                    }}
-                    open={mobileOpen}
-                    onClose={handleDrawerToggle}
-                    >
-                        {drawer}
-                    </Drawer>
-                </Hidden>
-                <Hidden xsDown implementation="css">
-                    <Drawer
-                    classes={{
-                        paper: classes.drawerPaper
-                    }}
-                    variant="permanent"
-                    open>
-                        {drawer}
-                    </Drawer>
-                </Hidden>
+                <Grid container spacing={3}> 
+                        <AppBar 
+                        className={classes.appBar}
+                        elevation={0} 
+                        backgroundColor='primary' > 
+                            <Toolbar className={classes.toolbar}>
+                                <Grid item xs={2}> 
+                                    <IconButton 
+                                    className={classes.menuButton}
+                                    onClick={handleDrawerToggle}>
+                                        <MenuIcon style={{color: '#ECF0F1'}} />
+                                    </IconButton>
+                                </Grid>
+                                <Grid item xs={7}> 
+                                    <div>
+                                        <InputBase
+                                        className={classes.input}
+                                        placeholder='Search'
+                                        startAdornment={
+                                            <InputAdornment position='start'>
+                                                <SearchIcon className={classes.searchIcon} />
+                                            </InputAdornment>
+                                        } />
+                                    </div>
+                                </Grid>
+                                <Grid 
+                                style={{
+                                    display:'flex', 
+                                    justifyContent: 'center', 
+                                    marginLeft: '3em', 
+                                    alignItems: 'center',
+                                    cursor: 'pointer'}}
+                                item xs={2}> 
+                                    <AccountCircle className={classes.accountIcon} />
+                                    <Typography
+                                    style={{marginLeft: '-3rem'}} variant='body1'>Miyu T.</Typography>
+                                </Grid>
+                            </Toolbar>
+                        </AppBar>
+                    </Grid>
+                <div>
+                    <Hidden smUp implementation="css">
+                        <Drawer
+                        classes={{
+                            paper: classes.drawerPaper
+                        }}
+                        variant="temporary"
+                        anchor="left"
+                        ModalProps={{
+                            keepMounted: true,
+                        }}
+                        open={mobileOpen}
+                        onClose={handleDrawerToggle}
+                        >
+                            {drawer}
+                        </Drawer>
+                    </Hidden>
+                    <Hidden xsDown implementation="css">
+                        <Drawer
+                        classes={{
+                            paper: classes.drawerPaper
+                        }}
+                        variant="permanent"
+                        open>
+                            {drawer}
+                        </Drawer>
+                    </Hidden>
+                </div>
+                {modalOpen ? <AddChannelModal setModalOpen={modalOpen}  closeModal={setModalOpen} /> : null }
             </div>
-        
-        
-        </div>
+        </Router>
     )
 }
 
