@@ -6,7 +6,6 @@ import Channel from './Components/Channel/Channel';
 import HomeChannel from './Components/Channel/HomeChannel'
 import { ContextAPI } from './Components/Context/ContextAPi';
 
-
 function App() {
   const data = {}
 
