@@ -6,6 +6,7 @@ import { Avatar } from '@material-ui/core';
 import { Button } from '@material-ui/core';
 import { Box } from '@material-ui/core';
 import { Checkbox } from '@material-ui/core';
+/* import { Dialog } from '@material-ui/core'; */
 import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core'; 
 import { Typography } from '@material-ui/core';
@@ -15,6 +16,17 @@ import TMiBot from '../../assets/images/TMiBot.svg';
 import Sample from '../../assets/images/sample.jpg';
 
 const useStyles = makeStyles((theme) => ({
+    containerBackground: {
+        overflow: 'hidden',
+        backgroundColor:'#F2ebdd',
+        height: '100vh',
+    },
+
+    sideImage: {
+        height: '100vh',
+        width: '100%',
+    },
+
     avatarOne: {
         height: '56px',
         width: '56px'
@@ -25,7 +37,8 @@ const useStyles = makeStyles((theme) => ({
         fontFamily: 'Roboto',
         fontWeight: 'bolder',
         fontStyle: 'normal',
-        margin: '15px'
+        margin: '15px',
+        alignItems: 'Left',
     },
 
     inputEmail: {
@@ -82,14 +95,15 @@ const Registration = () => {
 
    const handleRegister = (e) => {
         if (passInput.current.value !== confirmPassInput.current.value) {
-            e.preventDefault();
+
             console.log('pass mismatch');
             setErrorMsg('Passwords do not match');
             return;
         } else {
-            e.preventDefault();
-            console.log('pass matching');
+
+            console.log('pass matched');
             setErrorMsg('Accepted');
+            handleCreateAcct();
         }
     }  
 
@@ -103,18 +117,15 @@ const Registration = () => {
         }
         
         callAPI(data);   */  
-        console.log('calls API')
+
+            console.log('calls API')
+        
     }
 
 
     return (
-        <Grid container>
-            <Grid
-                container
-            >
-               <Dialog className={classes.errorMsg} >HELLO{errorMsg}</Dialog>
-               <Dialog className={classes.errorPass} >{errorPass}</Dialog>
-            </Grid>
+        <Grid container className={classes.containerBackground}>
+            
             <Grid 
                 container 
                 direction='row'
@@ -130,7 +141,7 @@ const Registration = () => {
                     md={7}
                     sx={{ }}
                 >
-                    <img src={Sample} alt='sample' height='800' width='870'/>  
+                    <img src={Sample} alt='sample' className={classes.sideImage}/>  
                 </Grid>
 
                 <Grid item xs={12} sm={8} md={5} square>
@@ -143,11 +154,17 @@ const Registration = () => {
                         alignItems: 'center'
                         }}
                     >
-                    <Avatar  className={classes.avatarOne}>
-                        <img src={TMiBot} alt='sample' />
-                    </Avatar>
-                    <Typography className={classes.headerCreate}>Create Account</Typography>
-                        
+                        <Grid   container>
+                            <Typography className={classes.errorMsg} >{errorMsg}</Typography>
+                            <Typography className={classes.errorPass} > {errorPass}</Typography>
+                        </Grid>
+
+                        <Avatar  className={classes.avatarOne}>
+                            <img src={TMiBot} alt='sample' />
+                        </Avatar>
+
+                        <Typography className={classes.headerCreate}>Create Account</Typography>
+                            
                         <TextField 
                             margin='normal'
                             size='small'
@@ -160,15 +177,6 @@ const Registration = () => {
                             ref={emailInput}
                             className={classes.inputEmail}
                         />
-
-                       {/*  <Grid 
-                        container
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center'
-                            }}
-                        > */}
 
                         <TextField 
                             margin='normal'
@@ -193,11 +201,10 @@ const Registration = () => {
                             name='password'
                             label="Confirm Password" 
                             type='password' 
-                            ref={confirmPassInput} onSubmit={(e) => handleRegister(e)}
+                            ref={confirmPassInput} 
                             className={classes.inputConfirmPassword}
                         />
 
-                        {/* </Grid> */}
                         <FormControlLabel
                             control={<Checkbox/>}
                             label="I want to receive updates via email."
@@ -208,6 +215,7 @@ const Registration = () => {
                             type='submit'
                             variant='contained'
                             className={classes.buttonSignUp}
+                            onClick={(e) => handleRegister(e)}
                         > SIGN UP </Button>
                        
                    </Box>
@@ -223,21 +231,6 @@ const Registration = () => {
                 >
                 </Grid>
             </Grid>
-
-        {/* <div>
-            <form>
-                <label>Email</label>
-                <input type='email' ref={emailInput}></input>
-                <label>Password</label>
-                <input type='password' ref={passInput} onChange={(e) => PasswordStrength(e.target.value)}></input>
-                <span style={{fontWeight: 'bold', color: 'red',}}>{errorPass}</span>
-                <label>Confirm Password</label>
-                <input type='password' ref={confirmPassInput} onChange={(e) => handleRegister(e)}></input> 
-                <Button onClick={(e) => handleCreateAcct(e)}>Submit</Button>
-
-                <span style={{fontWeight: 'bold', color: 'red',}}>{errorMsg}</span>
-            </form>
-        </div> */}
 
     </Grid>
     )

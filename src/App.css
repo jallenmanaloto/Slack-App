@@ -4,11 +4,11 @@
   box-sizing: border-box;
 }
 
- body {
+/*  body {
   width: 100vw;
   overflow: hidden;
 }  
-
+ */
 ::-webkit-scrollbar {
   width: 9px;
   display: none;
