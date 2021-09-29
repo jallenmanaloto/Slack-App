@@ -31,6 +31,6 @@
   display: none;
 }
 
-.makeStyles-root-35:hover > ::-webkit-scrollbar {
+.scroll-active:hover > ::-webkit-scrollbar {
   display: block;
 }

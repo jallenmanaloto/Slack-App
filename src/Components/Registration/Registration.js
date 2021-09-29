@@ -1,5 +1,5 @@
-import { useRef, useState, } from 'react';
-import {callAPI} from '../API/callAPI';
+import { useRef, useState, useEffect } from 'react';
+/* import {callAPI} from '../callAPI'; */ 
 import validator from 'validator';
 import { Avatar } from '@material-ui/core';
 import { Button } from '@material-ui/core';
@@ -80,6 +80,8 @@ const Registration = () => {
 
     const [errorPass, setErrorPass] = useState('')
     const [errorMsg, setErrorMsg] = useState('')
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setconfirmPassword] = useState('');
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -93,15 +95,17 @@ const Registration = () => {
 
             setErrorPass('Strong Password')
             console.log('Input Accepted (STRONG)')
+            setPassword(v)
         } else {
             setErrorPass('Weak Password')
             console.log('Input Accepted (WEAK)')
+            setPassword(v)
         }
+        console.log(password)
     }
 
    const handleRegister = () => {
         if (password.value !== confirmPassword.value) {
-
             console.log('pass mismatch');
             setErrorMsg('Passwords do not match');
             return;
@@ -195,6 +199,7 @@ const Registration = () => {
                             name='password'
                             label="Password" 
                             type='password' 
+                            value={password}
                             ref={passInput} 
                             value={password} 
                             onChange={(e) => setPassword(e.target.value)}

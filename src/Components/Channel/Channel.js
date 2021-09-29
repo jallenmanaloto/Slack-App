@@ -14,10 +14,12 @@ const useStyles = makeStyles((theme) => ({
             width: '83vw',
             marginLeft: '325px',
         },
-        height: '95vh',
+        position: 'fixed',
         background: '#ECF0F1',
-        marginTop: '5em',
-        position: 'fixed'
+        left: '0',
+        top: '64px',
+        bottom: '0',
+        right: '0'
     },
     input: {
         width: '98%',
@@ -101,7 +103,7 @@ const Channel = () => {
     const classes = useStyles();
     
     return (
-        <div className={classes.root}>
+        <div className={`${classes.root} scroll-active`}>
             <div className={classes.channelNameContainer}>
             <Typography className={classes.channelName} variant='h5'>
                     # Channel-name
@@ -125,9 +127,7 @@ const Channel = () => {
                                         This channel is for working on a project. Hold meetings, share docs, and make decisions together with your team.
                                     </Typography>
                                 </div>
-                                
                             </div>
-                            
                                 {/* {messages.map((val, key) =>  */}
                                     <div className={classes.message}>
                                         <Avatar 
