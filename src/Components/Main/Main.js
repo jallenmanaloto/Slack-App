@@ -7,6 +7,7 @@ import {
  } from 'react-router-dom';
  import axios from 'axios';
 import AddChannelModal from '../Channel/AddChannelModal'
+import HomeChannel from '../Channel/HomeChannel';
 import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -36,7 +37,7 @@ import Logo from '../../assets/images/Logo.svg'
 import Avatar from '@material-ui/core/Avatar';
 
 
-const drawerWidth = 350;
+const drawerWidth = 325;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -90,7 +91,8 @@ const useStyles = makeStyles((theme) => ({
     },
     menuIconColor: {
         color: 'white',
-        marginLeft: '1rem'
+        marginLeft: '1em',
+        marginRight: '-1.4em'
     },
     input: {
         backgroundColor: '#051D43',
@@ -111,7 +113,9 @@ const useStyles = makeStyles((theme) => ({
     },
     subMessages: {
         marginLeft: '4.5em',
-        marginTop: 0
+        marginTop: 0,
+        textDecoration: 'none',
+        color: 'white'
     },
     workspace: {
         borderRight: '1px solid rgba(220, 229, 242, 0.15)',
@@ -152,6 +156,42 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: '5.7em',
         marginTop: '2.2em'
     },
+    addChannel: {
+        display: 'flex', 
+        alignItems: 'center', 
+        marginLeft: '4em', 
+        fontSize: '0.9rem', 
+        height: '1em'
+    },
+    userDM: {
+        fontSize: '0.95rem', 
+        fontWeight: 'lighter'
+    },
+    channelList: {
+        fontSize: '0.95rem', 
+        marginLeft:'-3rem', 
+        fontWeight: 'lighter'
+    },
+    addIcon: {
+        height: '1.2em', 
+        width: '1.2em', 
+        color: '#3A66AA'
+    },
+    mySpace: {
+        display: 'flex', 
+        flexDirection: 'column', 
+        justifyContent: 'center', 
+        height: '2em', 
+        textDecoration: 'none', 
+        color: 'white'
+    },
+    myAccount: {
+        display:'flex', 
+        justifyContent: 'center', 
+        marginLeft: '3em', 
+        alignItems: 'center',
+        cursor: 'pointer'
+    }
 }));
 
 const Main = () => {
@@ -160,9 +200,6 @@ const Main = () => {
 
     //Container to store all fetched channels
     const [allChannels, setAllChannels] = useState([])
-
-    
-
     
     //Setting states
     const [mobileOpen, setMobileOpen] = useState(false)
@@ -172,6 +209,9 @@ const Main = () => {
     const [tokenValue, setTokenValue] = useState();
     const [clientVal, setClientVal] = useState();
     const [expiryVal, setExpiryVal] = useState();
+
+    const [channelName, setChannelName] = useState('');
+    const [channelID, setChannelID] = useState();
 
     useEffect(() => {
         axios({
@@ -188,7 +228,7 @@ const Main = () => {
             setAllChannels([...res.data.data])
         }))
         .catch(err => console.log(err))
-    }, [allChannels])
+    })
 
 
     //state for the modal open
@@ -210,88 +250,132 @@ const Main = () => {
 
     const userDM = (
         <div className={classes.subMessages}>
-            <Typography variant='subtitle1' style={{fontSize: '0.95rem', fontWeight: 'lighter'}}>Sample User</Typography>
+            <Typography 
+                className={classes.userDM}
+                variant='subtitle1'>
+                    Sample User
+            </Typography>
         </div>
     )
 
     const channelList = (
         <div className={classes.subMessages}>
-            <Typography variant='subtitle1' style={{fontSize: '0.95rem', marginLeft:'-3rem', fontWeight: 'lighter'}}># My Space</Typography>
+            <Typography 
+                className={classes.channelList} 
+                variant='subtitle1'>
+                    # My Space
+            </Typography>
         </div>
     )
 
     // Defining the structure for the drawer menu
     const drawer = (
         <div className={classes.drawer}>
-            {/* <div className={classes.logoContainer}>
-                Hello
-            </div> */}
             <img className={classes.logo} src={Logo} alt="logo" />
             <div className={classes.workspace}>
                 <div className={classes.workspaceItem}>
-                    <AddIcon style={{ height: '1.2em', width: '1.2em', color: '#3A66AA'}} />
+                    <AddIcon className={classes.addIcon} />
                 </div>
             </div>
-            <div className={classes.mainContent}>
-                <List style={{ color: 'white', marginTop: '10em'}}>
-                    <ListItem button style={{}}>
-                        <ListItemIcon className={classes.menuIconColor}><QuestionAnswerIcon /></ListItemIcon>
-                        <ListItemText primary='Threads' />
-                    </ListItem >
-                    <ListItem button>
-                        <ListItemIcon className={classes.menuIconColor}><InboxIcon /></ListItemIcon>
-                        <ListItemText primary='All DMs' />
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon className={classes.menuIconColor}><AlternateEmailIcon /></ListItemIcon>
-                        <ListItemText primary='Mentions' />
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon className={classes.menuIconColor}><MoreHorizIcon /></ListItemIcon>
-                        <ListItemText primary='More' />
-                    </ListItem>
-                        <ListItem onClick={handleChannelExpandToggle} button>
-                            <ListItemIcon
+            <Router>
+                <div className={classes.mainContent}>
+                    <List style={{ color: 'white', marginTop: '10em'}}>
+                        <ListItem button style={{}}>
+                            <ListItemIcon 
+                                className={classes.menuIconColor}>
+                                    <QuestionAnswerIcon />
+                            </ListItemIcon>
+                            <ListItemText primary='Threads' />
+                        </ListItem >
+                        <ListItem button>
+                            <ListItemIcon 
+                                className={classes.menuIconColor}>
+                                    <InboxIcon />
+                            </ListItemIcon>
+                            <ListItemText primary='All DMs' />
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemIcon 
+                                className={classes.menuIconColor}>
+                                    <AlternateEmailIcon />
+                            </ListItemIcon>
+                            <ListItemText primary='Mentions' />
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemIcon 
+                                className={classes.menuIconColor}>
+                                    <MoreHorizIcon />
+                            </ListItemIcon>
+                            <ListItemText primary='More' />
+                        </ListItem>
+                            <ListItem onClick={handleChannelExpandToggle} button>
+                                <ListItemIcon
+                                className={classes.menuIconColor}
+                                >
+                                {channelExpand ? <ExpandMore /> : <ChevronRightIcon />}  
+                                </ListItemIcon>
+                                <ListItemText primary='Channels' />
+                            </ListItem>
+                        <Collapse in={channelExpand} timeout='auto' unmountOnExit>
+                            <List style={{marginTop: '-0.8em'}}>
+                                <Link to='/My-Space'>
+                                    <ListItem className={classes.mySpace} button>
+                                        {channelList}
+                                    </ListItem>
+                                </Link>
+                                <Link to='/My-Space'>
+                                    {allChannels.map((val, key) => {
+                                        const getChannel = event => {
+                                            setChannelName(val.name)
+                                            setChannelID(val.id)
+                                        }
+                                        return (
+                                        <ListItem 
+                                            onClick={getChannel} 
+                                            className={classes.subMessages} 
+                                            button>
+                                                {`# ${val.name}`}
+                                        </ListItem>
+                                        )
+                                    })}
+                                </Link>
+                                <ListItem 
+                                    button 
+                                    onClick={() => setModalOpen(!modalOpen)}
+                                >
+                                    <Typography 
+                                    className={classes.addChannel}>
+                                        <AddIcon />Add Channel
+                                    </Typography>
+                                </ListItem>
+                            </List>
+                        </Collapse>
+                        <ListItem onClick={handleDmExpandToggle} button>
+                            <ListItemIcon 
                             className={classes.menuIconColor}
                             >
-                            {channelExpand ? <ExpandMore /> : <ChevronRightIcon />}  
+                                {dmExpand ? <ExpandMore /> : <ChevronRightIcon />}  
                             </ListItemIcon>
-                            <ListItemText primary='Channels' />
+                            <ListItemText primary='Direct Messages' />
                         </ListItem>
-                    <Collapse in={channelExpand} timeout='auto' unmountOnExit>
-                        <List style={{marginTop: '-0.8em', marginLeft: '-1rem'}}>
-                            <ListItem style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '2em'}} button>
-                                {channelList}
-                            </ListItem>
-                            {allChannels.map((val, key) => {
-                                console.log(val.name)
-                                return <ListItem className={classes.subMessages} button>
-                                {`# ${val.name}`}
+                        <Collapse in={dmExpand} timeout='auto' unmountOnExit>
+                            <List>
+                                <ListItem button>
+                                    {userDM}
                                 </ListItem>
-                            })}
-                            {console.log(allChannels)}
-                            <ListItem button onClick={() => setModalOpen(!modalOpen)}>
-                                <Typography  style={{display: 'flex', alignItems: 'center', marginLeft: '3.5em', fontSize: '0.9rem', height: '1em'}}> <AddIcon />Add Channel</Typography>
-                            </ListItem>
-                        </List>
-                    </Collapse>
-                    <ListItem onClick={handleDmExpandToggle} button>
-                        <ListItemIcon 
-                        className={classes.menuIconColor}
-                        >
-                            {dmExpand ? <ExpandMore /> : <ChevronRightIcon />}  
-                        </ListItemIcon>
-                        <ListItemText primary='Direct Messages' />
-                    </ListItem>
-                    <Collapse in={dmExpand} timeout='auto' unmountOnExit>
-                        <List>
-                            <ListItem button>
-                                {userDM}
-                            </ListItem>
-                        </List>
-                    </Collapse>
-                </List>
-            </div>
+                            </List>
+                        </Collapse>
+                    </List>
+                </div>
+                <Switch>
+                    <Route path='/My-Space'>
+                        <HomeChannel />
+                    </Route>
+                    <Route path='/channel/:id'>
+
+                    </Route>
+                </Switch>
+            </Router>
         </div>
     );
 
@@ -323,18 +407,17 @@ const Main = () => {
                                     </div>
                                 </Grid>
                                 <Grid 
-                                style={{
-                                    display:'flex', 
-                                    justifyContent: 'center', 
-                                    marginLeft: '3em', 
-                                    alignItems: 'center',
-                                    cursor: 'pointer'}}
-                                item xs={2}> 
+                                    className={classes.myAccount}
+                                    item xs={2}
+                                > 
                                     <Avatar 
-                                    className={classes.accountIcon}
-                                    alt='Miyu Togo' src='/broken-image.jpg' />
+                                        className={classes.accountIcon}
+                                        alt='Miyu Togo' 
+                                        src='/broken-image.jpg' />
                                     <Typography
-                                    variant='body1'>Miyu T.</Typography>
+                                    variant='body1'
+                                    >Miyu T.
+                                    </Typography>
                                 </Grid>
                             </Toolbar>
                         </AppBar>
