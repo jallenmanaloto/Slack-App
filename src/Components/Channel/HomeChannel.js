@@ -14,10 +14,12 @@ const useStyles = makeStyles((theme) => ({
             width: '83vw',
             marginLeft: '325px',
         },
-        height: '95vh',
         background: '#ECF0F1',
-        marginTop: '5em',
-        position: 'fixed'
+        position: 'fixed',
+        left: '0',
+        top: '64px',
+        bottom: '0',
+        right: '0'
     },
     input: {
         width: '98%',
@@ -113,7 +115,7 @@ const HomeChannel = () => {
     }
 
     return (
-        <div className={classes.root}>
+        <div className={`${classes.root} scroll-active`}>
             <div className={classes.channelNameContainer}>
             <Typography className={classes.channelName} variant='h5'>
                     # My Space
