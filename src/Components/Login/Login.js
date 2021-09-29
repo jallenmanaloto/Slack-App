@@ -1,22 +1,36 @@
-import { useRef } from 'react';
-import {callAPI} from '../callAPI';
+import { useRef, useState} from 'react';
+import {callAPI} from '../API/callAPI.js';
 
 
-const Login = () => {
+const Login = ({setHeaders, setData}) => {
     const emailInput = useRef()
     const passInput = useRef()
+
+    const [errorMsg, setErrorMsg] = useState('')
 
     const handleLogin = (e) => {
         e.preventDefault();
 
         const data =  {
-            method: 'post',
             url: 'auth/sign_in',
             email: emailInput.current.value,
             password: passInput.current.value
         }
-        callAPI(data);
+
+        callAPI(data)
+            /* .then((res) => {
+                setHeaders(res.headers);
+                setData(res.data.data);
+                console.log(res.headers);
+                
+                })
+
+            .catch((err) => console.err) */
+
     }
+
+
+    console.log()
 
     return (
         <div>
@@ -26,7 +40,7 @@ const Login = () => {
                 <input type='email' ref={emailInput}></input>
                 <label>Password</label>
                 <input type='password' ref={passInput}></input>
-                <button onClick={handleLogin}>Submit</button>
+                <button onClick={(e) => handleLogin(e)}>Submit</button>
             </form>
 
         </div>

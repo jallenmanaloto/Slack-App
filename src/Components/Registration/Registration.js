@@ -1,7 +1,6 @@
 import { useRef, useState, } from 'react';
-/* import {callAPI} from '../callAPI'; */ 
+import {callAPI} from '../API/callAPI';
 import validator from 'validator';
-import { Dialog } from '@material-ui/core';
 import { Avatar } from '@material-ui/core';
 import { Button } from '@material-ui/core';
 import { Box } from '@material-ui/core';
@@ -93,22 +92,22 @@ const Registration = () => {
         }
     }
 
-   const handleRegister = (e) => {
+   const handleRegister = () => {
         if (passInput.current.value !== confirmPassInput.current.value) {
 
             console.log('pass mismatch');
             setErrorMsg('Passwords do not match');
             return;
         } else {
-
             console.log('pass matched');
             setErrorMsg('Accepted');
             handleCreateAcct();
         }
     }  
 
-    const handleCreateAcct = (e) => {
-       /* const data =  {
+    const handleCreateAcct = () => {
+        
+        const data =  {
             method: 'post',
             url: 'auth',
             email: emailInput.current.value,
@@ -116,9 +115,8 @@ const Registration = () => {
             password_confirmation: confirmPassInput.current.value
         }
         
-        callAPI(data);   */  
-
-            console.log('calls API')
+        callAPI(data);
+           /*  console.log('calls API') */
         
     }
 
@@ -197,7 +195,7 @@ const Registration = () => {
                             size='small'
                             required
                             variant='outlined'
-                            id='password-register'
+                            id='confpassword-register'
                             name='password'
                             label="Confirm Password" 
                             type='password' 
@@ -232,7 +230,9 @@ const Registration = () => {
                 </Grid>
             </Grid>
 
-    </Grid>
+    </Grid> 
+    
+   
     )
 }
 
