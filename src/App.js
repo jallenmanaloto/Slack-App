@@ -9,11 +9,8 @@ import HomeChannel from './Components/Channel/HomeChannel'
 function App() {
   return (
     <div className="App">
-      {/* <Registration/> */}
-      {/* <Login/> */}
-      <Main />
-      {/* <HomeChannel /> */}
-      <Channel />
+      <Registration/>
+    {/*<Login/> */}
     </div>
   );
 }
