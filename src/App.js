@@ -9,12 +9,10 @@ import { useState } from 'react';
 
 function App() {
 
-  const [headers, setHeaders] = useState('');
-  const [data, setData] = useState('');
   return (
     <div className="App">
-    <Registration/> 
-    {/* <Login/>  */}
+    {/*  <Registration/>   */}
+     <Login/> 
     </div>
   );
 }
