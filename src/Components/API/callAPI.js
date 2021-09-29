@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-axios.defaults.baseURL = 'https://slackapi.avionschool.com/api/v1/';
+axios.defaults.baseURL = 'https://206.189.91.54/api/v1/';
 
 export const callAPI = (data) => {
     return axios({
@@ -9,9 +9,9 @@ export const callAPI = (data) => {
         data: {
             'email': data.email,
             'password': data.password,
-            'password_confirmation': data
+            'password_confirmation': data.password_confirmation,
         },
     }).then((res) => console.log(res))
-    .catch((error) => console.error)
-
+    .catch((err) => console.err) 
 };
+
