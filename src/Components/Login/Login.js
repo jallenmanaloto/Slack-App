@@ -49,6 +49,14 @@ const Login = () => {
         callAPI(data)
             .then((res) => setHeaders(res.headers))
             .catch((err) => console.err) 
+
+
+        const details = {
+            email: email,
+            password: password,
+        }
+
+        localStorage.setItem('user', JSON.stringify(details))
     }
 
     console.log(headers) 
@@ -117,7 +125,7 @@ const Login = () => {
                                 variant='contained'
                                 className={classes.buttonLogin}
                                 onClick={(e) => handleLogin(e)}
-                            > SIGN UP </Button>
+                            > LOGIN </Button>
                         
                     </Box>
                     </Grid>
