@@ -1,5 +1,13 @@
-import React, { useState } from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles'
+import React, { useState, useEffect } from 'react';
+import { 
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+ } from 'react-router-dom';
+ import axios from 'axios';
+import AddChannelModal from '../Channel/AddChannelModal'
+import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import AppBar from '@material-ui/core/AppBar';
@@ -10,7 +18,6 @@ import Collapse from '@material-ui/core/Collapse';
 import InputBase from '@material-ui/core/InputBase';
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -26,9 +33,10 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import SearchIcon from '@material-ui/icons/Search';
 import AddIcon from '@material-ui/icons/Add';
 import Logo from '../../assets/images/Logo.svg'
+import Avatar from '@material-ui/core/Avatar';
 
 
-const drawerWidth = 325;
+const drawerWidth = 350;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -96,9 +104,10 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'space-between',
     },
     accountIcon: {
-        height: '2.2rem',
-        width: '2.2rem',
-        marginRight: '2.5em'
+        height: '2rem',
+        width: '2rem',
+        marginRight: '1rem',
+        backgroundColor: 'lightcoral'
     },
     subMessages: {
         marginLeft: '4.5em',
@@ -126,10 +135,6 @@ const useStyles = makeStyles((theme) => ({
     mainContent: {
         paddingTop: '2.5em'
     },
-    accountIcon: {
-        height: '2rem',
-        width: '2rem'
-    },
     searchIcon: {
         marginRight: '0',
         color: '#3A66AA'
@@ -146,17 +151,48 @@ const useStyles = makeStyles((theme) => ({
         position: 'absolute',
         marginLeft: '5.7em',
         marginTop: '2.2em'
-    }
+    },
 }));
 
 const Main = () => {
 
     const classes = useStyles();
 
+    //Container to store all fetched channels
+    const [allChannels, setAllChannels] = useState([])
+
+    
+
+    
     //Setting states
     const [mobileOpen, setMobileOpen] = useState(false)
     const [channelExpand, setChannelExpand] = useState(false)
     const [dmExpand, setDmExpand] = useState(false)
+
+    const [tokenValue, setTokenValue] = useState();
+    const [clientVal, setClientVal] = useState();
+    const [expiryVal, setExpiryVal] = useState();
+
+    useEffect(() => {
+        axios({
+            method: 'GET',
+            url:'http://206.189.91.54/api/v1/channels',
+            headers: {
+                'access-token': tokenValue,
+                client: clientVal,
+                expiry: expiryVal,
+                uid: 'allen2.test@email.com',
+            },
+        })
+        .then((res => {
+            setAllChannels([...res.data.data])
+        }))
+        .catch(err => console.log(err))
+    }, [allChannels])
+
+
+    //state for the modal open
+    const [modalOpen, setModalOpen] = useState(false)
 
     //Function to handle expansion of Channel
     const handleChannelExpandToggle = () => {
@@ -180,7 +216,7 @@ const Main = () => {
 
     const channelList = (
         <div className={classes.subMessages}>
-            <Typography variant='subtitle1' style={{fontSize: '0.95rem', fontWeight: 'lighter'}}># My Space</Typography>
+            <Typography variant='subtitle1' style={{fontSize: '0.95rem', marginLeft:'-3rem', fontWeight: 'lighter'}}># My Space</Typography>
         </div>
     )
 
@@ -214,18 +250,28 @@ const Main = () => {
                         <ListItemIcon className={classes.menuIconColor}><MoreHorizIcon /></ListItemIcon>
                         <ListItemText primary='More' />
                     </ListItem>
-                    <ListItem onClick={handleChannelExpandToggle} button>
-                        <ListItemIcon
-                        className={classes.menuIconColor}
-                        >
-                        {channelExpand ? <ExpandMore /> : <ChevronRightIcon />}  
-                        </ListItemIcon>
-                        <ListItemText primary='Channels' />
-                    </ListItem>
+                        <ListItem onClick={handleChannelExpandToggle} button>
+                            <ListItemIcon
+                            className={classes.menuIconColor}
+                            >
+                            {channelExpand ? <ExpandMore /> : <ChevronRightIcon />}  
+                            </ListItemIcon>
+                            <ListItemText primary='Channels' />
+                        </ListItem>
                     <Collapse in={channelExpand} timeout='auto' unmountOnExit>
-                        <List>
-                            <ListItem button>
+                        <List style={{marginTop: '-0.8em', marginLeft: '-1rem'}}>
+                            <ListItem style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '2em'}} button>
                                 {channelList}
+                            </ListItem>
+                            {allChannels.map((val, key) => {
+                                console.log(val.name)
+                                return <ListItem className={classes.subMessages} button>
+                                {`# ${val.name}`}
+                                </ListItem>
+                            })}
+                            {console.log(allChannels)}
+                            <ListItem button onClick={() => setModalOpen(!modalOpen)}>
+                                <Typography  style={{display: 'flex', alignItems: 'center', marginLeft: '3.5em', fontSize: '0.9rem', height: '1em'}}> <AddIcon />Add Channel</Typography>
                             </ListItem>
                         </List>
                     </Collapse>
@@ -246,83 +292,90 @@ const Main = () => {
                     </Collapse>
                 </List>
             </div>
-            
         </div>
     );
 
     return (
-        <div>
-            <Grid spacing={2}> 
-                    <AppBar 
-                    className={classes.appBar}
-                    elevation={0} 
-                    backgroundColor='primary' > 
-                        <Toolbar className={classes.toolbar}>
-                            <Grid item xs={2}> 
-                                <IconButton 
-                                className={classes.menuButton}
-                                onClick={handleDrawerToggle}>
-                                    <MenuIcon style={{color: '#ECF0F1'}} />
-                                </IconButton>
-                            </Grid>
-                            <Grid item xs={7}> 
-                                <div>
-                                    <InputBase
-                                    className={classes.input}
-                                    placeholder='Search'
-                                    startAdornment={
-                                        <InputAdornment position='start'>
-                                            <SearchIcon className={classes.searchIcon} />
-                                        </InputAdornment>
-                                    } />
-                                </div>
-                            </Grid>
-                            <Grid 
-                            style={{
-                                display:'flex', 
-                                justifyContent: 'center', 
-                                marginLeft: '3em', 
-                                alignItems: 'center',
-                                cursor: 'pointer'}}
-                            item xs={2}> 
-                                <AccountCircle className={classes.accountIcon} />
-                                <Typography
-                                style={{marginLeft: '1rem'}} variant='body1'>Miyu T.</Typography>
-                            </Grid>
-                        </Toolbar>
-                    </AppBar>
-                </Grid>
+        <Router>
             <div>
-                <Hidden smUp implementation="css">
-                    <Drawer
-                    classes={{
-                        paper: classes.drawerPaper
-                    }}
-                    variant="temporary"
-                    anchor="left"
-                    ModalProps={{
-                        keepMounted: true,
-                    }}
-                    open={mobileOpen}
-                    onClose={handleDrawerToggle}
-                    >
-                        {drawer}
-                    </Drawer>
-                </Hidden>
-                <Hidden xsDown implementation="css">
-                    <Drawer
-                    classes={{
-                        paper: classes.drawerPaper
-                    }}
-                    variant="permanent"
-                    open>
-                        {drawer}
-                    </Drawer>
-                </Hidden>
+                <Grid container spacing={3}> 
+                        <AppBar 
+                        className={classes.appBar}
+                        elevation={0}> 
+                            <Toolbar className={classes.toolbar}>
+                                <Grid item xs={2}> 
+                                    <IconButton 
+                                    className={classes.menuButton}
+                                    onClick={handleDrawerToggle}>
+                                        <MenuIcon style={{color: '#ECF0F1'}} />
+                                    </IconButton>
+                                </Grid>
+                                <Grid item xs={7}> 
+                                    <div>
+                                        <InputBase
+                                        className={classes.input}
+                                        placeholder='Search'
+                                        startAdornment={
+                                            <InputAdornment position='start'>
+                                                <SearchIcon className={classes.searchIcon} />
+                                            </InputAdornment>
+                                        } />
+                                    </div>
+                                </Grid>
+                                <Grid 
+                                style={{
+                                    display:'flex', 
+                                    justifyContent: 'center', 
+                                    marginLeft: '3em', 
+                                    alignItems: 'center',
+                                    cursor: 'pointer'}}
+                                item xs={2}> 
+                                    <Avatar 
+                                    className={classes.accountIcon}
+                                    alt='Miyu Togo' src='/broken-image.jpg' />
+                                    <Typography
+                                    variant='body1'>Miyu T.</Typography>
+                                </Grid>
+                            </Toolbar>
+                        </AppBar>
+                    </Grid>
+                <div>
+                    <Hidden smUp implementation="css">
+                        <Drawer
+                        classes={{
+                            paper: classes.drawerPaper
+                        }}
+                        variant="temporary"
+                        anchor="left"
+                        ModalProps={{
+                            keepMounted: true,
+                        }}
+                        open={mobileOpen}
+                        onClose={handleDrawerToggle}
+                        >
+                            {drawer}    
+                        </Drawer>
+                    </Hidden>
+                    <Hidden xsDown implementation="css">
+                        <Drawer
+                        classes={{
+                            paper: classes.drawerPaper
+                        }}
+                        variant="permanent"
+                        open>
+                            {drawer}
+                        </Drawer>
+                    </Hidden>
+                </div>
+                {modalOpen 
+                ? <AddChannelModal 
+                    setModalOpen={modalOpen}  
+                    closeModal={setModalOpen}
+                    setToken={setTokenValue}
+                    setClient={setClientVal}
+                    setExpiry={setExpiryVal} /> : null }
             </div>
-        
-        
-        </div>
+        </Router>
     )
 }
 

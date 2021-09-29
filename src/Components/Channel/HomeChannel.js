@@ -60,8 +60,8 @@ const useStyles = makeStyles((theme) => ({
         marginTop: '0.8rem',
     },
     bot:{
-        height: '3em',
-        width: '3em'
+        height: '5em',
+        width: '5em'
     },
     user: {
         height: '1.7em',
@@ -76,60 +76,82 @@ const useStyles = makeStyles((theme) => ({
     button: {
         position: 'absolute',
         right: 0
-    },
-    welcomeContainer: {
-        display: 'flex',
-        flexDirection: 'column'
-    },
-    welcome: {
-        display: 'flex',
-        marginTop: '1em',
-        marginLeft: '1.8rem',
-        paddingBottom: '3em',
-        paddingTop: '50vh'
-    },
-    welcomeText: {
-        fontSize: '1.06rem',
-        color: '#3F3F3F',
-        marginLeft: '1.4em',
-        marginRight: '5em'
     }
 }));
 
-const Channel = () => {
+const HomeChannel = () => {
 
     const classes = useStyles();
+    const inputValue = useRef();
+    const [messageInput, setMessageInput] = useState('');
+    const [messages, setMessages] = useState([]);
     
+    //Setting new messages appear on the display
+    useEffect(() => {
+        if (localStorage.length === 0) {
+            return
+        } else {
+                const message = JSON.parse(localStorage.getItem('message'))
+                setMessages([...message])
+                // ref.current.scrollIntoView({behavior: 'smooth'})
+        }
+    },[])
+
+    //function to handle the value passed in the Input
+    const handleInputValue = () => {
+        setMessageInput(inputValue.current.value)
+    }
+
+    //function on sending message
+    const sendMessage = (e) => {
+        messages.push(inputValue.current.value)
+        // setMessageStatus(!messageStatus)
+        localStorage.setItem('message', JSON.stringify(messages))
+        setMessages([...messages])
+        setMessageInput('');
+        
+    }
+
     return (
         <div className={classes.root}>
             <div className={classes.channelNameContainer}>
             <Typography className={classes.channelName} variant='h5'>
-                    # Channel-name
+                    # My Space
                 </Typography>
             </div>
             <div className={classes.contentDisplay}>
                 <div className={classes.mySpace}>
+                    <Typography variant='h4' style={{fontWeight: 'bold', marginLeft: '1.8rem'}}>
+                        Hi, TMi-bot here!
+                    </Typography>
+                   
                     <Grid> 
                         <Grid item xs={12}> 
-                            <div className={classes.welcome}>
+                            <div style={{
+                                display: 'flex',
+                                marginTop: '1em',
+                                marginLeft: '1.8rem',
+                                paddingBottom: '4em'}}>
                                 <img src={TMiBot} alt="bot" className={classes.bot} />
-                                <div className={classes.welcomeContainer}>
-                                    <Typography 
-                                    className={classes.welcomeText}
-                                    variant='h6'>
-                                        This is the very beginning of the <strong># Channel-name</strong> channel
-                                    </Typography>
-                                    <Typography 
-                                    className={classes.welcomeText}
-                                    variant='h6'>
-                                        This channel is for working on a project. Hold meetings, share docs, and make decisions together with your team.
-                                    </Typography>
-                                </div>
-                                
+                                <Typography 
+                                style={{
+                                    fontSize: '1.06rem',
+                                    color: '#3F3F3F',
+                                    marginLeft: '1.4em',
+                                    marginRight: '5em'}}
+                                variant='h6'>
+                                    You're here! Hello!
+                                    <br />  <br />
+                                    This is your personal space. You can write anything in here, like a template, draft, or any of your jibber jabbers.
+                                    <br /> <br />
+                                    You may explore the app so you can get a full grasp to help you with your work as a team or as an individual.
+                                    <br /> <br />
+                                    I, however, am not a human. Just a bot (a simple bot) that can give you your daily motivation - just type <strong>/motivate</strong> in the message bar and I will give you something to get you motivated.
+                                </Typography>
                             </div>
                             
-                                {/* {messages.map((val, key) =>  */}
-                                    <div className={classes.message}>
+                                {messages.map((val, key) => 
+                                    <div key={key} className={classes.message}>
                                         <Avatar 
                                         alt='Miyu Togo'
                                         src='/broken-image.jpg'
@@ -154,10 +176,10 @@ const Channel = () => {
                                                     marginTop: '1.5rem',
                                                     marginRight: '5em'}}
                                                 variant='h6'>
-                                                {/* {val} */}
+                                                {val}
                                         </Typography>
                                     </div>
-                                {/* )} */}
+                                )}
                         </Grid>
                     </Grid>
                     <AutoScroll />
@@ -166,13 +188,16 @@ const Channel = () => {
                 <input 
                 placeholder='Message #Channel-name'
                 className= {classes.input} 
-                defaultValue=''
+                ref={inputValue} 
+                onChange={handleInputValue}
+                value={messageInput}
                 type="text" />
                 <Button
                 type='submit'
+                onClick={sendMessage}
                 className={classes.button}><SendIcon className={classes.sendIcon}/></Button>
         </div>
     )
 }
 
-export default Channel
+export default HomeChannel
