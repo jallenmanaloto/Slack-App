@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button';
 import SendIcon from '@material-ui/icons/Send';
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid';
+import Avatar from '@material-ui/core/Avatar';
 import TMiBot from '../../assets/images/TMiBot.svg'
 import AutoScroll from './AutoScroll';
 
@@ -63,8 +64,9 @@ const useStyles = makeStyles((theme) => ({
         width: '5em'
     },
     user: {
-        height: '2.4em',
-        width: '2.4em'
+        height: '1.7em',
+        width: '1.7em',
+        backgroundColor: 'lightcoral'
     },
     message: {
         display: 'flex',
@@ -83,9 +85,6 @@ const HomeChannel = () => {
     const inputValue = useRef();
     const [messageInput, setMessageInput] = useState('');
     const [messages, setMessages] = useState([]);
-    const [messageStatus, setMessageStatus] = useState(false);
-    let ref = useRef();
-
     
     //Setting new messages appear on the display
     useEffect(() => {
@@ -96,9 +95,7 @@ const HomeChannel = () => {
                 setMessages([...message])
                 // ref.current.scrollIntoView({behavior: 'smooth'})
         }
-    },[messageStatus])
-
-    
+    },[])
 
     //function to handle the value passed in the Input
     const handleInputValue = () => {
@@ -119,7 +116,7 @@ const HomeChannel = () => {
         <div className={classes.root}>
             <div className={classes.channelNameContainer}>
             <Typography className={classes.channelName} variant='h5'>
-                    My Space
+                    # My Space
                 </Typography>
             </div>
             <div className={classes.contentDisplay}>
@@ -155,11 +152,15 @@ const HomeChannel = () => {
                             
                                 {messages.map((val, key) => 
                                     <div key={key} className={classes.message}>
-                                        <img src={TMiBot} alt="bot" className={classes.user} />
+                                        <Avatar 
+                                        alt='Miyu Togo'
+                                        src='/broken-image.jpg'
+                                        className={classes.user} />
+                                        {/* <img src={TMiBot} alt="bot" className={classes.user} /> */}
                                         <div style={{display: 'flex'}}>
                                             <Typography
                                             style={{
-                                                marginLeft: '1.4em',
+                                                marginLeft: '0.8em',
                                                 fontWeight: 'bold'}}>UserName</Typography>
                                             <Typography  
                                             style={{marginLeft: '1em', color: 'rgba(50, 74, 95, 0.7)'}}
@@ -176,7 +177,6 @@ const HomeChannel = () => {
                                                     marginRight: '5em'}}
                                                 variant='h6'>
                                                 {val}
-                                                <div ref={ref} />
                                         </Typography>
                                     </div>
                                 )}

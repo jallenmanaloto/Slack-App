@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     BrowserRouter as Router,
     Switch,
     Route,
     Link
  } from 'react-router-dom';
+ import axios from 'axios';
 import AddChannelModal from '../Channel/AddChannelModal'
 import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid';
@@ -32,9 +33,10 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import SearchIcon from '@material-ui/icons/Search';
 import AddIcon from '@material-ui/icons/Add';
 import Logo from '../../assets/images/Logo.svg'
+import Avatar from '@material-ui/core/Avatar';
 
 
-const drawerWidth = 325;
+const drawerWidth = 350;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -102,9 +104,10 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'space-between',
     },
     accountIcon: {
-        height: '2.2rem',
-        width: '2.2rem',
-        marginRight: '2.5em'
+        height: '2rem',
+        width: '2rem',
+        marginRight: '1rem',
+        backgroundColor: 'lightcoral'
     },
     subMessages: {
         marginLeft: '4.5em',
@@ -148,17 +151,45 @@ const useStyles = makeStyles((theme) => ({
         position: 'absolute',
         marginLeft: '5.7em',
         marginTop: '2.2em'
-    }
+    },
 }));
 
 const Main = () => {
 
     const classes = useStyles();
 
+    //Container to store all fetched channels
+    const [allChannels, setAllChannels] = useState([])
+
+    
+
+    
     //Setting states
     const [mobileOpen, setMobileOpen] = useState(false)
     const [channelExpand, setChannelExpand] = useState(false)
     const [dmExpand, setDmExpand] = useState(false)
+
+    const [tokenValue, setTokenValue] = useState();
+    const [clientVal, setClientVal] = useState();
+    const [expiryVal, setExpiryVal] = useState();
+
+    useEffect(() => {
+        axios({
+            method: 'GET',
+            url:'http://206.189.91.54/api/v1/channels',
+            headers: {
+                'access-token': tokenValue,
+                client: clientVal,
+                expiry: expiryVal,
+                uid: 'allen2.test@email.com',
+            },
+        })
+        .then((res => {
+            setAllChannels([...res.data.data])
+        }))
+        .catch(err => console.log(err))
+    }, [allChannels])
+
 
     //state for the modal open
     const [modalOpen, setModalOpen] = useState(false)
@@ -185,7 +216,7 @@ const Main = () => {
 
     const channelList = (
         <div className={classes.subMessages}>
-            <Typography variant='subtitle1' style={{fontSize: '0.95rem', fontWeight: 'lighter'}}># My Space</Typography>
+            <Typography variant='subtitle1' style={{fontSize: '0.95rem', marginLeft:'-3rem', fontWeight: 'lighter'}}># My Space</Typography>
         </div>
     )
 
@@ -228,12 +259,19 @@ const Main = () => {
                             <ListItemText primary='Channels' />
                         </ListItem>
                     <Collapse in={channelExpand} timeout='auto' unmountOnExit>
-                        <List style={{marginTop: '-0.8em'}}>
+                        <List style={{marginTop: '-0.8em', marginLeft: '-1rem'}}>
                             <ListItem style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '2em'}} button>
                                 {channelList}
                             </ListItem>
+                            {allChannels.map((val, key) => {
+                                console.log(val.name)
+                                return <ListItem className={classes.subMessages} button>
+                                {`# ${val.name}`}
+                                </ListItem>
+                            })}
+                            {console.log(allChannels)}
                             <ListItem button onClick={() => setModalOpen(!modalOpen)}>
-                                <Typography style={{display: 'flex', alignItems: 'center', marginLeft: '5.5em', fontSize: '0.9rem', height: '1em'}}> <AddIcon />Add Channel</Typography>
+                                <Typography  style={{display: 'flex', alignItems: 'center', marginLeft: '3.5em', fontSize: '0.9rem', height: '1em'}}> <AddIcon />Add Channel</Typography>
                             </ListItem>
                         </List>
                     </Collapse>
@@ -263,8 +301,7 @@ const Main = () => {
                 <Grid container spacing={3}> 
                         <AppBar 
                         className={classes.appBar}
-                        elevation={0} 
-                        backgroundColor='primary' > 
+                        elevation={0}> 
                             <Toolbar className={classes.toolbar}>
                                 <Grid item xs={2}> 
                                     <IconButton 
@@ -293,9 +330,11 @@ const Main = () => {
                                     alignItems: 'center',
                                     cursor: 'pointer'}}
                                 item xs={2}> 
-                                    <AccountCircle className={classes.accountIcon} />
+                                    <Avatar 
+                                    className={classes.accountIcon}
+                                    alt='Miyu Togo' src='/broken-image.jpg' />
                                     <Typography
-                                    style={{marginLeft: '-3rem'}} variant='body1'>Miyu T.</Typography>
+                                    variant='body1'>Miyu T.</Typography>
                                 </Grid>
                             </Toolbar>
                         </AppBar>
@@ -314,7 +353,7 @@ const Main = () => {
                         open={mobileOpen}
                         onClose={handleDrawerToggle}
                         >
-                            {drawer}
+                            {drawer}    
                         </Drawer>
                     </Hidden>
                     <Hidden xsDown implementation="css">
@@ -328,7 +367,13 @@ const Main = () => {
                         </Drawer>
                     </Hidden>
                 </div>
-                {modalOpen ? <AddChannelModal setModalOpen={modalOpen}  closeModal={setModalOpen} /> : null }
+                {modalOpen 
+                ? <AddChannelModal 
+                    setModalOpen={modalOpen}  
+                    closeModal={setModalOpen}
+                    setToken={setTokenValue}
+                    setClient={setClientVal}
+                    setExpiry={setExpiryVal} /> : null }
             </div>
         </Router>
     )
