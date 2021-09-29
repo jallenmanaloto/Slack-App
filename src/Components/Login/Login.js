@@ -55,11 +55,13 @@ const Login = () => {
             email: email,
             password: password,
         }
-
+        
         localStorage.setItem('user', JSON.stringify(details))
+        console.log(details)
     }
 
     console.log(headers) 
+  
 
     return (
     
