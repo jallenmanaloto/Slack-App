@@ -4,16 +4,21 @@ import Login from './Components/Login/Login';
 import Main from './Components/Main/Main'
 import Channel from './Components/Channel/Channel';
 import HomeChannel from './Components/Channel/HomeChannel'
+import { ContextAPI } from './Components/Context/ContextAPi';
 
 
 function App() {
+  const data = {}
+
   return (
     <div className="App">
-      {/* <Registration/> */}
-      {/* <Login/> */}
-      <Main />
-      {/* <HomeChannel /> */}
-      <Channel />
+      <ContextAPI.Provider value={data} >
+          {/* <Registration/>
+        <Login/> */}
+        <Main />
+        <HomeChannel />
+        {/* <Channel /> */}
+      </ContextAPI.Provider>
     </div>
   );
 }
