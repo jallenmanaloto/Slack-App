@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
+import { ContextAPI } from '../Context/ContextAPi';
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button';
 import SendIcon from '@material-ui/icons/Send';
@@ -100,6 +101,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Channel = () => {
 
+    const [data, setData] = useContext(ContextAPI);
     const classes = useStyles();
     
     return (
