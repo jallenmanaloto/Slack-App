@@ -1,4 +1,5 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useContext } from 'react'
+import { ContextAPI } from '../Context/ContextAPi';
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import InputBase from '@material-ui/core/InputBase';
@@ -85,6 +86,7 @@ const useStyles = makeStyles({
 
 const AddChannelModal = ({setModalOpen, closeModal, setToken, setClient, setExpiry}) => {
 
+    const {data, setData} = useContext(ContextAPI); //fetch api responses => data.token, etc.
     const classes = useStyles();
 
     const channelName = useRef();
