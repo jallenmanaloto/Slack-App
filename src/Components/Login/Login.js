@@ -9,17 +9,52 @@ import { Typography } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
 import { FormControlLabel } from '@material-ui/core';
 import Sample from '../../assets/images/sample.jpg';
+import CatBG from '../../assets/images/CatBG.jpg';
+import Logo from '../../assets/images/Logo.svg';
+import LogReg from '../../assets/images/LogReg.svg'
 
 const useStyles = makeStyles(() => ({
     containerBackground: {
         overflow: 'hidden',
-        backgroundColor:'#F2ebdd',
+        /* backgroundColor:'#F2ebdd', */
         height: '100vh',
     },
 
-    sideImage: {
+    containerDiv: {
+        direction: 'row',
+        justifyContent: 'center',
+        alignItems: 'center' ,
+        height: '100vh',
+    },
+
+    containerLoginForm: {
+        backgroundImage: `url(${LogReg})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        height: '100VH',
+    },
+
+    sideImageContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
         height: '100vh',
         width: '100%',
+        backgroundColor: '#14106A'
+    },
+
+    img: {
+        top: '50',
+        height: '30vh',
+        width: '30%',
+    },
+
+    headerLogin: {
+        fontFamily: 'Roboto',
+        fontSize: '40px',
+        fontWeight: 'bolder',
+        textAlign: 'left',
+        margin: '15px',
+
     },
 
 
@@ -69,13 +104,10 @@ const Login = () => {
                 
                 <Grid 
                     container 
-                    direction='row'
-                    justifyContent='center' 
-                    alignItems='center' 
-                    sx={{ height: '100vh' }}
+                    className={classes.containerDiv}
                 >
 
-                    <Grid item xs={12} sm={8} md={5} square>
+                    <Grid item xs={12} sm={8} md={5} className={classes.containerLoginForm}>
                         <Box 
                             sx={{
                             my: 8,
@@ -85,11 +117,12 @@ const Login = () => {
                             alignItems: 'center'
                             }}
                         >
-
-                            <Typography className={classes.headerCreate}>Login Account</Typography>
+                            
+                            <Typography className={classes.headerLogin}>Login Account</Typography>
                                 
                             <TextField 
                                 margin='normal'
+                                size='small'
                                 required
                                 variant='outlined'
                                 id='email-login'
@@ -104,6 +137,7 @@ const Login = () => {
 
                             <TextField 
                                 margin='normal'
+                                size='small'
                                 required
                                 variant='outlined'
                                 id='password-login'
@@ -138,19 +172,11 @@ const Login = () => {
                         sm={4}
                         md={7}
                         sx={{ }}
+                        className={classes.sideImageContainer}
                     >
-                        <img src={Sample} alt='sample' className={classes.sideImage}/>  
+                        <img src={CatBG} alt='sample' className={classes.sideImage}/>  
                     </Grid>
 
-                </Grid>
-
-                <Grid
-                    container
-                >
-                    <Grid 
-                        item
-                    >
-                    </Grid>
                 </Grid>
 
             </Grid> 

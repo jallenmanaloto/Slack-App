@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-/* import {callAPI} from '../callAPI'; */ 
+import {callAPI} from '../API/callAPI'; 
 import validator from 'validator';
 import { Avatar } from '@material-ui/core';
 import { Button } from '@material-ui/core';
@@ -32,10 +32,10 @@ const useStyles = makeStyles(() => ({
     },
 
     headerCreate: {
-        fontSize: '40px',
         fontFamily: 'Roboto',
+        fontSize: '40px',
         fontWeight: 'bolder',
-        fontStyle: 'normal',
+        textAlign: 'left',
         margin: '15px',
         alignItems: 'Left',
     },
@@ -80,8 +80,6 @@ const Registration = () => {
 
     const [errorPass, setErrorPass] = useState('')
     const [errorMsg, setErrorMsg] = useState('')
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setconfirmPassword] = useState('');
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -95,11 +93,11 @@ const Registration = () => {
 
             setErrorPass('Strong Password')
             console.log('Input Accepted (STRONG)')
-            setPassword(v)
+            setPassword(password)
         } else {
             setErrorPass('Weak Password')
             console.log('Input Accepted (WEAK)')
-            setPassword(v)
+            setPassword(password)
         }
         console.log(password)
     }
@@ -129,7 +127,6 @@ const Registration = () => {
         callAPI(data); 
           
         console.log(data)
-        console.log('calls API')
         
     }
 
