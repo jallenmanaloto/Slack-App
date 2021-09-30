@@ -2,6 +2,10 @@ import React, { useState, useEffect, useRef } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button';
 import SendIcon from '@material-ui/icons/Send';
+import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
+import AttachFileIcon from '@material-ui/icons/AttachFile';
+import SentimentSatisfiedOutlinedIcon from '@material-ui/icons/SentimentSatisfiedOutlined';
+import ImageOutlinedIcon from '@material-ui/icons/ImageOutlined';
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
@@ -37,9 +41,9 @@ const useStyles = makeStyles((theme) => ({
         outline: 'none'
     },
     sendIcon: {
-        // marginRight: '2.5rem',
-        // marginTop: '4.5rem',
-        cursor: 'pointer'
+        marginRight: '1rem',
+        cursor: 'pointer',
+        color: 'rgba(43, 33, 24, 0.65)',
     },
     contentDisplay: {
         height: '77vh',
@@ -77,7 +81,21 @@ const useStyles = makeStyles((theme) => ({
     },
     button: {
         position: 'absolute',
-        right: 0
+        right: 0,
+        bottom: '4.7em'
+    },
+    messageAdornment: {
+        position: 'absolute',
+        bottom: '1.5rem',
+        left: '2.2em',
+        width: 'max-content'
+    },
+    messageIcons: {
+        color: 'rgba(43, 33, 24, 0.65)',
+        cursor: 'pointer',
+        height: '1.3rem',
+        width: '1.3rem',
+        marginLeft: '0.8rem'
     }
 }));
 
@@ -87,17 +105,17 @@ const HomeChannel = () => {
     const inputValue = useRef();
     const [messageInput, setMessageInput] = useState('');
     const [messages, setMessages] = useState([]);
-    
+
     //Setting new messages appear on the display
-    useEffect(() => {
-        if (localStorage.length === 0) {
-            return
-        } else {
-                const message = JSON.parse(localStorage.getItem('message'))
-                setMessages([...message])
-                // ref.current.scrollIntoView({behavior: 'smooth'})
-        }
-    },[])
+    // useEffect(() => {
+    //     if (localStorage.length === 0) {
+    //         return
+    //     } else {
+    //             const message = JSON.parse(localStorage.getItem('message'))
+    //             setMessages([...message])
+    //             ref.current.scrollIntoView({behavior: 'smooth'})
+    //     }
+    // })
 
     //function to handle the value passed in the Input
     const handleInputValue = () => {
@@ -111,7 +129,12 @@ const HomeChannel = () => {
         localStorage.setItem('message', JSON.stringify(messages))
         setMessages([...messages])
         setMessageInput('');
-        
+    }
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
     }
 
     return (
@@ -188,16 +211,27 @@ const HomeChannel = () => {
                 </div>
             </div>
                 <input 
-                placeholder='Message #Channel-name'
-                className= {classes.input} 
-                ref={inputValue} 
-                onChange={handleInputValue}
-                value={messageInput}
-                type="text" />
+                    placeholder='Message #Channel-name'
+                    className= {classes.input} 
+                    ref={inputValue} 
+                    onChange={handleInputValue}
+                    onKeyDown={handleKeyDown}
+                    value={messageInput}
+                    type="text" 
+                />
+                <div className={classes.messageAdornment}>
+                    <AlternateEmailIcon className={classes.messageIcons} />
+                    <ImageOutlinedIcon className={classes.messageIcons}  />
+                    <AttachFileIcon className={classes.messageIcons}  />
+                    <SentimentSatisfiedOutlinedIcon className={classes.messageIcons}  />
+                </div>
                 <Button
-                type='submit'
-                onClick={sendMessage}
-                className={classes.button}><SendIcon className={classes.sendIcon}/></Button>
+                    type='submit'
+                    onClick={sendMessage}
+                    className={classes.button}
+                >
+                <SendIcon className={classes.sendIcon}/>
+                </Button>
         </div>
     )
 }
