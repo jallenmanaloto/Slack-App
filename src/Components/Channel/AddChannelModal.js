@@ -86,7 +86,7 @@ const useStyles = makeStyles({
 
 const AddChannelModal = ({setModalOpen, closeModal, setToken, setClient, setExpiry}) => {
 
-    const {data, setData} = useContext(ContextAPI); //fetch api responses => data.token, etc.
+    const {apiData, setApiData} = useContext(ContextAPI); //fetch api responses => data.token, etc.
     const classes = useStyles();
 
     const channelName = useRef();
@@ -99,16 +99,6 @@ const AddChannelModal = ({setModalOpen, closeModal, setToken, setClient, setExpi
     const [headerPrivate, setheaderPrivate] = useState(false);
     const [privateDetails, setPrivateDetails] = useState(false);
     const [lockIcon, setLockIcon] = useState(false);
-
-    const [tokenValue, setTokenValue] = useState();
-    const [clientVal, setClientVal] = useState();
-    const [expiryVal, setExpiryVal] = useState();
-
-    const fetchCredentials = () => {
-        setToken(tokenValue)
-        setClient(clientVal)
-        setExpiry(expiryVal)
-    }
 
     //function to handle closing of Add Channel modal
     const handleClose = () => {
@@ -143,40 +133,20 @@ const AddChannelModal = ({setModalOpen, closeModal, setToken, setClient, setExpi
             method: 'POST',
             url:'http://206.189.91.54/api/v1/channels',
             headers: {
-                'access-token': tokenValue,
-                client: clientVal,
-                expiry: expiryVal,
-                uid: 'allen2.test@email.com',
+                'access-token': apiData.token,
+                client: apiData.client,
+                expiry: apiData.expiry,
+                uid: apiData.uid,
             },
             data: {
                 name: nameInputValue,
-                user_ids: ['allen2.test@email.com']
+                user_ids: [apiData.uid]
             }
         })
         .then(res => console.log(res))
         .catch(err => console.log(err))
     }
 
-    const allChannels = (e) => {
-        e.preventDefault();
-        handleClose();
-        axios({
-            method: 'GET',
-            url:'http://206.189.91.54/api/v1/channels',
-            headers: {
-                'access-token': tokenValue,
-                client: clientVal,
-                expiry: expiryVal,
-                uid: 'allen2.test@email.com',
-            },
-            data: {
-                name: nameInputValue,
-                user_ids: ['allen2.test@email.com']
-            }
-        })
-        .then(res => console.log(res))
-        .catch(err => console.log(err))
-    }
 
     const login = (e) => {
         e.preventDefault();
@@ -189,14 +159,17 @@ const AddChannelModal = ({setModalOpen, closeModal, setToken, setClient, setExpi
             }
         })
         .then(res => {
-            const {'access-token': token, client, expiry} = res.headers;
-            setTokenValue(token)
-            setClientVal(client)
-            setExpiryVal(expiry)
-            console.log(res.headers)
+            const {'access-token': token, client, expiry, uid} = res.headers;
+            setApiData({token, client, expiry, uid})
+            console.log(apiData)
+            console.log(apiData.token)
+            console.log(apiData.client)
+            console.log(apiData.expiry)
+            console.log(apiData.uid)
         })
         .catch(err => console.log(err))
     }
+    
     
     //creating component for the modal
     const body = (
@@ -275,7 +248,7 @@ const AddChannelModal = ({setModalOpen, closeModal, setToken, setClient, setExpi
                 </form>
                 <button 
                     className={classes.button}
-                    onClick={fetchCredentials}
+                    onClick={createChannel}
                 >Create</button>
                 <InfoOutlinedIcon className={classes.infoIcon} />
             </div>

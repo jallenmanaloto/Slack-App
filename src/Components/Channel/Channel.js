@@ -38,8 +38,6 @@ const useStyles = makeStyles((theme) => ({
         outline: 'none'
     },
     sendIcon: {
-        // marginRight: '2.5rem',
-        // marginTop: '4.5rem',
         cursor: 'pointer'
     },
     contentDisplay: {
@@ -101,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Channel = () => {
 
-    const [data, setData] = useContext(ContextAPI);
+    const {apiData, setApiData} = useContext(ContextAPI);
     const classes = useStyles();
     
     return (
@@ -123,7 +121,7 @@ const Channel = () => {
                                     variant='h6'>
                                         This is the very beginning of the <strong># Channel-name</strong> channel
                                     </Typography>
-                                    <Typography 
+                                    <Typography >
                                     className={classes.welcomeText}
                                     variant='h6'>
                                         This channel is for working on a project. Hold meetings, share docs, and make decisions together with your team.
