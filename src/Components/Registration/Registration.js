@@ -1,20 +1,20 @@
 import { useRef, useState, useEffect } from 'react';
-/* import {callAPI} from '../callAPI'; */ 
+import {callAPI} from '../API/callAPI'; 
 import validator from 'validator';
 import { Avatar } from '@material-ui/core';
 import { Button } from '@material-ui/core';
 import { Box } from '@material-ui/core';
 import { Checkbox } from '@material-ui/core';
-/* import { Dialog } from '@material-ui/core'; */
 import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core'; 
 import { Typography } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
+/* import { Dialog } from '@material-ui/core'; */
 import { FormControlLabel } from '@material-ui/core';
 import TMiBot from '../../assets/images/TMiBot.svg';
 import Sample from '../../assets/images/sample.jpg';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     containerBackground: {
         overflow: 'hidden',
         backgroundColor:'#F2ebdd',
@@ -32,10 +32,10 @@ const useStyles = makeStyles((theme) => ({
     },
 
     headerCreate: {
-        fontSize: '40px',
         fontFamily: 'Roboto',
+        fontSize: '40px',
         fontWeight: 'bolder',
-        fontStyle: 'normal',
+        textAlign: 'left',
         margin: '15px',
         alignItems: 'Left',
     },
@@ -80,27 +80,30 @@ const Registration = () => {
 
     const [errorPass, setErrorPass] = useState('')
     const [errorMsg, setErrorMsg] = useState('')
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setconfirmPassword] = useState('');
 
-    const PasswordStrength = (v) => {
-        if (validator.isStrongPassword(v, { minLength: 8, minLowercase: 1, minUppercase: 1, minSymbols: 1, minNumbers: 1,}))
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+
+    const handlePasswordStrength = (password) => {
+        if (validator.isStrongPassword(password, 
+            { minLength: 8, minLowercase: 1, minUppercase: 1, 
+              minSymbols: 1, minNumbers: 1,}))
         {
+
             setErrorPass('Strong Password')
             console.log('Input Accepted (STRONG)')
-            setPassword(v)
+            setPassword(password)
         } else {
             setErrorPass('Weak Password')
             console.log('Input Accepted (WEAK)')
-            setPassword(v)
+            setPassword(password)
         }
         console.log(password)
     }
 
-   const handleRegister = (e) => {
-        if (password !== confirmPassword) {
-
-
+   const handleRegister = () => {
+        if (password.value !== confirmPassword.value) {
             console.log('pass mismatch');
             setErrorMsg('Passwords do not match');
             return;
@@ -113,16 +116,17 @@ const Registration = () => {
 
     const handleCreateAcct = () => {
         
-        const data =  {
+         const data =  {
             method: 'post',
             url: 'auth',
-            email: emailInput.current.value,
-            password: passInput.current.value,
-            password_confirmation: confirmPassInput.current.value
+            email: email,
+            password: password,
+            password_confirmation: confirmPassword
         }
         
-        callAPI(data);
-           /*  console.log('calls API') */
+        callAPI(data); 
+          
+        console.log(data)
         
     }
 
@@ -171,7 +175,6 @@ const Registration = () => {
                             
                         <TextField 
                             margin='normal'
-                            size='small'
                             required
                             variant='outlined'
                             id='email-register'
@@ -179,12 +182,14 @@ const Registration = () => {
                             label='Email'
                             type='email' 
                             ref={emailInput}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             className={classes.inputEmail}
                         />
 
+
                         <TextField 
                             margin='normal'
-                            size='small'
                             required
                             variant='outlined'
                             id='password-register'
@@ -193,22 +198,22 @@ const Registration = () => {
                             type='password' 
                             value={password}
                             ref={passInput} 
-                            onChange={(e) => PasswordStrength(e.target.value)}
+                            value={password} 
+                            onChange={(e) => setPassword(e.target.value)}
                             className={classes.inputPassword}
                         />
 
                         <TextField 
                             margin='normal'
-                            size='small'
                             required
                             variant='outlined'
                             id='confpassword-register'
                             name='password'
                             label="Confirm Password" 
                             type='password' 
+                            ref={confirmPassInput}
                             value={confirmPassword}
-                            ref={confirmPassInput} 
-                            onChange={(event) => setconfirmPassword(event.target.value)}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
                             className={classes.inputConfirmPassword}
                         />
 
