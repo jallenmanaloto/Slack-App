@@ -12,9 +12,13 @@ export const callAPI = (data) => {
             'password': data.password,
             'password_confirmation': data.password_confirmation,
         },
-    }).then((res) => {
-        
+        headers: {
+            'access-tokens': data['access-tokens'],
+            uid: data.uid,
+            expiry: data.expiry,
+            client: data.client,
+        },
     })
-    .catch((err) => console.err) 
 };
+
 
