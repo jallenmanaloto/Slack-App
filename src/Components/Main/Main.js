@@ -38,7 +38,7 @@ import Logo from '../../assets/images/Logo.svg'
 import Avatar from '@material-ui/core/Avatar';
 import Channel from '../Channel/Channel';
 import { ContextAPI } from '../Context/ContextAPi';
-import { ContextChannel } from '../Context/ContextChannel'
+
 
 
 const drawerWidth = 325;
@@ -203,6 +203,7 @@ const useStyles = makeStyles((theme) => ({
 const Main = () => {
 
     const classes = useStyles();
+    const history = useHistory();
     const {apiData, setApiData, apiHeaders, setApiHeaders, tokenValue, setTokenValue, channelData, setChannelData} = useContext(ContextAPI);
 
     //Container to store all fetched channels
@@ -228,9 +229,15 @@ const Main = () => {
         .then((res => {
             setAllChannels([...res.data.data])
             console.log(res)
+            console.log(tokenValue)
+            console.log(apiHeaders.client)
+            console.log(apiHeaders.expiry)
+            console.log(apiData.data?.data?.uid)
         }))
-        .catch(err => console.log(err))
-    }, [allChannels])
+        .catch(err => {
+            console.log(err)
+        })
+    })
 
     //state for the modal open
     const [modalOpen, setModalOpen] = useState(false)
