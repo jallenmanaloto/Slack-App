@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from 'react'
+import React, { useState, useContext } from 'react'
 import { ContextAPI } from '../Context/ContextAPi';
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button';
@@ -8,6 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import TMiBot from '../../assets/images/TMiBot.svg'
 import AutoScroll from './AutoScroll';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -99,14 +100,14 @@ const useStyles = makeStyles((theme) => ({
 
 const Channel = () => {
 
-    const {apiData, setApiData} = useContext(ContextAPI);
+    const {apiData, setApiData, apiHeaders, setApiHeaders, tokenValue, setTokenValue, channelData, setChannelData} = useContext(ContextAPI);
     const classes = useStyles();
     
     return (
         <div className={`${classes.root} scroll-active`}>
             <div className={classes.channelNameContainer}>
-            <Typography className={classes.channelName} variant='h5'>
-                    # Channel-name
+                <Typography className={classes.channelName} variant='h5'>
+                   {`# ${channelData.name}`}
                 </Typography>
             </div>
             <div className={classes.contentDisplay}>
@@ -119,11 +120,12 @@ const Channel = () => {
                                     <Typography 
                                     className={classes.welcomeText}
                                     variant='h6'>
-                                        This is the very beginning of the <strong># Channel-name</strong> channel
+                                        This is the very beginning of the <strong>channelname</strong> channel
                                     </Typography>
-                                    <Typography >
+                                    <Typography
                                     className={classes.welcomeText}
-                                    variant='h6'>
+                                    variant='h6'
+                                    >
                                         This channel is for working on a project. Hold meetings, share docs, and make decisions together with your team.
                                     </Typography>
                                 </div>

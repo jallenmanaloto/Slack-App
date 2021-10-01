@@ -10,26 +10,28 @@ import { ContextAPI } from './Components/Context/ContextAPi';
 
 function App() {
   const [apiData, setApiData] = useState({});
-  const [user, setUser] = useState();
+  const [apiHeaders, setApiHeaders] = useState();
+  const [tokenValue, setTokenValue] = useState();
+  const [channelData, setChannelData] = useState();
 
-  console.log(user)
+  const [user, setUser] = useState(localStorage.getItem('user'));
 
   return (
     <div className="App">
-      <ContextAPI.Provider value={{apiData, setApiData}} >
-        <Router>
-          <Switch>
-              <Route exact path='/' component={Login}>
-                  <Login />
-              </Route>
-              <Route exact path='/dashboard' component={Main}>
-                  <Main />
-              </Route>
-              <Route exact path='/dashboard/channel' component={Channel}>
-                  <Channel />
-              </Route>
-            </Switch>
-        </Router>
+      <ContextAPI.Provider value={{apiData, setApiData, apiHeaders, setApiHeaders, tokenValue, setTokenValue, channelData, setChannelData}} >
+          <Router>
+            <Switch>
+                <Route exact path='/' component={Login}>
+                    <Login setUser={setUser} />
+                </Route>
+                <Route exact path='/dashboard' component={Main}>
+                    <Main />
+                </Route>
+                <Route exact path='/dashboard/channel' component={Channel}>
+                    <Channel />
+                </Route>
+              </Switch>
+          </Router>
       </ContextAPI.Provider>
     </div>
   );

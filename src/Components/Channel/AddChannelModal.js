@@ -148,33 +148,28 @@ const AddChannelModal = ({setModalOpen, closeModal, setToken, setClient, setExpi
     }
 
 
-    const login = (e) => {
-        e.preventDefault();
-        axios({
-            method: 'POST',
-            url:'http://206.189.91.54/api/v1/auth/sign_in',
-            data: {
-                email: 'allen2.test@email.com',
-                password: 'password2'
-            }
-        })
-        .then(res => {
-            const {'access-token': token, client, expiry, uid} = res.headers;
-            setApiData({token, client, expiry, uid})
-            console.log(apiData)
-            console.log(apiData.token)
-            console.log(apiData.client)
-            console.log(apiData.expiry)
-            console.log(apiData.uid)
-        })
-        .catch(err => console.log(err))
-    }
+    // const login = (e) => {
+    //     e.preventDefault();
+    //     axios({
+    //         method: 'POST',
+    //         url:'http://206.189.91.54/api/v1/auth/sign_in',
+    //         data: {
+    //             email: 'allen2.test@email.com',
+    //             password: 'password2'
+    //         }
+    //     })
+    //     .then(res => {
+    //         const {'access-token': token, client, expiry, uid} = res.headers;
+    //         setApiData({token, client, expiry, uid})
+    //     })
+    //     .catch(err => console.log(err))
+    // }
     
     
     //creating component for the modal
     const body = (
         <div className={classes.root}>
-            <button onClick={login}>log In</button>
+            <button>log In</button>
             <CloseIcon className={classes.closeButton} onClick={handleClose} />
             <div style={{margin: '1.6em 2.9em'}}>
                 <h1 className={classes.header}>Create a {headerPrivate ? 'private ' : null}channel</h1>
