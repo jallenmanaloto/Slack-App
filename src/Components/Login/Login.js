@@ -65,6 +65,7 @@ const Login = () => {
 
     const emailInput = useRef()
     const passInput = useRef()
+    const {apiData, setApiData, apiHeaders, setApiHeaders, tokenValue, setTokenValue} = useContext(ContextAPI);
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -73,6 +74,20 @@ const Login = () => {
 
     const handleLogin = (e) => {
         e.preventDefault();
+        axios({
+            method: 'POST',
+            url:'http://206.189.91.54/api/v1/auth/sign_in',
+            data: {
+                email: emailInput.current.value,
+                password: passInput.current.value
+            }
+        })
+        .then(res => {
+            const { headers } = res
+            const { 'access-token': token} = res.headers
+            setApiData(res)
+            setApiHeaders(headers)
+            setTokenValue(token)
 
         const data =  {
             method: 'post',
@@ -96,9 +111,8 @@ const Login = () => {
     }
 
     console.log(headers) 
-  
-
-    return (
+ 
+      return (
     
             <Grid container className={classes.containerBackground}>
                 

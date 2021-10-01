@@ -38,6 +38,7 @@ import Logo from '../../assets/images/Logo.svg'
 import Avatar from '@material-ui/core/Avatar';
 import Channel from '../Channel/Channel';
 import { ContextAPI } from '../Context/ContextAPi';
+import { ContextChannel } from '../Context/ContextChannel'
 
 
 const drawerWidth = 325;
@@ -202,7 +203,7 @@ const useStyles = makeStyles((theme) => ({
 const Main = () => {
 
     const classes = useStyles();
-    const {apiData, setApiData} = useContext(ContextAPI);
+    const {apiData, setApiData, apiHeaders, setApiHeaders, tokenValue, setTokenValue, channelData, setChannelData} = useContext(ContextAPI);
 
     //Container to store all fetched channels
     const [allChannels, setAllChannels] = useState([])
@@ -212,30 +213,24 @@ const Main = () => {
     const [channelExpand, setChannelExpand] = useState(false)
     const [dmExpand, setDmExpand] = useState(false)
 
-    const [tokenValue, setTokenValue] = useState();
-    const [clientVal, setClientVal] = useState();
-    const [expiryVal, setExpiryVal] = useState();
-
-    const [channelName, setChannelName] = useState('');
-    const [channelID, setChannelID] = useState();
 
     useEffect(() => {
         axios({
             method: 'GET',
             url:'http://206.189.91.54/api/v1/channels',
             headers: {
-                'access-token': apiData.token,
-                client: apiData.client,
-                expiry: apiData.expiry,
-                uid: 'allen2.test@email.com',
+                'access-token': tokenValue,
+                client: apiHeaders.client,
+                expiry: apiHeaders.expiry,
+                uid: apiData.data?.data?.uid,
             },
         })
         .then((res => {
             setAllChannels([...res.data.data])
+            console.log(res)
         }))
         .catch(err => console.log(err))
-    })
-
+    }, [allChannels])
 
     //state for the modal open
     const [modalOpen, setModalOpen] = useState(false)
@@ -331,13 +326,13 @@ const Main = () => {
                                 </Link>
                                 <Link style={{textDecoration: 'none'}} to='/dashboard/channel'>
                                     {allChannels.map((val, key) => {
-                                        const getChannel = event => {
-                                            setChannelName(val.name)
-                                            setChannelID(val.id)
+                                        const getChannelData = (e) => {
+                                            console.log(val.name)
+                                            setChannelData(val)
                                         }
                                         return (
                                         <ListItem 
-                                            onClick={getChannel} 
+                                            onClick={getChannelData}
                                             className={classes.subMessages} 
                                             button>
                                                 {`# ${val.name}`}
@@ -374,7 +369,6 @@ const Main = () => {
                     </List>
                 </div>
                 <Switch>
-                    <Route path='/dashboard/my-space' component={HomeChannel} />
                     <Route path='/dashboard/channel' component={Channel} />
                 </Switch>
             </Router>
@@ -417,7 +411,8 @@ const Main = () => {
                                     src='/broken-image.jpg' />
                                 <Typography
                                 variant='body1'
-                                >Miyu T.
+                                >
+                                    sopme
                                 </Typography>
                             </Grid>
                         </Toolbar>
@@ -454,10 +449,9 @@ const Main = () => {
             {modalOpen 
             ? <AddChannelModal 
                 setModalOpen={modalOpen}  
-                closeModal={setModalOpen}
-                setToken={setTokenValue}
-                setClient={setClientVal}
-                setExpiry={setExpiryVal} /> : null }
+                closeModal={setModalOpen} /> 
+            : null }
+            <HomeChannel />
         </div>
     )
 }
