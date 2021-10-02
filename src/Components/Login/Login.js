@@ -1,6 +1,7 @@
 import { useRef, useState, useContext} from 'react';
 import { useHistory } from 'react-router';
 import { callAPI } from '../API/callAPI.js';
+import { Breakpoint } from '@material-ui/core/styles/createBreakpoints';
 import { ContextAPI } from '../Context/ContextAPi.js';
 import { Button } from '@material-ui/core';
 import { Box } from '@material-ui/core';
@@ -13,12 +14,12 @@ import { FormControlLabel } from '@material-ui/core';
 import Sample from '../../assets/images/sample.jpg';
 import CatBG from '../../assets/images/CatBG.jpg';
 import Logo from '../../assets/images/Logo.svg';
-import LogReg from '../../assets/images/LogReg.svg'
 
 const useStyles = makeStyles(() => ({
+    
     containerBackground: {
         overflow: 'hidden',
-        /* backgroundColor:'#F2ebdd', */
+        backgroundColor:'#F2ebdd',
         height: '100vh',
     },
 
@@ -29,36 +30,53 @@ const useStyles = makeStyles(() => ({
         height: '100vh',
     },
 
-    containerLoginForm: {
-        backgroundImage: `url(${LogReg})`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
-        height: '100VH',
-    },
-
     sideImageContainer: {
         alignItems: 'center',
         justifyContent: 'center',
         height: '100vh',
-        width: '100%',
-        backgroundColor: '#14106A'
+        width: '100vw',
     },
 
-    img: {
-        top: '50',
-        height: '30vh',
-        width: '30%',
+    sideImage: {
+        height: '100vh',
+        width: '60vw',
     },
 
     headerLogin: {
         fontFamily: 'Roboto',
-        fontSize: '40px',
+        fontSize: '3.5em',
         fontWeight: 'bolder',
         textAlign: 'left',
         margin: '15px',
-
     },
 
+    input: {
+        width: '70%',
+        margin: '10px',
+    },
+
+    buttonLogin: {
+        margin: '10px',
+        fontSize: '1.2em',
+    },
+
+    footerContainer: {
+        margin: '10px',
+        direction: 'row',
+        justifyContent: 'center' ,
+        alignItems: 'center' ,
+    },
+
+    footerOne: {
+        marginTop: '10px',
+        marginRight: '10px',
+        fontSize: '1em',
+    },
+
+    footerTwo: {
+        marginTop: '10px',
+        fontSize: '1em',
+    },
 
 }));
 
@@ -97,7 +115,6 @@ const Login = () => {
                 email: email,
                 password: password,
         }
-
             callAPI(data)
                 .then((res) => {
                     const { 'access-token': token } = res.headers
@@ -114,7 +131,7 @@ const Login = () => {
                 email: email,
                 password: password,
             }
-        
+       
             localStorage.setItem('user', JSON.stringify(details))
     }
 
@@ -134,7 +151,9 @@ const Login = () => {
                             alignItems: 'center'
                             }}
                         >
-                            <Typography className={classes.headerLogin}>Login Account</Typography>
+                           
+                            <Typography className={classes.headerLogin}>Sign In</Typography>
+
                             <TextField 
                                 margin='normal'
                                 size='small'
@@ -147,7 +166,7 @@ const Login = () => {
                                 ref={emailInput}
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className={classes.inputEmail}
+                                className={classes.input}
                             />
                             <TextField 
                                 margin='normal'
@@ -161,12 +180,12 @@ const Login = () => {
                                 ref={passInput} 
                                 value={password} 
                                 onChange={(e) => setPassword(e.target.value)}
-                                className={classes.inputPassword}
+                                className={classes.input}
                             />
 
                             <FormControlLabel
                                 control={<Checkbox/>}
-                                label="Remember Me"
+                                label="Keep me logged in"
                                 className={classes.remember}
                             />
 
@@ -176,7 +195,14 @@ const Login = () => {
                                 className={classes.buttonLogin}
                                 onClick={(e) => handleLogin(e)}
                             > LOGIN </Button>
-                        </Box>
+                       
+                            <Grid container  className={classes.footerContainer}>
+                                <Typography className={classes.footerOne}> Don't have an account? </Typography>
+                                <Typography className={classes.footerTwo}> Sign up</Typography>
+                            </Grid>
+                            
+
+                    </Box>
                     </Grid>
                     <Grid 
                         item
@@ -210,7 +236,6 @@ const Login = () => {
             </form>
 
             </div> */
-
     )
 }
 
