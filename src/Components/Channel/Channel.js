@@ -1,13 +1,18 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useEffect, useContext, useRef } from 'react'
 import { ContextAPI } from '../Context/ContextAPi';
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button';
 import SendIcon from '@material-ui/icons/Send';
+import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
+import AttachFileIcon from '@material-ui/icons/AttachFile';
+import SentimentSatisfiedOutlinedIcon from '@material-ui/icons/SentimentSatisfiedOutlined';
+import ImageOutlinedIcon from '@material-ui/icons/ImageOutlined';
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import TMiBot from '../../assets/images/TMiBot.svg'
 import AutoScroll from './AutoScroll';
+import axios from 'axios';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -95,13 +100,107 @@ const useStyles = makeStyles((theme) => ({
         color: '#3F3F3F',
         marginLeft: '1.4em',
         marginRight: '5em'
+    },
+    messageAdornment: {
+        position: 'absolute',
+        bottom: '1.5rem',
+        left: '2.2em',
+        width: 'max-content'
+    },
+    messageIcons: {
+        color: 'rgba(43, 33, 24, 0.65)',
+        cursor: 'pointer',
+        height: '1.3rem',
+        width: '1.3rem',
+        marginLeft: '0.8rem'
     }
 }));
 
 const Channel = () => {
 
-    const {apiData, setApiData, apiHeaders, setApiHeaders, tokenValue, setTokenValue, channelData, setChannelData} = useContext(ContextAPI);
+    // declaring values for context
+    const {
+        apiData, 
+        setApiData, 
+        apiHeaders, 
+        setApiHeaders, 
+        tokenValue, 
+        setTokenValue, 
+        channelData, 
+        setChannelData
+    } = useContext(ContextAPI);
+
     const classes = useStyles();
+    const inputValue = useRef();
+    const messageView = useRef();
+    const [messageInput, setMessageInput] = useState('');
+    const [newMessage, setNewMessage] = useState(false);
+    const [messages, setMessages] = useState([]);
+
+    useEffect(() => {
+        messageView.current.scrollIntoView();
+    }, [messageInput])
+
+    // retrieving messages on a channel
+    useEffect(() => {
+        axios({
+            method: 'GET',
+            url:`http://206.189.91.54/api/v1/messages?receiver_id=${channelData.id}&receiver_class=Channel`,
+            headers: {
+                'access-token': tokenValue,
+                client: apiHeaders.client,
+                expiry: apiHeaders.expiry,
+                uid: apiData.data?.data?.uid,
+            },
+            params: {
+                receiver_id: channelData.data?.data?.id,
+                receiver_class: 'Channel'
+            }
+        })
+        .then(res => {
+            setMessages(res.data.data)
+            
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }, [newMessage])
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    }
+
+    const handleInputValues = () => {
+        setMessageInput(inputValue.current.value)
+    }
+
+    const sendMessage = (e) => {
+        //push the input value to api
+        axios({
+            method: 'POST',
+            url: 'http://206.189.91.54/api/v1/messages',
+            headers: {
+                'access-token': tokenValue,
+                client: apiHeaders.client,
+                expiry: apiHeaders.expiry,
+                uid: apiData.data?.data?.uid,
+            },
+            data: {
+                receiver_id: channelData.id,
+                receiver_class: 'Channel',
+                body: messageInput
+            }
+        })
+        .then(res => {
+            console.log(res)
+            console.log(channelData.id)
+            console.log(messageInput)
+            setNewMessage(!newMessage)
+        })
+        .catch(err => console.log(err))
+    }
     
     return (
         <div className={`${classes.root} scroll-active`}>
@@ -130,7 +229,7 @@ const Channel = () => {
                                     </Typography>
                                 </div>
                             </div>
-                                {/* {messages.map((val, key) =>  */}
+                                {messages.map((val, key) => 
                                     <div className={classes.message}>
                                         <Avatar 
                                         alt='Miyu Togo'
@@ -156,23 +255,37 @@ const Channel = () => {
                                                     marginTop: '1.5rem',
                                                     marginRight: '5em'}}
                                                 variant='h6'>
-                                                {/* {val} */}
+                                                {val.body}
                                         </Typography>
                                     </div>
-                                {/* )} */}
+                                )}
                         </Grid>
                     </Grid>
-                    <AutoScroll />
+                    <div ref={messageView}></div>
+                    {/* <AutoScroll /> */}
                 </div>
             </div>
                 <input 
-                placeholder='Message #Channel-name'
-                className= {classes.input} 
-                defaultValue=''
-                type="text" />
+                    placeholder='Message #Channel-name'
+                    className= {classes.input} 
+                    ref={inputValue}
+                    onChange={handleInputValues}
+                    onKeyDown={handleKeyDown}
+                    value={messageInput}
+                    type="text" 
+                />
+                <div className={classes.messageAdornment}>
+                    <AlternateEmailIcon className={classes.messageIcons} />
+                    <ImageOutlinedIcon className={classes.messageIcons}  />
+                    <AttachFileIcon className={classes.messageIcons}  />
+                    <SentimentSatisfiedOutlinedIcon className={classes.messageIcons}  />
+                </div>
                 <Button
                 type='submit'
-                className={classes.button}><SendIcon className={classes.sendIcon}/></Button>
+                onClick={sendMessage}
+                className={classes.button}>
+                    <SendIcon className={classes.sendIcon} />
+                </Button>
         </div>
     )
 }

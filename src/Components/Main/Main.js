@@ -141,7 +141,8 @@ const useStyles = makeStyles((theme) => ({
         marginTop: '6em'
     },
     mainContent: {
-        paddingTop: '2.5em'
+        marginTop: '10.5em',
+        overflowY: 'scroll',
     },
     searchIcon: {
         marginRight: '0',
@@ -149,9 +150,10 @@ const useStyles = makeStyles((theme) => ({
     },
     logoContainer: {
         position: 'absolute',
-        background: 'linear-gradient(to right bottom, rgba(26, 51, 90, 1), rgba(40, 69, 114, 1))',
+        background: 'inherit',
         width: '100%',
-        height: '15%'
+        height: '15%',
+        zIndex: '10'
     },
     logo: {
         height: '8.5em',
@@ -228,16 +230,11 @@ const Main = () => {
         })
         .then((res => {
             setAllChannels([...res.data.data])
-            console.log(res)
-            console.log(tokenValue)
-            console.log(apiHeaders.client)
-            console.log(apiHeaders.expiry)
-            console.log(apiData.data?.data?.uid)
         }))
         .catch(err => {
             console.log(err)
         })
-    })
+    }, [channelExpand])
 
     //state for the modal open
     const [modalOpen, setModalOpen] = useState(false)
@@ -279,15 +276,17 @@ const Main = () => {
     // Defining the structure for the drawer menu
     const drawer = (
         <div className={classes.drawer}>
-            <img className={classes.logo} src={Logo} alt="logo" />
             <div className={classes.workspace}>
                 <div className={classes.workspaceItem}>
                     <AddIcon className={classes.addIcon} />
                 </div>
             </div>
+            <div className={classes.logoContainer}>
+                <img className={classes.logo} src={Logo} alt="logo" />
+            </div>
             <Router>
-                <div className={classes.mainContent}>
-                    <List style={{ color: 'white', marginTop: '10em'}}>
+                <div className={`${classes.mainContent} sideBarScroll`}>
+                    <List style={{ color: 'white', marginTop: '2em'}}>
                         <ListItem button style={{}}>
                             <ListItemIcon 
                                 className={classes.menuIconColor}>
@@ -334,7 +333,6 @@ const Main = () => {
                                 <Link style={{textDecoration: 'none'}} to='/dashboard/channel'>
                                     {allChannels.map((val, key) => {
                                         const getChannelData = (e) => {
-                                            console.log(val.name)
                                             setChannelData(val)
                                         }
                                         return (
