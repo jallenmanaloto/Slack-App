@@ -6,6 +6,7 @@ import Login from './Components/Login/Login';
 import Main from './Components/Main/Main'
 import Channel from './Components/Channel/Channel';
 import HomeChannel from './Components/Channel/HomeChannel'
+import Message from './Components/Template/Message'
 import { ContextAPI } from './Components/Context/ContextAPi';
 
 function App() {
@@ -18,7 +19,7 @@ function App() {
 
   return (
     <div className="App">
-      <ContextAPI.Provider value={{apiData, setApiData, apiHeaders, setApiHeaders, tokenValue, setTokenValue, channelData, setChannelData}} >
+      {/* <ContextAPI.Provider value={{apiData, setApiData, apiHeaders, setApiHeaders, tokenValue, setTokenValue, channelData, setChannelData}} >
           <Router>
             <Switch>
                 <Route exact path='/' component={Login}>
@@ -32,7 +33,9 @@ function App() {
                 </Route>
               </Switch>
           </Router>
-      </ContextAPI.Provider>
+      </ContextAPI.Provider> */}
+
+      <Message />
     </div>
   );
 }
