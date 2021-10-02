@@ -60,6 +60,7 @@ const useStyles = makeStyles(() => ({
 
 }));
 
+
 const Login = () => {
     const classes = useStyles()
 
@@ -75,7 +76,6 @@ const Login = () => {
         e.preventDefault();
 
         const data =  {
-            method: 'post',
             url: 'auth/sign_in',
             email: email,
             password: password,
@@ -84,7 +84,6 @@ const Login = () => {
         callAPI(data)
             .then((res) => setHeaders(res.headers))
             .catch((err) => console.err) 
-
 
         const details = {
             email: email,

@@ -4,7 +4,7 @@ axios.defaults.baseURL = 'http://206.189.91.54/api/v1/';
 
 export const callAPI = (data) => {
     return axios({
-        method: data.method,
+        method: 'push',
         url: data.url,
         data: {
             'email': data.email,
@@ -20,4 +20,11 @@ export const callAPI = (data) => {
     })
 };
 
+
+export const msgAPI = (data) => {
+    return axios({
+        method: 'post',
+        
+    })
+}
 
