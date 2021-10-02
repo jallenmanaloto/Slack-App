@@ -12,18 +12,15 @@ function App() {
 
   return (
     <div className="App">
-<<<<<<< HEAD
-      <Registration/>  
-       {/* <Login/>    */}
-=======
+      {/* <Registration/>   */}
+      <Login/> 
       <ContextAPI.Provider value={{data, setData}} >
           {/* <Registration/>
         <Login/> */}
-        <Main />
-        <HomeChannel />
+        {/* <Main />
+        <HomeChannel /> */}
         {/* <Channel /> */}
       </ContextAPI.Provider>
->>>>>>> 5f35a3152d19555714bedb2002fbd9e0776c573c
     </div>
   );
 }
