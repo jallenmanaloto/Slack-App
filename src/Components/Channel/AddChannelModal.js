@@ -84,9 +84,9 @@ const useStyles = makeStyles({
     }
 });
 
-const AddChannelModal = ({setModalOpen, closeModal, setToken, setClient, setExpiry}) => {
+const AddChannelModal = ({setModalOpen, closeModal}) => {
 
-    const {data, setData} = useContext(ContextAPI); //fetch api responses => data.token, etc.
+    const {apiData, setApiData, apiHeaders, setApiHeaders, tokenValue, setTokenValue, channelData, setChannelData} = useContext(ContextAPI); //fetch api responses => data.token, etc.
     const classes = useStyles();
 
     const channelName = useRef();
@@ -99,16 +99,6 @@ const AddChannelModal = ({setModalOpen, closeModal, setToken, setClient, setExpi
     const [headerPrivate, setheaderPrivate] = useState(false);
     const [privateDetails, setPrivateDetails] = useState(false);
     const [lockIcon, setLockIcon] = useState(false);
-
-    const [tokenValue, setTokenValue] = useState();
-    const [clientVal, setClientVal] = useState();
-    const [expiryVal, setExpiryVal] = useState();
-
-    const fetchCredentials = () => {
-        setToken(tokenValue)
-        setClient(clientVal)
-        setExpiry(expiryVal)
-    }
 
     //function to handle closing of Add Channel modal
     const handleClose = () => {
@@ -144,64 +134,26 @@ const AddChannelModal = ({setModalOpen, closeModal, setToken, setClient, setExpi
             url:'http://206.189.91.54/api/v1/channels',
             headers: {
                 'access-token': tokenValue,
-                client: clientVal,
-                expiry: expiryVal,
-                uid: 'allen2.test@email.com',
+                client: apiHeaders.client,
+                expiry: apiHeaders.expiry,
+                uid: apiData.data?.data?.uid,
             },
             data: {
                 name: nameInputValue,
-                user_ids: ['allen2.test@email.com']
-            }
-        })
-        .then(res => console.log(res))
-        .catch(err => console.log(err))
-    }
-
-    const allChannels = (e) => {
-        e.preventDefault();
-        handleClose();
-        axios({
-            method: 'GET',
-            url:'http://206.189.91.54/api/v1/channels',
-            headers: {
-                'access-token': tokenValue,
-                client: clientVal,
-                expiry: expiryVal,
-                uid: 'allen2.test@email.com',
-            },
-            data: {
-                name: nameInputValue,
-                user_ids: ['allen2.test@email.com']
-            }
-        })
-        .then(res => console.log(res))
-        .catch(err => console.log(err))
-    }
-
-    const login = (e) => {
-        e.preventDefault();
-        axios({
-            method: 'POST',
-            url:'http://206.189.91.54/api/v1/auth/sign_in',
-            data: {
-                email: 'allen2.test@email.com',
-                password: 'password2'
+                user_ids: []
             }
         })
         .then(res => {
-            const {'access-token': token, client, expiry} = res.headers;
-            setTokenValue(token)
-            setClientVal(client)
-            setExpiryVal(expiry)
-            console.log(res.headers)
+            setChannelData(res)
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+            console.log(err)
+        })
     }
-    
+
     //creating component for the modal
     const body = (
         <div className={classes.root}>
-            <button onClick={login}>log In</button>
             <CloseIcon className={classes.closeButton} onClick={handleClose} />
             <div style={{margin: '1.6em 2.9em'}}>
                 <h1 className={classes.header}>Create a {headerPrivate ? 'private ' : null}channel</h1>
@@ -275,7 +227,7 @@ const AddChannelModal = ({setModalOpen, closeModal, setToken, setClient, setExpi
                 </form>
                 <button 
                     className={classes.button}
-                    onClick={fetchCredentials}
+                    onClick={createChannel}
                 >Create</button>
                 <InfoOutlinedIcon className={classes.infoIcon} />
             </div>

@@ -1,6 +1,8 @@
-import { useRef, useState} from 'react';
+import { useRef, useState, useContext} from 'react';
+import { useHistory } from 'react-router';
 import { callAPI } from '../API/callAPI.js';
 import { Breakpoint } from '@material-ui/core/styles/createBreakpoints';
+import { ContextAPI } from '../Context/ContextAPi.js';
 import { Button } from '@material-ui/core';
 import { Box } from '@material-ui/core';
 import { Checkbox } from '@material-ui/core';
@@ -81,49 +83,64 @@ const useStyles = makeStyles(() => ({
 const Login = () => {
     const classes = useStyles()
 
+    const history = useHistory()
+
     const emailInput = useRef()
     const passInput = useRef()
+    const {apiData, setApiData, apiHeaders, setApiHeaders, tokenValue, setTokenValue} = useContext(ContextAPI)
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const [headers, setHeaders] = useState('')
-
     const handleLogin = (e) => {
         e.preventDefault();
+        // axios({
+        //     method: 'POST',
+        //     url:'http://206.189.91.54/api/v1/auth/sign_in',
+        //     data: {
+        //         email: emailInput.current.value,
+        //         password: passInput.current.value
+        //     }
+        // })
+        // .then(res => {
+        //     const { headers } = res
+        //     const { 'access-token': token} = res.headers
+        //     setApiData(res)
+        //     setApiHeaders(headers)
+        //     setTokenValue(token)
 
-        const data =  {
-            method: 'post',
-            url: 'auth/sign_in',
-            email: email,
-            password: password,
+            const data =  {
+                method: 'post',
+                url: 'auth/sign_in',
+                email: email,
+                password: password,
         }
+            callAPI(data)
+                .then((res) => {
+                    const { 'access-token': token } = res.headers
+                    setTokenValue(token)
+                    setApiHeaders(res.headers)
+                    setApiData(res)
+                    console.log(res)
+                    history.push('dashboard')
+                })
+                .catch((err) => console.err) 
 
-        callAPI(data)
-            .then((res) => setHeaders(res.headers))
-            .catch((err) => console.err) 
 
-        const details = {
-            email: email,
-            password: password,
-        }
-        
-        localStorage.setItem('user', JSON.stringify(details))
-        console.log(details)
+            const details = {
+                email: email,
+                password: password,
+            }
+       
+            localStorage.setItem('user', JSON.stringify(details))
     }
 
-    console.log(headers) 
-  
-
-    return (
-    
+      return (
             <Grid container className={classes.containerBackground}>
-                
                 <Grid 
                     container 
                     className={classes.containerDiv}
                 >
-
                     <Grid item xs={12} sm={8} md={5} className={classes.containerLoginForm}>
                         <Box 
                             sx={{
@@ -134,9 +151,9 @@ const Login = () => {
                             alignItems: 'center'
                             }}
                         >
-                            
+                           
                             <Typography className={classes.headerLogin}>Sign In</Typography>
-                                
+
                             <TextField 
                                 margin='normal'
                                 size='small'
@@ -151,7 +168,6 @@ const Login = () => {
                                 onChange={(e) => setEmail(e.target.value)}
                                 className={classes.input}
                             />
-
                             <TextField 
                                 margin='normal'
                                 size='small'
@@ -179,7 +195,7 @@ const Login = () => {
                                 className={classes.buttonLogin}
                                 onClick={(e) => handleLogin(e)}
                             > LOGIN </Button>
-                        
+                       
                             <Grid container  className={classes.footerContainer}>
                                 <Typography className={classes.footerOne}> Don't have an account? </Typography>
                                 <Typography className={classes.footerTwo}> Sign up</Typography>
@@ -188,7 +204,6 @@ const Login = () => {
 
                     </Box>
                     </Grid>
-
                     <Grid 
                         item
                         xs={false}
@@ -199,13 +214,30 @@ const Login = () => {
                     >
                         <img src={CatBG} alt='sample' className={classes.sideImage}/>  
                     </Grid>
-
                 </Grid>
-
             </Grid> 
 
+/*             <div>
+
+            <form>
+                <label>Email</label>
+                <input type='email'
+                    ref={emailInput}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}></input>
+
+                <label>Password</label>
+                <input type='password'  
+                    ref={passInput} 
+                    value={password} 
+                    onChange={(e) => setPassword(e.target.value)} ></input>
+
+                <button onClick={(e) => handleLogin(e)}>Submit</button>
+            </form>
+
+            </div> */
     )
 }
 
 
-export default Login;
+export default Login
