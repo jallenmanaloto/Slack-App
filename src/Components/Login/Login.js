@@ -110,7 +110,7 @@ const Login = () => {
         //     setTokenValue(token)
 
             const data =  {
-                method: 'post',
+                method: 'POST',
                 url: 'auth/sign_in',
                 email: email,
                 password: password,
