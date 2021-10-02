@@ -6,10 +6,11 @@ import { Button } from '@material-ui/core';
 import { Box } from '@material-ui/core';
 import { Checkbox } from '@material-ui/core';
 import { Grid } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core'; 
 import { Typography } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
-/* import { Dialog } from '@material-ui/core'; */
+import CatBG from '../../assets/images/CatBG.jpg';
 import { FormControlLabel } from '@material-ui/core';
 import TMiBot from '../../assets/images/TMiBot.svg';
 import Sample from '../../assets/images/sample.jpg';
@@ -23,43 +24,47 @@ const useStyles = makeStyles(() => ({
 
     sideImage: {
         height: '100vh',
-        width: '100%',
+        width: '58vw',
+    },
+
+    TMiBot: {
+        height: '100px',
+        width: '100px',
     },
 
     avatarOne: {
-        height: '56px',
-        width: '56px'
+        height: '100px',
+        width: '100px',
     },
 
     headerCreate: {
         fontFamily: 'Roboto',
-        fontSize: '40px',
+        fontSize: '3.5em',
         fontWeight: 'bolder',
         textAlign: 'left',
         margin: '15px',
-        alignItems: 'Left',
     },
 
-    inputEmail: {
+    input: {
         width: '70%',
-        margin: '10px'
-
+        margin: '10px',
+        height: '100%',
     },
 
-    inputPassword:{
-        width: '70%'
+    newsletterContainer: {
+        direction: 'row',
+        justifyContent: 'center' ,
+        alignItems: 'center' ,
     },
 
-    inputConfirmPassword: {
-        width: '70%',
-    },
-    
     newsletter: {
         margin: '10px',
+        fontSize: '1.2em',
     },
 
     buttonSignUp:{
         margin: '10px',
+        fontSize: '1.2em',
     },
 
     errorMsg:{
@@ -68,6 +73,24 @@ const useStyles = makeStyles(() => ({
 
     errorPass: {
 
+    },
+
+    footerContainer: {
+        margin: '10px',
+        direction: 'row',
+        justifyContent: 'center' ,
+        alignItems: 'center' ,
+    },
+
+    footerOne: {
+        marginTop: '10px',
+        marginRight: '10px',
+        fontSize: '1em',
+    },
+
+    footerTwo: {
+        marginTop: '10px',
+        fontSize: '1em',
     },
 }));
 
@@ -148,7 +171,7 @@ const Registration = () => {
                     md={7}
                     sx={{ }}
                 >
-                    <img src={Sample} alt='sample' className={classes.sideImage}/>  
+                    <img src={CatBG} alt='sample' className={classes.sideImage}/>  
                 </Grid>
 
                 <Grid item xs={12} sm={8} md={5} square>
@@ -167,7 +190,7 @@ const Registration = () => {
                         </Grid>
 
                         <Avatar  className={classes.avatarOne}>
-                            <img src={TMiBot} alt='sample' />
+                            <img src={TMiBot} alt='sample' className={classes.TMiBot} />
                         </Avatar>
 
                         <Typography className={classes.headerCreate}>Create Account</Typography>
@@ -183,7 +206,7 @@ const Registration = () => {
                             ref={emailInput}
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className={classes.inputEmail}
+                            className={classes.input}
                         />
 
 
@@ -199,7 +222,7 @@ const Registration = () => {
                             ref={passInput} 
                             value={password} 
                             onChange={(e) => setPassword(e.target.value)}
-                            className={classes.inputPassword}
+                            className={classes.input}
                         />
 
                         <TextField 
@@ -213,14 +236,13 @@ const Registration = () => {
                             ref={confirmPassInput}
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
-                            className={classes.inputConfirmPassword}
+                            className={classes.input}
                         />
 
-                        <FormControlLabel
-                            control={<Checkbox/>}
-                            label="I want to receive updates via email."
-                            className={classes.newsletter}
-                        />
+                        <Grid container className={classes.newsletterContainer}>
+                            <FormControlLabel control={<Checkbox/>} />
+                            <Typography className={classes.newsletter}>I want to receive updates via email.</Typography>
+                        </Grid>
 
                         <Button 
                             type='submit'
@@ -228,7 +250,11 @@ const Registration = () => {
                             className={classes.buttonSignUp}
                             onClick={(e) => handleRegister(e)}
                         > SIGN UP </Button>
-                       
+
+                       <Grid container  className={classes.footerContainer}>
+                                <Typography className={classes.footerOne}> Already have an account? </Typography>
+                                <Typography className={classes.footerTwo} href='#'  rel=''> Sign in</Typography>
+                       </Grid>
                    </Box>
                 </Grid>
 

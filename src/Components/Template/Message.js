@@ -1,5 +1,3 @@
-import React, { useState, useEffect, useContext, useRef } from 'react'
-import { ContextAPI } from '../Context/ContextAPi';
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button';
 import SendIcon from '@material-ui/icons/Send';
@@ -10,10 +8,6 @@ import ImageOutlinedIcon from '@material-ui/icons/ImageOutlined';
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
-import TMiBot from '../../assets/images/TMiBot.svg'
-import AutoScroll from './AutoScroll';
-import axios from 'axios';
-
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -51,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
         width: 'calc(100% + 1px)',
         overflowY: 'scroll'
     },
-    channelNameContainer: {
+    userNameContainer: {
         height: '5vh',
         width: 'calc(100% + 1px)',
         marginTop: '1rem',
@@ -59,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         alignItems: 'center'
     },
-    channelName: {
+    userName: {
         marginLeft: '1.8rem',
         color: 'rgba(63, 63, 63, 1)'
     },
@@ -116,97 +110,16 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const Channel = () => {
 
-    // declaring values for context
-    const {
-        apiData, 
-        setApiData, 
-        apiHeaders, 
-        setApiHeaders, 
-        tokenValue, 
-        setTokenValue, 
-        channelData, 
-        setChannelData
-    } = useContext(ContextAPI);
+const Message = () => {
 
     const classes = useStyles();
-    const inputValue = useRef();
-    const messageView = useRef();
-    const [messageInput, setMessageInput] = useState('');
-    const [newMessage, setNewMessage] = useState(false);
-    const [messages, setMessages] = useState([]);
 
-    useEffect(() => {
-        messageView.current.scrollIntoView();
-    }, [messageInput])
-
-    // retrieving messages on a channel
-    useEffect(() => {
-        axios({
-            method: 'GET',
-            url:`http://206.189.91.54/api/v1/messages?receiver_id=${channelData.id}&receiver_class=Channel`,
-            headers: {
-                'access-token': tokenValue,
-                client: apiHeaders.client,
-                expiry: apiHeaders.expiry,
-                uid: apiData.data?.data?.uid,
-            },
-            params: {
-                receiver_id: channelData.data?.data?.id,
-                receiver_class: 'Channel'
-            }
-        })
-        .then(res => {
-            setMessages(res.data.data)
-            
-        })
-        .catch(err => {
-            console.log(err)
-        })
-    }, [newMessage])
-
-    const handleKeyDown = (e) => {
-        if (e.key === 'Enter') {
-            sendMessage();
-        }
-    }
-
-    const handleInputValues = () => {
-        setMessageInput(inputValue.current.value)
-    }
-
-    const sendMessage = (e) => {
-        //push the input value to api
-        axios({
-            method: 'POST',
-            url: 'http://206.189.91.54/api/v1/messages',
-            headers: {
-                'access-token': tokenValue,
-                client: apiHeaders.client,
-                expiry: apiHeaders.expiry,
-                uid: apiData.data?.data?.uid,
-            },
-            data: {
-                receiver_id: channelData.id,
-                receiver_class: 'Channel',
-                body: messageInput
-            }
-        })
-        .then(res => {
-            console.log(res)
-            console.log(channelData.id)
-            console.log(messageInput)
-            setNewMessage(!newMessage)
-        })
-        .catch(err => console.log(err))
-    }
-    
     return (
         <div className={`${classes.root} scroll-active`}>
-            <div className={classes.channelNameContainer}>
-                <Typography className={classes.channelName} variant='h5'>
-                   {`# ${channelData.name}`}
+            <div className={classes.userNameContainer}>
+                <Typography className={classes.userName} variant='h5'>
+                   Insert User's name here
                 </Typography>
             </div>
             <div className={classes.contentDisplay}>
@@ -214,37 +127,35 @@ const Channel = () => {
                     <Grid> 
                         <Grid item xs={12}> 
                             <div className={classes.welcome}>
-                                <img src={TMiBot} alt="bot" className={classes.bot} />
                                 <div className={classes.welcomeContainer}>
                                     <Typography 
                                     className={classes.welcomeText}
                                     variant='h6'>
-                                        This is the very beginning of the <strong>channelname</strong> channel
-                                    </Typography>
-                                    <Typography
-                                    className={classes.welcomeText}
-                                    variant='h6'
-                                    >
-                                        This channel is for working on a project. Hold meetings, share docs, and make decisions together with your team.
+                                        This is the very beginning of your chat with <strong>@Username</strong>
                                     </Typography>
                                 </div>
                             </div>
-                                {messages.map((val, key) => 
+
+                              {/* {{messages.map((val, key) => 
                                     <div className={classes.message}>
                                         <Avatar 
                                         alt='Miyu Togo'
                                         src='/broken-image.jpg'
                                         className={classes.user} />
-                                        {/* <img src={TMiBot} alt="bot" className={classes.user} /> */}
                                         <div style={{display: 'flex'}}>
                                             <Typography
                                             style={{
                                                 marginLeft: '0.8em',
-                                                fontWeight: 'bold'}}>UserName</Typography>
+                                                fontWeight: 'bold'}}
+                                            >
+                                               User's name who sent the message should be here 
+                                            </Typography>
                                             <Typography  
                                             style={{marginLeft: '1em', color: 'rgba(50, 74, 95, 0.7)'}}
                                             variant='subtitle2'
-                                            >12:36 PM</Typography>
+                                            >
+                                                 Insert actual time here 
+                                            </Typography>
                                         </div>
                                         <Typography 
                                                 style={{
@@ -255,23 +166,18 @@ const Channel = () => {
                                                     marginTop: '1.5rem',
                                                     marginRight: '5em'}}
                                                 variant='h6'>
-                                                {val.body}
+                                              Message sent should be mapped here 
                                         </Typography>
                                     </div>
-                                )}
+                                )} */}
+                                
                         </Grid>
                     </Grid>
-                    <div ref={messageView}></div>
-                    {/* <AutoScroll /> */}
                 </div>
             </div>
                 <input 
-                    placeholder='Message #Channel-name'
+                    placeholder='Message @User-name'
                     className= {classes.input} 
-                    ref={inputValue}
-                    onChange={handleInputValues}
-                    onKeyDown={handleKeyDown}
-                    value={messageInput}
                     type="text" 
                 />
                 <div className={classes.messageAdornment}>
@@ -282,7 +188,6 @@ const Channel = () => {
                 </div>
                 <Button
                 type='submit'
-                onClick={sendMessage}
                 className={classes.button}>
                     <SendIcon className={classes.sendIcon} />
                 </Button>
@@ -290,4 +195,4 @@ const Channel = () => {
     )
 }
 
-export default Channel
+export default Message

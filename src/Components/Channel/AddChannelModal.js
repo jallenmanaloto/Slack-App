@@ -84,9 +84,9 @@ const useStyles = makeStyles({
     }
 });
 
-const AddChannelModal = ({setModalOpen, closeModal, setToken, setClient, setExpiry}) => {
+const AddChannelModal = ({setModalOpen, closeModal}) => {
 
-    const {apiData, setApiData} = useContext(ContextAPI); //fetch api responses => data.token, etc.
+    const {apiData, setApiData, apiHeaders, setApiHeaders, tokenValue, setTokenValue, channelData, setChannelData} = useContext(ContextAPI); //fetch api responses => data.token, etc.
     const classes = useStyles();
 
     const channelName = useRef();
@@ -133,48 +133,27 @@ const AddChannelModal = ({setModalOpen, closeModal, setToken, setClient, setExpi
             method: 'POST',
             url:'http://206.189.91.54/api/v1/channels',
             headers: {
-                'access-token': apiData.token,
-                client: apiData.client,
-                expiry: apiData.expiry,
-                uid: apiData.uid,
+                'access-token': tokenValue,
+                client: apiHeaders.client,
+                expiry: apiHeaders.expiry,
+                uid: apiData.data?.data?.uid,
             },
             data: {
                 name: nameInputValue,
-                user_ids: [apiData.uid]
-            }
-        })
-        .then(res => console.log(res))
-        .catch(err => console.log(err))
-    }
-
-
-    const login = (e) => {
-        e.preventDefault();
-        axios({
-            method: 'POST',
-            url:'http://206.189.91.54/api/v1/auth/sign_in',
-            data: {
-                email: 'allen2.test@email.com',
-                password: 'password2'
+                user_ids: []
             }
         })
         .then(res => {
-            const {'access-token': token, client, expiry, uid} = res.headers;
-            setApiData({token, client, expiry, uid})
-            console.log(apiData)
-            console.log(apiData.token)
-            console.log(apiData.client)
-            console.log(apiData.expiry)
-            console.log(apiData.uid)
+            setChannelData(res)
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+            console.log(err)
+        })
     }
-    
-    
+
     //creating component for the modal
     const body = (
         <div className={classes.root}>
-            <button onClick={login}>log In</button>
             <CloseIcon className={classes.closeButton} onClick={handleClose} />
             <div style={{margin: '1.6em 2.9em'}}>
                 <h1 className={classes.header}>Create a {headerPrivate ? 'private ' : null}channel</h1>
