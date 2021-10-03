@@ -14,6 +14,7 @@ import { FormControlLabel } from '@material-ui/core';
 import Sample from '../../assets/images/sample.jpg';
 import CatBG from '../../assets/images/CatBG.jpg';
 import Logo from '../../assets/images/Logo.svg';
+import axios from 'axios'
 
 const useStyles = makeStyles(() => ({
     
@@ -95,61 +96,50 @@ const Login = () => {
 
     const handleLogin = (e) => {
         e.preventDefault();
-
-        const data =  {
-            url: 'auth/sign_in',
-            email: email,
-            password: password,
-        }
-
-        callAPI(data)
-            .then((res) => setHeaders(res.headers))
-            .catch((err) => console.err) 
-
-        const details = {
-            email: email,
-            password: password,
-        // axios({
-        //     method: 'POST',
-        //     url:'http://206.189.91.54/api/v1/auth/sign_in',
-        //     data: {
-        //         email: emailInput.current.value,
-        //         password: passInput.current.value
-        //     }
-        // })
-        // .then(res => {
-        //     const { headers } = res
-        //     const { 'access-token': token} = res.headers
-        //     setApiData(res)
-        //     setApiHeaders(headers)
-        //     setTokenValue(token)
-
-            const data =  {
-                method: 'POST',
-                url: 'auth/sign_in',
+        axios({
+            method: 'POST',
+            url:'http://206.189.91.54/api/v1/auth/sign_in',
+            data: {
                 email: email,
-                password: password,
-        }
-            callAPI(data)
-                .then((res) => {
-                    const { 'access-token': token } = res.headers
+                password: password
+            }
+        })
+        .then((res) => {
+            const { 'access-token': token } = res.headers
                     setTokenValue(token)
                     setApiHeaders(res.headers)
                     setApiData(res)
                     console.log(res)
-                    history.push('dashboard')
-                })
-                .catch((err) => console.err) 
+                    history.push('/dashboard')
+        })
+        .catch(err => console.log(err))
+
+        //     const data =  {
+        //         method: 'post',
+        //         url: 'auth/sign_in',
+        //         email: email,
+        //         password: password,
+        // }
+        //     callAPI(data)
+        //         .then((res) => {
+        //             const { 'access-token': token } = res.headers
+        //             setTokenValue(token)
+        //             setApiHeaders(res.headers)
+        //             setApiData(res)
+        //             console.log(res)
+        //             // history.push('dashboard')
+        //         })
+        //         .catch((err) => console.err) 
 
 
-            const details = {
-                email: email,
-                password: password,
-            }
+        //     const details = {
+        //         email: email,
+        //         password: password,
+        //     }
        
-            localStorage.setItem('user', JSON.stringify(details))
+        //     localStorage.setItem('user', JSON.stringify(details))
+    
     }
-
       return (
             <Grid container className={classes.containerBackground}>
                 <Grid 
