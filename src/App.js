@@ -14,12 +14,15 @@ function App() {
   const [apiHeaders, setApiHeaders] = useState();
   const [tokenValue, setTokenValue] = useState();
   const [channelData, setChannelData] = useState();
+  const [channelID, setchannelID] = useState('');
+  const [channelMessage, setchannelMessage] = useState([]);
+  const [channelMembers, setChannelMembers] = useState([]);
 
   const [user, setUser] = useState(localStorage.getItem('user'));
 
   return (
     <div className="App">
-      {/* <ContextAPI.Provider value={{apiData, setApiData, apiHeaders, setApiHeaders, tokenValue, setTokenValue, channelData, setChannelData}} >
+      <ContextAPI.Provider value={{apiData, setApiData, apiHeaders, setApiHeaders, tokenValue, setTokenValue, channelData, setChannelData, channelMembers, setChannelMembers, channelMessage, setchannelMessage}} >
           <Router>
             <Switch>
                 <Route exact path='/' component={Login}>
@@ -33,9 +36,7 @@ function App() {
                 </Route>
               </Switch>
           </Router>
-      </ContextAPI.Provider> */}
-
-      <Message />
+      </ContextAPI.Provider>
     </div>
   );
 }
