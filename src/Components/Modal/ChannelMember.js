@@ -1,6 +1,7 @@
 import React, { useState, useContext, useRef } from 'react'
-import { AppBar, Avatar, Modal, Tab, Tabs, Typography} from '@material-ui/core';
-import AvatarGroup from '@material-ui/lab/AvatarGroup';
+import axios from 'axios';
+import { AppBar, Avatar, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Modal, Tab, Tabs, Typography} from '@material-ui/core';
+import { AvatarGroup, Alert } from '@material-ui/lab';
 import { ContextAPI } from '../Context/ContextAPi';
 import { makeStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
@@ -69,8 +70,29 @@ const useStyles = makeStyles({
     container: {
         paddingTop: '2em'
     },
-    descriptionAndTopic: {
-
+    dialog: {
+        marginBottom: '3em',
+    },
+    dialogChannelName:{
+        position: 'absolute',
+        paddingLeft: '1.8em',
+        paddingTop: '3.3em',
+        fontWeight: '400',
+        fontSize: '0.95rem',
+        color: '#9B9A9A'
+    },
+    dialogInput: {
+        width: '100%',
+        height: '2.8em',
+        marginTop: '1.4rem',
+        paddingLeft: '1rem',
+        outline: 'none',
+        border: '1px solid #C6C2C2',
+        borderRadius: '5px',
+        fontSize: '1.1rem'
+    },
+    dialogTitle: {
+        color: '#3F3F3F',
     },
     members: {
         display: 'flex',
@@ -144,20 +166,42 @@ const ChannelMember = () => {
 
     //declaring states
     const [modalDisplay, setModalDisplay] = useState(false);
+    const [dialogDisplay, setDialogDisplay] = useState(false);
+    const [errorDisplay, setErrorDisplay] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+    const [dialogInput, setDialogInput] = useState('');
     const [tabIndex, setTabIndex] = useState(0);
 
     //declaring reference for the input to search member
     const searchMember = useRef();
+    const dialogInputVal = useRef();
+
+    
+    const handleClose = () => {
+        setModalDisplay(!modalDisplay)
+    }
+    
+    const handleDialogDisplay = () => {
+        setDialogDisplay(!dialogDisplay);
+    }
+
+    const handleDialogInputValue = () => {
+        setDialogInput(dialogInputVal.current.value)
+        console.log(dialogInput)
+    }
+
+    const handleErrorDisplay = () => {
+        setErrorDisplay(true);
+        setTimeout(()=> {
+            setErrorDisplay(false)
+        }, 3500)
+    }
 
     //declaring functions to handle events
     const handleSearchMemberInput = (e) => {
         setSearchTerm(searchMember.current.value);
         console.log(searchTerm);
-    }
-
-    const handleClose = () => {
-        setModalDisplay(!modalDisplay)
     }
 
     const handleTabChange = (event, newIndex) => {
@@ -179,6 +223,34 @@ const ChannelMember = () => {
         channelMessage, 
         setchannelMessage
     } = useContext(ContextAPI)
+
+    //function to handle invite of user to the channel
+    const inviteUser = () => {
+        axios({
+            url: 'http://206.189.91.54/api/v1/channel/add_member',
+            method: 'POST',
+            headers: {
+                'access-token': tokenValue,
+                client: apiHeaders.client,
+                expiry: apiHeaders.expiry,
+                uid: apiData.data?.data?.uid,
+            },
+            data: {
+                id: channelData.id,
+                member_id: 123
+            }
+        })
+        .then(res => {
+            console.log(channelData)
+            //handling errors received
+            if(res.data.errors) {
+                setErrorMessage(res.data.errors)
+                handleErrorDisplay()
+            }
+            setChannelMembers(res.data.data.channel_members)
+        })
+        .catch(err => console.log(err))
+    }
 
     //declaring variable for the date the channel was created
     const channelCreateDate = new Date(channelData.created_at).toLocaleDateString('en-US',{year: 'numeric', month: 'short', day: 'numeric'});
@@ -213,7 +285,7 @@ const ChannelMember = () => {
                 type="text"
                 placeholder='Find members'
             />
-            <div className={classes.memberListContainer}>
+            <div onClick={handleDialogDisplay} className={classes.memberListContainer}>
                 <div className={`${classes.addMembers} addPeople`}>
                     <PersonAddIcon className={classes.addUserIcon} />
                     <h4 className={classes.memberName}>Add people</h4>
@@ -296,6 +368,25 @@ const ChannelMember = () => {
             >
                 {memberListModal}
             </Modal>
+            <Dialog 
+                fullWidth='xs'
+                maxWidth='xs'
+                className={classes.dialog} 
+                open={dialogDisplay} 
+                onClose={handleDialogDisplay}
+            >
+                <DialogTitle className={classes.dialogTitle}>Add People</DialogTitle>
+                <h5 className={classes.dialogChannelName}>{`# ${channelData.name}`}</h5>
+                <DialogContent>
+                    <input onChange={handleDialogInputValue} value={dialogInput} ref={dialogInputVal} className={classes.dialogInput} type='text' placeholder='Enter a user id'></input>
+                    {errorDisplay ? <Alert className={classes.errors} severity='error'>{errorMessage}</Alert> : null}
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={inviteUser} color='primary'>Invite</Button>
+                    <Button onClick={handleDialogDisplay} color='primary'>Cancel</Button>
+                </DialogActions>
+            </Dialog>
+            
         </div>
     )
 }
