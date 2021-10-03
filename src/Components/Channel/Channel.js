@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
 import { ContextAPI } from '../Context/ContextAPi';
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, withStyles } from '@material-ui/core/styles'
+import Badge from '@material-ui/core/Badge';
 import Button from '@material-ui/core/Button';
 import SendIcon from '@material-ui/icons/Send';
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
@@ -13,6 +14,7 @@ import Avatar from '@material-ui/core/Avatar';
 import TMiBot from '../../assets/images/TMiBot.svg'
 import AutoScroll from './AutoScroll';
 import axios from 'axios';
+import ChannelMember from '../Modal/ChannelMember'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -44,7 +46,9 @@ const useStyles = makeStyles((theme) => ({
         outline: 'none'
     },
     sendIcon: {
-        cursor: 'pointer'
+        marginRight: '1rem',
+        cursor: 'pointer',
+        color: 'rgba(43, 33, 24, 0.65)'
     },
     contentDisplay: {
         height: '77vh',
@@ -116,6 +120,36 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+const StyledBadge = withStyles((theme) => ({
+    badge: {
+      backgroundColor: '#44b700',
+      marginBottom: '1rem',
+      color: '#44b700',
+      boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+      '&::after': {
+        position: 'absolute',
+        top: '-1px',
+        left: '-1px',
+        width: '100%',
+        height: '100%',
+        borderRadius: '50%',
+        animation: '$ripple 1.2s infinite ease-in-out',
+        border: '1px solid currentColor',
+        content: '""',
+      },
+    },
+    '@keyframes ripple': {
+      '0%': {
+        transform: 'scale(.8)',
+        opacity: 1,
+      },
+      '100%': {
+        transform: 'scale(2.4)',
+        opacity: 0,
+      },
+    },
+  }))(Badge);
+
 const Channel = () => {
 
     // declaring values for context
@@ -127,7 +161,9 @@ const Channel = () => {
         tokenValue, 
         setTokenValue, 
         channelData, 
-        setChannelData
+        setChannelData,
+        channelMessage,
+        setchannelMessage
     } = useContext(ContextAPI);
 
     const classes = useStyles();
@@ -137,11 +173,7 @@ const Channel = () => {
     const [newMessage, setNewMessage] = useState(false);
     const [messages, setMessages] = useState([]);
 
-    useEffect(() => {
-        messageView.current.scrollIntoView();
-    }, [messageInput])
-
-    // retrieving messages on a channel
+    //retrieving messages on a channel
     useEffect(() => {
         axios({
             method: 'GET',
@@ -158,13 +190,12 @@ const Channel = () => {
             }
         })
         .then(res => {
-            setMessages(res.data.data)
-            
+            setchannelMessage(res.data.data)
         })
         .catch(err => {
             console.log(err)
         })
-    }, [newMessage])
+    })
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
@@ -194,12 +225,14 @@ const Channel = () => {
             }
         })
         .then(res => {
-            console.log(res)
-            console.log(channelData.id)
-            console.log(messageInput)
             setNewMessage(!newMessage)
+            setMessageInput('')
         })
         .catch(err => console.log(err))
+        setTimeout(() => {
+            messageView.current.scrollIntoView();
+        },400)
+        
     }
     
     return (
@@ -208,6 +241,7 @@ const Channel = () => {
                 <Typography className={classes.channelName} variant='h5'>
                    {`# ${channelData.name}`}
                 </Typography>
+                <ChannelMember />
             </div>
             <div className={classes.contentDisplay}>
                 <div className={classes.mySpace}>
@@ -229,42 +263,62 @@ const Channel = () => {
                                     </Typography>
                                 </div>
                             </div>
-                                {messages.map((val, key) => 
-                                    <div className={classes.message}>
+                                {channelMessage.map((val, key) => {
+                                    const timestamp = new Date(val.created_at)
+                                    return (
+                                    <div key={key} className={classes.message}>
+                                        <StyledBadge    
+                                            overlap='circular'
+                                            anchorOrigin={{
+                                                vertical: 'bottom',
+                                                horizontal: 'right'
+                                            }}
+                                            variant='dot'
+                                        >
                                         <Avatar 
-                                        alt='Miyu Togo'
-                                        src='/broken-image.jpg'
-                                        className={classes.user} />
-                                        {/* <img src={TMiBot} alt="bot" className={classes.user} /> */}
-                                        <div style={{display: 'flex'}}>
-                                            <Typography
-                                            style={{
-                                                marginLeft: '0.8em',
-                                                fontWeight: 'bold'}}>UserName</Typography>
-                                            <Typography  
-                                            style={{marginLeft: '1em', color: 'rgba(50, 74, 95, 0.7)'}}
-                                            variant='subtitle2'
-                                            >12:36 PM</Typography>
-                                        </div>
-                                        <Typography 
+                                            alt={val.sender.uid}
+                                            src='/broken-image.jpg'
+                                            className={classes.user} 
+                                        />
+                                        </StyledBadge>
+                                        <div style={{display: 'flex', flexDirection: 'column'}}>
+                                            <div style={{display: 'flex'}}>
+                                                <Typography
                                                 style={{
-                                                    position: 'relative',
-                                                    fontSize: '1.06rem',
-                                                    color: '#3F3F3F',
-                                                    marginLeft: '-9.1em',
-                                                    marginTop: '1.5rem',
-                                                    marginRight: '5em'}}
-                                                variant='h6'>
-                                                {val.body}
-                                        </Typography>
+                                                    marginLeft: '0.8em',
+                                                    fontWeight: 'bold'}}
+                                                >
+                                                    {val.sender.uid}
+                                                </Typography>
+                                                <Typography  
+                                                style={{marginLeft: '1em', color: 'rgba(50, 74, 95, 0.7)'}}
+                                                variant='subtitle2'
+                                                >
+                                                    {timestamp.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}
+                                                </Typography>
+                                            </div>
+                                            <Typography 
+                                                    style={{
+                                                        position: 'relative',
+                                                        fontSize: '1.06rem',
+                                                        color: '#3F3F3F',
+                                                        marginLeft: '0.8em',
+                                                    }}
+                                                    variant='h6'>
+                                                    {val.body}
+                                            </Typography>
+                                        </div>
+                                        
                                     </div>
-                                )}
+                                    )
+                                })}
                         </Grid>
                     </Grid>
                     <div ref={messageView}></div>
-                    {/* <AutoScroll /> */}
+                   <AutoScroll />
                 </div>
             </div>
+            
                 <input 
                     placeholder='Message #Channel-name'
                     className= {classes.input} 

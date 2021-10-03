@@ -142,7 +142,9 @@ const useStyles = makeStyles((theme) => ({
     },
     mainContent: {
         marginTop: '10.5em',
-        overflowY: 'scroll',
+        height: '70%',
+        width: '100%',
+        overflowY: 'auto',
     },
     searchIcon: {
         marginRight: '0',
@@ -177,7 +179,7 @@ const useStyles = makeStyles((theme) => ({
     },
     channelList: {
         fontSize: '0.95rem', 
-        marginLeft:'-3rem', 
+        marginLeft:'-5.85rem', 
         fontWeight: 'lighter'
     },
     addIcon: {
@@ -206,7 +208,7 @@ const Main = () => {
 
     const classes = useStyles();
     const history = useHistory();
-    const {apiData, setApiData, apiHeaders, setApiHeaders, tokenValue, setTokenValue, channelData, setChannelData} = useContext(ContextAPI);
+    const {apiData, setApiData, apiHeaders, setApiHeaders, tokenValue, setTokenValue, channelData, setChannelData, channelMembers, setChannelMembers, channelMessage, setchannelMessage} = useContext(ContextAPI);
 
     //Container to store all fetched channels
     const [allChannels, setAllChannels] = useState([])
@@ -330,21 +332,41 @@ const Main = () => {
                                         {channelList}
                                     </ListItem>
                                 </Link>
-                                <Link style={{textDecoration: 'none'}} to='/dashboard/channel'>
                                     {allChannels.map((val, key) => {
                                         const getChannelData = (e) => {
-                                            setChannelData(val)
+                                            setChannelData(val);
+                                            
+                                            //Retrieving information of a Channel
+                                            axios({
+                                                method: 'GET',
+                                                url:`http://206.189.91.54/api/v1/channels/${val.id}`,
+                                                headers: {
+                                                    'access-token': tokenValue,
+                                                    client: apiHeaders.client,
+                                                    expiry: apiHeaders.expiry,
+                                                    uid: apiData.data?.data?.uid,
+                                                },
+                                            })
+                                            .then((res => {
+                                                setChannelMembers(res.data.data.channel_members)
+                                            }))
+                                            .catch(err => {
+                                                console.log(err)
+                                            })
                                         }
+                                        
                                         return (
-                                        <ListItem 
-                                            onClick={getChannelData}
-                                            className={classes.subMessages} 
-                                            button>
-                                                {`# ${val.name}`}
-                                        </ListItem>
+                                        <Link style={{textDecoration: 'none'}} to={`/dashboard/channel/${val.id}`}>
+                                            <ListItem 
+                                            key={key}
+                                                onClick={getChannelData}
+                                                className={classes.subMessages} 
+                                                button>
+                                                    {`# ${val.name}`}
+                                            </ListItem>
+                                        </Link>
                                         )
                                     })}
-                                </Link>
                                 <ListItem 
                                     button 
                                     onClick={() => setModalOpen(!modalOpen)}
