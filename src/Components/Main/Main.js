@@ -208,6 +208,8 @@ const Main = () => {
   const classes = useStyles();
   const history = useHistory();
   const {
+    allUsers,
+    setAllUsers,
     apiData,
     setApiData,
     apiHeaders,
@@ -232,6 +234,7 @@ const Main = () => {
   const [channelExpand, setChannelExpand] = useState(false);
   const [dmExpand, setDmExpand] = useState(false);
   const [searchBar, setSearchBar] = useState("");
+  const [searchResult, setSearchResult] = useState(false);
 
   useEffect(() => {
     axios({
@@ -264,7 +267,8 @@ const Main = () => {
       },
     })
       .then((res) => {
-        console.log(res.data.data); //array of all users
+        setAllUsers(res.data.data);
+        console.log(allUsers);
       })
       .catch((err) => console.log(err));
   };
@@ -289,6 +293,10 @@ const Main = () => {
   //Function to handle values in searchbar
   const handleSearchBarValue = (e) => {
     setSearchBar(e.target.value);
+    if (!searchBar) {
+      setSearchResult(true);
+      console.log("open search result");
+    }
   };
 
   const userDM = (
@@ -430,7 +438,6 @@ const Main = () => {
 
   return (
     <div>
-      <UserSearch />
       <Grid container spacing={3}>
         <AppBar className={classes.appBar} elevation={0}>
           <Toolbar className={classes.toolbar}>
@@ -456,6 +463,12 @@ const Main = () => {
                     </InputAdornment>
                   }
                 />
+                {searchBar ? (
+                  <UserSearch
+                    searchResult={searchResult}
+                    searchBar={searchBar}
+                  />
+                ) : null}
               </div>
             </Grid>
             <Grid className={classes.myAccount} item xs={2}>

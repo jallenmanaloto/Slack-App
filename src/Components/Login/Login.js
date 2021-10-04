@@ -106,6 +106,10 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const handleKeyDown = (evt) => {
+    evt.key === "Enter" && handleLogin(evt);
+  };
+
   const handleLogin = (e) => {
     e.preventDefault();
     axios({
@@ -128,30 +132,6 @@ const Login = () => {
         history.push("/dashboard");
       })
       .catch((err) => console.log(err));
-
-    //     const data =  {
-    //         method: 'post',
-    //         url: 'auth/sign_in',
-    //         email: email,
-    //         password: password,
-    // }
-    //     callAPI(data)
-    //         .then((res) => {
-    //             const { 'access-token': token } = res.headers
-    //             setTokenValue(token)
-    //             setApiHeaders(res.headers)
-    //             setApiData(res)
-    //             console.log(res)
-    //             // history.push('dashboard')
-    //         })
-    //         .catch((err) => console.err)
-
-    //     const details = {
-    //         email: email,
-    //         password: password,
-    //     }
-
-    //     localStorage.setItem('user', JSON.stringify(details))
   };
   return (
     <Grid container className={classes.containerBackground}>
@@ -193,6 +173,7 @@ const Login = () => {
               type="password"
               ref={passInput}
               value={password}
+              onKeyDown={handleKeyDown}
               onChange={(e) => setPassword(e.target.value)}
               className={classes.input}
             />
