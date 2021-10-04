@@ -305,7 +305,6 @@ const ChannelMember = () => {
                 </div>
                 )
                 })}
-                
             </div>
         </div>
     )

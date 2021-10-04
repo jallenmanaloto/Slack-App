@@ -103,19 +103,11 @@ const HomeChannel = () => {
 
     const classes = useStyles();
     const inputValue = useRef();
+    const messageView = useRef();
     const [messageInput, setMessageInput] = useState('');
+    const [newMessage, setNewMessage] = useState(false);
     const [messages, setMessages] = useState([]);
 
-    //Setting new messages appear on the display
-    // useEffect(() => {
-    //     if (localStorage.length === 0) {
-    //         return
-    //     } else {
-    //             const message = JSON.parse(localStorage.getItem('message'))
-    //             setMessages([...message])
-    //             ref.current.scrollIntoView({behavior: 'smooth'})
-    //     }
-    // })
 
     //function to handle the value passed in the Input
     const handleInputValue = () => {
@@ -128,6 +120,7 @@ const HomeChannel = () => {
         // setMessageStatus(!messageStatus)
         localStorage.setItem('message', JSON.stringify(messages))
         setMessages([...messages])
+        setNewMessage(!newMessage)
         setMessageInput('');
     }
 
@@ -207,7 +200,8 @@ const HomeChannel = () => {
                                 )}
                         </Grid>
                     </Grid>
-                    <AutoScroll />
+                    <div ref={messageView}></div>
+                   <AutoScroll />
                 </div>
             </div>
                 <input 
