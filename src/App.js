@@ -10,6 +10,7 @@ import Message from "./Components/Template/Message";
 import { ContextAPI } from "./Components/Context/ContextAPi";
 
 function App() {
+  const [allUsers, setAllUsers] = useState([]);
   const [apiData, setApiData] = useState({});
   const [apiHeaders, setApiHeaders] = useState();
   const [tokenValue, setTokenValue] = useState();
@@ -25,6 +26,8 @@ function App() {
     <div className="App">
       <ContextAPI.Provider
         value={{
+          allUsers,
+          setAllUsers,
           apiData,
           setApiData,
           apiHeaders,
