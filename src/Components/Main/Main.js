@@ -24,7 +24,8 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import AccountCircle from "@material-ui/icons/AccountCircle";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import MenuIcon from "@material-ui/icons/Menu";
 import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";
@@ -255,6 +256,11 @@ const Main = () => {
       });
   }, [channelExpand]);
 
+  useEffect(() => {
+    const sessionKey = JSON.parse(localStorage.getItem("userKey"));
+    console.log(sessionKey);
+  }, []);
+
   const getAllUser = () => {
     axios({
       method: "GET",
@@ -297,6 +303,20 @@ const Main = () => {
       setSearchResult(true);
       console.log("open search result");
     }
+  };
+
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const logOut = () => {
+    history.push("/");
   };
 
   const userDM = (
@@ -471,7 +491,12 @@ const Main = () => {
                 ) : null}
               </div>
             </Grid>
-            <Grid className={classes.myAccount} item xs={2}>
+            <Grid
+              className={classes.myAccount}
+              onClick={handleMenuClick}
+              item
+              xs={2}
+            >
               <Avatar
                 className={classes.accountIcon}
                 alt={userName}
@@ -479,6 +504,16 @@ const Main = () => {
               />
               <Typography variant="body1">{userName}</Typography>
             </Grid>
+            <Menu
+              anchorEl={anchorEl}
+              keepMounted
+              style={{ marginTop: "2em", marginLeft: "6em" }}
+              open={Boolean(anchorEl)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem>My Profile</MenuItem>
+              <MenuItem onClick={logOut}>Log out</MenuItem>
+            </Menu>
           </Toolbar>
         </AppBar>
       </Grid>

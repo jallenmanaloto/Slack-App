@@ -123,16 +123,26 @@ const Login = () => {
       .then((res) => {
         const { "access-token": token } = res.headers;
         const { email } = res.data.data;
+        const { uid } = res.data.data;
         const userDisplayName = email.split("@")[0];
+
         setUserName(userDisplayName);
         setTokenValue(token);
         setApiHeaders(res.headers);
         setApiData(res);
-        console.log(res);
+
+        const authData = {
+          accessToken: token,
+          accessClient: res.headers.client,
+          accessExpiry: res.headers.expiry,
+          accessUID: uid,
+        };
+        localStorage.setItem("userKey", JSON.stringify(authData));
         history.push("/dashboard");
       })
       .catch((err) => console.log(err));
   };
+
   return (
     <Grid container className={classes.containerBackground}>
       <Grid container className={classes.containerDiv}>
@@ -215,22 +225,6 @@ const Login = () => {
         </Grid>
       </Grid>
     </Grid>
-
-    /*             <div>
-            <form>
-                <label>Email</label>
-                <input type='email'
-                    ref={emailInput}
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}></input>
-                <label>Password</label>
-                <input type='password'  
-                    ref={passInput} 
-                    value={password} 
-                    onChange={(e) => setPassword(e.target.value)} ></input>
-                <button onClick={(e) => handleLogin(e)}>Submit</button>
-            </form>
-            </div> */
   );
 };
 
