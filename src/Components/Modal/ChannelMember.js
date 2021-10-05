@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import axios from "axios";
 import {
   AppBar,
@@ -181,6 +181,7 @@ const ChannelMember = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [dialogInput, setDialogInput] = useState("");
   const [tabIndex, setTabIndex] = useState(0);
+  const [filterMember, setFilterMember] = useState([]);
 
   //declaring reference for the input to search member
   const searchMember = useRef();
@@ -233,19 +234,13 @@ const ChannelMember = () => {
     setchannelMessage,
   } = useContext(ContextAPI);
 
-  const channelMemberList = [...channelMembers];
-  const allUsersList = [...allUsers];
+  useEffect(() => {
+    const channelMemberList = channelMembers.map((member) => member.user_id);
 
-  const filteredList = allUsersList.filter((user) => {
-    return channelMemberList.some((channel) => {
-      return channel.id === user.id;
-    });
-  });
-
-  // console.log(channelMemberList);
-  // console.log(allUsersList);
-  // console.log(channelData);
-  // console.log(filteredList);
+    setFilterMember(
+      allUsers.filter((users) => channelMemberList.includes(users.id))
+    );
+  }, [channelData]);
 
   //function to handle invite of user to the channel
   const inviteUser = () => {
@@ -264,7 +259,6 @@ const ChannelMember = () => {
       },
     })
       .then((res) => {
-        console.log(channelData);
         //handling errors received
         if (res.data.errors) {
           setErrorMessage(res.data.errors);
@@ -283,16 +277,18 @@ const ChannelMember = () => {
 
   const members = (
     <div onClick={handleClose} className={classes.root}>
-      <AvatarGroup max={4}>
-        {channelMessage.map((val) => {
-          <Avatar
-            className={classes.user}
-            alt={val.sender.uid}
-            src="/static/images/avatar/1.jpg"
-          />;
+      <AvatarGroup max={3}>
+        {filterMember.map((val) => {
+          return (
+            <Avatar
+              className={classes.user}
+              alt={val.uid}
+              src="/static/images/avatar/1.jpg"
+            />
+          );
         })}
 
-        <Avatar
+        {/* <Avatar
           className={classes.user}
           alt="Travis Howard"
           src="/static/images/avatar/2.jpg"
@@ -316,7 +312,7 @@ const ChannelMember = () => {
           className={classes.user}
           alt="Trevor Henderson"
           src="/static/images/avatar/5.jpg"
-        />
+        /> */}
       </AvatarGroup>
     </div>
   );
@@ -340,25 +336,25 @@ const ChannelMember = () => {
           <PersonAddIcon className={classes.addUserIcon} />
           <h4 className={classes.memberName}>Add people</h4>
         </div>
-        {channelMembers
+        {filterMember
           .filter((val) => {
-            const user = val.user_id;
             if (searchTerm === "") {
               return val;
-            } else if (JSON.stringify(user).includes(searchTerm)) {
+            } else if (JSON.stringify(val).includes(searchTerm)) {
               return val;
             }
             return false;
           })
           .map((val) => {
+            const user = val.uid.split("@")[0];
             return (
-              <div key={val.user_id} className={`${classes.members} addPeople`}>
+              <div key={val.id} className={`${classes.members} addPeople`}>
                 <Avatar
                   className={classes.memberImg}
-                  alt={val.user_id}
+                  alt={user}
                   src={val.user_id}
                 />
-                <h4 className={classes.memberName}>{val.user_id}</h4>
+                <h4 className={classes.memberName}>{user}</h4>
               </div>
             );
           })}

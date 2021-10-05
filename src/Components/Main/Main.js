@@ -398,7 +398,6 @@ const Main = () => {
                 {allChannels.map((val, key) => {
                   const getChannelData = (e) => {
                     setChannelData(val);
-
                     //Retrieving information of a Channel
                     axios({
                       method: "GET",
@@ -420,6 +419,7 @@ const Main = () => {
 
                   return (
                     <Link
+                      key={key}
                       style={{ textDecoration: "none" }}
                       to={`/dashboard/channel/${val.id}`}
                     >
