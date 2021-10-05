@@ -8,7 +8,7 @@ import Channel from "./Components/Channel/Channel";
 import HomeChannel from "./Components/Channel/HomeChannel";
 import Message from "./Components/Template/Message";
 import { ContextAPI } from "./Components/Context/ContextAPi";
-import Chat from ".Components/Chat/Chat"
+import Chat from "./Components/Chat/Chat";
 
 function App() {
   const [allUsers, setAllUsers] = useState([]);
