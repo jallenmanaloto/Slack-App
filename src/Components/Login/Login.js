@@ -145,9 +145,7 @@ const Login = () => {
       })
       .catch((err) => console.log(err));
   };
-
-  console.log(email);
-  console.log(password);
+  
   return (
     <Grid container className={classes.containerBackground}>
       <Grid container className={classes.containerDiv}>
