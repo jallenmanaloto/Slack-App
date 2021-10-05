@@ -8,6 +8,7 @@ import Channel from "./Components/Channel/Channel";
 import HomeChannel from "./Components/Channel/HomeChannel";
 import Message from "./Components/Template/Message";
 import { ContextAPI } from "./Components/Context/ContextAPi";
+import Chat from ".Components/Chat/Chat"
 
 function App() {
   const [allUsers, setAllUsers] = useState([]);
@@ -50,11 +51,11 @@ function App() {
               <Login setUser={setUser} />
             </Route>
             <Route exact path="/dashboard" component={Main}>
-              <Main />
+              <Chat />
             </Route>
-            <Route exact path="/dashboard/channel" component={Channel}>
+         {/*    <Route exact path="/dashboard/channel" component={Channel}>
               <Channel />
-            </Route>
+            </Route> */}
           </Switch>
         </Router>
       </ContextAPI.Provider>
