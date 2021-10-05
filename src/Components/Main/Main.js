@@ -217,6 +217,8 @@ const Main = () => {
     setApiHeaders,
     auth,
     setAuth,
+    authKey,
+    setAuthKey,
     channelData,
     setChannelData,
     channelMembers,
@@ -240,18 +242,28 @@ const Main = () => {
   const [searchResult, setSearchResult] = useState(false);
 
   useEffect(() => {
+    const sessionKey = JSON.parse(localStorage.getItem("userKey"));
+    setAuthKey(sessionKey);
+  }, []);
+
+  useEffect(() => {
     axios({
       method: "GET",
       url: "http://206.189.91.54/api/v1/channels",
       headers: {
-        "access-token": tokenValue,
-        client: apiHeaders.client,
-        expiry: apiHeaders.expiry,
-        uid: apiData.data?.data?.uid,
+        "access-token": authKey.accessToken,
+        client: authKey.accessClient,
+        expiry: authKey.accessExpiry,
+        uid: authKey.accessUID,
       },
     })
       .then((res) => {
         setAllChannels([...res.data.data]);
+        console.log("success from main");
+        console.log(authKey.accessToken);
+        console.log(authKey.accessClient);
+        console.log(authKey.accessExpiry);
+        console.log(authKey.accessUID);
       })
       .catch((err) => {
         return;
@@ -259,18 +271,14 @@ const Main = () => {
   }, [channelExpand]);
 
   useEffect(() => {
-    const sessionKey = JSON.parse(localStorage.getItem("userKey"));
-  }, []);
-
-  useEffect(() => {
     axios({
       method: "GET",
       url: "http://206.189.91.54/api/v1/users",
       headers: {
-        "access-token": tokenValue,
-        client: apiHeaders.client,
-        expiry: apiHeaders.expiry,
-        uid: apiData.data?.data?.uid, //user id
+        "access-token": authKey.accessToken,
+        client: authKey.accessClient,
+        expiry: authKey.accessExpiry,
+        uid: authKey.accessUID,
       },
     })
       .then((res) => {

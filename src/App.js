@@ -11,9 +11,10 @@ import Chat from "./Components/Chat/Chat";
 
 function App() {
   const [allUsers, setAllUsers] = useState([]);
-  const [apiData, setApiData] = useState({});
+  const [apiData, setApiData] = useState([]);
   const [apiHeaders, setApiHeaders] = useState();
   const [auth, setAuth] = useState(false);
+  const [authKey, setAuthKey] = useState([]);
   const [tokenValue, setTokenValue] = useState();
   const [channelData, setChannelData] = useState();
   const [channelID, setchannelID] = useState("");
@@ -26,7 +27,7 @@ function App() {
   return (
     <div className="App">
       {/* <Registration/>   */}
-      <ContextAPI.Provider
+      {/* <ContextAPI.Provider
         value={{
           allUsers,
           setAllUsers,
@@ -58,8 +59,8 @@ function App() {
             </Route>
           </Switch>
         </Router>
-      </ContextAPI.Provider>
-      {/* <ContextAPI.Provider
+      </ContextAPI.Provider> */}
+      <ContextAPI.Provider
         value={{
           allUsers,
           setAllUsers,
@@ -69,6 +70,8 @@ function App() {
           setApiHeaders,
           auth,
           setAuth,
+          authKey,
+          setAuthKey,
           channelData,
           setChannelData,
           channelMembers,
@@ -86,17 +89,16 @@ function App() {
             <Route exact path="/" component={Login}>
               <Login setUser={setUser} />
             </Route>
-            <Route exact path="/dashboard" component={Chat }>
+            <Route exact path="/dashboard" component={Chat}>
               <Chat />
-              <Main/>
+              <Main />
             </Route>
             <Route exact path="/dashboard/channel" component={Channel}>
               <Channel />
             </Route>
           </Switch>
         </Router>
-
-      </ContextAPI.Provider> */}
+      </ContextAPI.Provider>
     </div>
   );
 }
