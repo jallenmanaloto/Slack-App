@@ -34,6 +34,10 @@
   display: none;
 }
 
+.addPeople:hover {
+  background-color: #c1cccf54;
+}
+
 .scroll-active:hover > ::-webkit-scrollbar {
   display: block;
 }

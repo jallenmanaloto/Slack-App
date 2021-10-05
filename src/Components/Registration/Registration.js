@@ -140,7 +140,6 @@ const Registration = () => {
     const handleCreateAcct = () => {
         
          const data =  {
-            method: 'post',
             url: 'auth',
             email: email,
             password: password,
