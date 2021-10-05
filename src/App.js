@@ -96,6 +96,7 @@ function App() {
             <Route exact path="/dashboard/channel" component={Channel}>
               <Channel />
             </Route>
+            <Route exact path="/register" component={Registration} />
           </Switch>
         </Router>
       </ContextAPI.Provider>

@@ -259,11 +259,6 @@ const Main = () => {
     })
       .then((res) => {
         setAllChannels([...res.data.data]);
-        console.log("success from main");
-        console.log(authKey.accessToken);
-        console.log(authKey.accessClient);
-        console.log(authKey.accessExpiry);
-        console.log(authKey.accessUID);
       })
       .catch((err) => {
         return;

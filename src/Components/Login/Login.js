@@ -76,6 +76,7 @@ const useStyles = makeStyles(() => ({
   footerTwo: {
     marginTop: "10px",
     fontSize: "1em",
+    cursor: "pointer",
   },
 }));
 
@@ -110,6 +111,10 @@ const Login = () => {
 
   const handleKeyDown = (evt) => {
     evt.key === "Enter" && handleLogin(evt);
+  };
+
+  const toRegister = () => {
+    history.push("/register");
   };
 
   const handleLogin = (e) => {
@@ -212,7 +217,10 @@ const Login = () => {
                 {" "}
                 Don't have an account?{" "}
               </Typography>
-              <Typography className={classes.footerTwo}> Sign up</Typography>
+              <Typography onClick={toRegister} className={classes.footerTwo}>
+                {" "}
+                Sign up
+              </Typography>
             </Grid>
           </Box>
         </Grid>
