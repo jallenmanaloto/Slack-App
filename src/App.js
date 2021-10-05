@@ -7,6 +7,7 @@ import Main from './Components/Main/Main'
 import Channel from './Components/Channel/Channel';
 import HomeChannel from './Components/Channel/HomeChannel'
 import { ContextAPI } from './Components/Context/ContextAPi';
+import Chat from'./Components/Chat/Chat'
 
 function App() {
   const [apiData, setApiData] = useState({});
@@ -26,10 +27,7 @@ function App() {
                     <Login setUser={setUser} />
                 </Route>
                 <Route exact path='/dashboard' component={Main}>
-                    <Main />
-                </Route>
-                <Route exact path='/dashboard/channel' component={Channel}>
-                    <Channel />
+                    <Chat />
                 </Route>
               </Switch>
           </Router>
