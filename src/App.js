@@ -89,7 +89,7 @@ function App() {
             <Route exact path="/" component={Login}>
               <Login setUser={setUser} />
             </Route>
-            <Route exact path="/dashboard" component={Chat}>
+            <Route exact path="/dashboard" component={HomeChannel}>
               <Chat />
               <Main />
             </Route>
