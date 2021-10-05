@@ -13,6 +13,7 @@ function App() {
   const [allUsers, setAllUsers] = useState([]);
   const [apiData, setApiData] = useState({});
   const [apiHeaders, setApiHeaders] = useState();
+  const [auth, setAuth] = useState(false);
   const [tokenValue, setTokenValue] = useState();
   const [channelData, setChannelData] = useState();
   const [channelID, setchannelID] = useState("");
@@ -32,6 +33,8 @@ function App() {
           setApiData,
           apiHeaders,
           setApiHeaders,
+          auth,
+          setAuth,
           channelData,
           setChannelData,
           channelMembers,

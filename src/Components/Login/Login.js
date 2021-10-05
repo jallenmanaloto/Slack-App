@@ -91,6 +91,8 @@ const Login = () => {
     setApiData,
     apiHeaders,
     setApiHeaders,
+    auth,
+    setAuth,
     channelData,
     setChannelData,
     channelMembers,
@@ -138,6 +140,7 @@ const Login = () => {
           accessUID: uid,
         };
         localStorage.setItem("userKey", JSON.stringify(authData));
+        setAuth(true);
         history.push("/dashboard");
       })
       .catch((err) => console.log(err));
