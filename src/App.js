@@ -50,8 +50,9 @@ function App() {
             <Route exact path="/" component={Login}>
               <Login setUser={setUser} />
             </Route>
-            <Route exact path="/dashboard" component={Main}>
+            <Route exact path="/dashboard" component={Chat }>
               <Chat />
+              {/* <Main/> */}
             </Route>
          {/*    <Route exact path="/dashboard/channel" component={Channel}>
               <Channel />
