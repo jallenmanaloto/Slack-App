@@ -11,7 +11,6 @@ const Chat = () => {
 
     const classes = useStyles();
     const [to, setTo] = useState('');
-    
 
     const [usersList, setUsersList] = useState([]);
     const [sendTo, setSendTo] = useState('');
