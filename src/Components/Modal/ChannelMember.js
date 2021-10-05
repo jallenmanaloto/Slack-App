@@ -217,6 +217,8 @@ const ChannelMember = () => {
 
   //declaring Contexts for API data
   const {
+    allUsers,
+    setAllUsers,
     apiData,
     setApiData,
     apiHeaders,
@@ -230,6 +232,20 @@ const ChannelMember = () => {
     channelMessage,
     setchannelMessage,
   } = useContext(ContextAPI);
+
+  const channelMemberList = [...channelMembers];
+  const allUsersList = [...allUsers];
+
+  const filteredList = allUsersList.filter((user) => {
+    return channelMemberList.some((channel) => {
+      return channel.id === user.id;
+    });
+  });
+
+  // console.log(channelMemberList);
+  // console.log(allUsersList);
+  // console.log(channelData);
+  // console.log(filteredList);
 
   //function to handle invite of user to the channel
   const inviteUser = () => {
