@@ -108,6 +108,7 @@ const Login = () => {
     setChannelMembers,
     channelMessage,
     setchannelMessage,
+    setMessages,
     tokenValue,
     setTokenValue,
     userName,
@@ -150,9 +151,12 @@ const Login = () => {
         const userDisplayName = email.split("@")[0];
 
         setUserName(userDisplayName);
-        // setTokenValue(token);
-        // setApiHeaders(res.headers);
-        // setApiData(res);
+
+        // if (!JSON.parse(localStorage.getItem("messages"))) {
+        //   return;
+        // } else {
+        //   setMessages(JSON.parse(localStorage.getItem("message")));
+        // }
 
         if (res.data.errors) {
           handleErrorDisplay();
@@ -170,7 +174,6 @@ const Login = () => {
       })
       .then((res) => {
         const auth = JSON.parse(localStorage.getItem("userKey"));
-        console.log(`auth: ${auth}`);
       })
       .catch((err) => handleErrorDisplay());
   };

@@ -10,6 +10,7 @@ import {
   DialogContentText,
   DialogTitle,
   Modal,
+  Snackbar,
   Tab,
   Tabs,
   Typography,
@@ -24,8 +25,15 @@ const useStyles = makeStyles({
   root: {
     position: "absolute",
     right: "5rem",
-    top: "1rem",
+    top: "0.6rem",
     cursor: "pointer",
+    minWidth: "7em",
+    minHeight: "2.9em",
+    background: "lightgray",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: "32.5px",
   },
   addPeople: {
     height: "30vh",
@@ -418,7 +426,7 @@ const ChannelMember = () => {
         {memberListModal}
       </Modal>
       <Dialog
-        maxWidth="xs"
+        maxWidth="sm"
         className={classes.dialog}
         open={dialogDisplay}
         onClose={handleDialogDisplay}
@@ -435,9 +443,18 @@ const ChannelMember = () => {
             placeholder="Enter a user id"
           ></input>
           {errorDisplay ? (
-            <Alert className={classes.errors} severity="error">
-              {errorMessage}
-            </Alert>
+            <Snackbar
+              anchorOrigin={{ vertical: "top", horizontal: "center" }}
+              open="true"
+            >
+              <Alert
+                className={classes.errors}
+                severity="error"
+                variant="filled"
+              >
+                {errorMessage}
+              </Alert>
+            </Snackbar>
           ) : null}
         </DialogContent>
         <DialogActions>

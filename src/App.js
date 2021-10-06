@@ -11,11 +11,13 @@ import Chat from "./Components/Chat/Chat";
 
 function App() {
   const [allUsers, setAllUsers] = useState([]);
+  const [allChannels, setAllChannels] = useState([]);
   const [apiData, setApiData] = useState([]);
   const [apiHeaders, setApiHeaders] = useState();
   const [auth, setAuth] = useState(false);
   const [authKey, setAuthKey] = useState([]);
   const [fetchFilterMembers, setFetchFilterMembers] = useState([]);
+  const [messages, setMessages] = useState([]);
   const [tokenValue, setTokenValue] = useState();
   const [channelData, setChannelData] = useState();
   const [channelID, setchannelID] = useState("");
@@ -29,6 +31,8 @@ function App() {
     <div className="App">
       <ContextAPI.Provider
         value={{
+          allChannels,
+          setAllChannels,
           allUsers,
           setAllUsers,
           apiData,
@@ -49,6 +53,8 @@ function App() {
           setchannelMessage,
           fetchFilterMembers,
           setFetchFilterMembers,
+          messages,
+          setMessages,
           tokenValue,
           setTokenValue,
           userName,

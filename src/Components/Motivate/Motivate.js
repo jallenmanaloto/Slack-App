@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
+import TMiBot from '../../assets/images/TMiBot.svg'
 
 const Motivate = ({ openMotivate, setOpenMotivate }) => {
   const useStyles = makeStyles({
@@ -26,6 +27,10 @@ const Motivate = ({ openMotivate, setOpenMotivate }) => {
       alignItems: "center",
       textAlign: "center",
       padding: "0 1rem",
+    },
+    botImg: {
+      height: '4.6em',
+      width: '4.6em',
     },
     copy: {
       paddingTop: "3rem",
@@ -85,6 +90,7 @@ const Motivate = ({ openMotivate, setOpenMotivate }) => {
 
   const body = (
     <div className={classes.bodyRoot}>
+      <img className={classes.botImg} src={TMiBot} alt="TMiBot" />
       <h3 className={classes.copy}>{quote.body}</h3>
       <h5 className={classes.author}>{quote.author}</h5>
     </div>
