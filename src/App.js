@@ -68,6 +68,7 @@ function App() {
               <Channel />
             </Route>
             <Route exact path="/register" component={Registration} />
+            <Route path="*" component={() => "404 NOT FOUND"} />
           </Switch>
         </Router>
       </ContextAPI.Provider>
