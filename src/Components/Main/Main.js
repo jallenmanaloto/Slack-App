@@ -40,6 +40,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Channel from "../Channel/Channel";
 import { ContextAPI } from "../Context/ContextAPi";
 import UserSearch from "../UserSearch/UserSearch";
+import MyAccount from "../Modal/MyAccount";
 
 const drawerWidth = 325;
 
@@ -209,6 +210,8 @@ const Main = () => {
   const classes = useStyles();
   const history = useHistory();
   const {
+    allChannels,
+    setAllChannels,
     allUsers,
     setAllUsers,
     apiData,
@@ -229,14 +232,12 @@ const Main = () => {
     setchannelMessage,
     fetchFilterMembers,
     setFetchFilterMembers,
+    setMessages,
     tokenValue,
     setTokenValue,
     userName,
     setUserName,
   } = useContext(ContextAPI);
-
-  //Container to store all fetched channels
-  const [allChannels, setAllChannels] = useState([]);
 
   //Setting states
   const [anchorEl, setAnchorEl] = useState(null);
@@ -247,6 +248,7 @@ const Main = () => {
   const [searchResult, setSearchResult] = useState(false);
   //state for the modal open
   const [modalOpen, setModalOpen] = useState(false);
+  const [profileModalOpen, setProfileModalOpen] = useState(false);
 
   useEffect(() => {
     const sessionKey = JSON.parse(localStorage.getItem("userKey"));
@@ -343,6 +345,11 @@ const Main = () => {
   };
 
   const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const openMyProfile = () => {
+    setProfileModalOpen(true);
     setAnchorEl(null);
   };
 
@@ -530,7 +537,7 @@ const Main = () => {
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
               >
-                <MenuItem>My Profile</MenuItem>
+                <MenuItem onClick={openMyProfile}>My Profile</MenuItem>
                 <MenuItem onClick={logOut}>Log out</MenuItem>
               </Menu>
             </Toolbar>
@@ -569,6 +576,11 @@ const Main = () => {
       {modalOpen ? (
         <AddChannelModal setModalOpen={modalOpen} closeModal={setModalOpen} />
       ) : null}
+      {}
+      <MyAccount
+        profileModalOpen={profileModalOpen}
+        setProfileModalOpen={setProfileModalOpen}
+      />
       <HomeChannel />
     </div>
   );
