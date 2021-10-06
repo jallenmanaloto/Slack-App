@@ -18,9 +18,11 @@ const Chat = () => {
   const [sendTo, setSendTo] = useState('');
   const [inputMsg, setInputMsg] = useState('');
   const [messages, setMessages] = useState([]);
-  const [receiverId, setReceiverId] = useState('')
-  const msgRef = useRef();
+  const [receiverId, setReceiverId] = useState('');
+  
+  const [userStorage, setUserStorage] =  useState();
 
+  const sendRef = useRef();
 
   const {
     apiData,
@@ -31,32 +33,8 @@ const Chat = () => {
     setTokenValue,
   } = useContext(ContextAPI);
 
-  
-/*   const displayMsgs = () => {
-    const data = {
-      method: "Get",
-      url: "users",
-      "access-tokens": tokenValue,
-      client: apiHeaders.client,
-      expiry: apiHeaders.expiry,
-      uid: apiHeaders.data?.data?.uid,
-
-      receiver_id: .data?.data?.id,
-      receiver_class: "user",
-    }; 
-
-    DisplayMsgsAPI(data)
-      .then((res) => {
-        setMessages(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }; */
-
-
-  //Get all users
-  useEffect (() => {
+   //Get all users
+   useEffect (() => {
     axios({
         method: 'Get',
         url: 'http://206.189.91.54/api/v1/users',
@@ -69,27 +47,65 @@ const Chat = () => {
     })
         .then((res) => {
             setUsersList(res.data.data)
+            
         })
         .catch(err => 
             console.log(err)) 
 
     },[])  
 
-    
-    const getReceiverID = () => {
-        for (let i = 0; i < usersList.length; i++){
-            if (usersList[i].email === sendTo) {
-                setReceiverId(usersList[i].id)
-            }
+  const getReceiverID = () => {
+    for (let i = 0; i < usersList.length; i++){
+        if (usersList[i].email === sendRef.current.value) {
+            setReceiverId(usersList[i].id)
         }
-     }  
+    }
+ }
 
-    console.log(receiverId);
+  // Get msgs
+  const getMsgs = async () => {
+    await getReceiverID();
+    axios({
+      method: "Get",
+      url: `http://206.189.91.54/api/v1/messages?receiver_id=${receiverId}}&receiver_class=User`,
+      headers: {
+        'access-token': tokenValue,
+        client: apiHeaders.client,
+        expiry: apiHeaders.expiry,
+        uid: apiData.data?.data?.uid,
+       },
+
+      params: {
+          receiver_id: receiverId,
+          receiver_class: 'User',
+      }
+      })
+      .then((res) => {
+        console.log(res.data.data);
+        setMessages(res.data.data); 
+        setUserStorage(res.data)
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
+
+
+
+ 
+    
+    console.log(usersList)
+
+    /* console.log(receiverId); */
+    /* console.log(messages);   */
+    /* console.log('here')
+    console.log(userStorage) */
+
+    
 
   const sendMsg = (e) => {
         getReceiverID();
         e.preventDefault();
-
         axios({
             method: 'Post',
             url: 'http://206.189.91.54/api/v1/messages',
@@ -115,28 +131,38 @@ const Chat = () => {
 
   return (
     <div>
-      <label>Send to:</label>
-        <input onChange={(e) => {setSendTo(e.target.value)}}/>
-             {usersList
-                .filter((val) => {
-                    if (sendTo === '') {
-                        return val
-                    } else if (JSON.stringify(val.uid).includes(sendTo)) {
-                        return val
-                    } return false;
-                }).map((val,key) => {
-                    return(
-                        <div className="users" key={key}>
-                            <p>{val.email}</p>
-                        </div>
-                    );
-                })}  
+      <div>
+        <label>Send to:</label>
+          <input ref={sendRef}/> 
+          <button onClick={(e) => getMsgs(e)}>Get</button>
+              {/* {usersList
+                  .filter((val) => {
+                      if (sendTo === '') {
+                          return val
+                      } else if (JSON.stringify(val.uid).includes(sendTo)) {
+                          return val
+                      } return false;
+                  }).map((val,key) => {
+                      return(
+                          <div className="users" key={key}>
+                              <p>{val.email}</p>
+                          </div>
+                      );
+                  })}   */}
 
-      <label>Msg box</label>
-      <input onChange={(e) => setInputMsg(e.target.value)} value={inputMsg}></input>
-      <button onClick={(e) => sendMsg(e)}>Send</button>
+        <label>Msg box</label>
+        <input onChange={(e) => setInputMsg(e.target.value)}  ></input>
+        <button onClick={(e) => sendMsg(e)}>Send</button>
+      </div>
+      <div>
+          {/*  {messages.map((val) => {
+              return (
+                  <p>{val.body}</p>
 
-      <span>{messages}</span>
+              )
+     
+              })} */}
+      </div>
     </div>
   );
 };
