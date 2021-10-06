@@ -12,7 +12,7 @@ import Grid from "@material-ui/core/Grid";
 import Avatar from "@material-ui/core/Avatar";
 import TMiBot from "../../assets/images/TMiBot.svg";
 import AutoScroll from "./AutoScroll";
-import Motivate from '../Motivate/Motivate'
+import Motivate from "../Motivate/Motivate";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -108,7 +108,7 @@ const HomeChannel = () => {
   const [messageInput, setMessageInput] = useState("");
   const [newMessage, setNewMessage] = useState(false);
   const [messages, setMessages] = useState([]);
-  const [openMotivate, setOpenMotivate] = useState(false)
+  const [openMotivate, setOpenMotivate] = useState(false);
 
   const timeStamp = new Date();
   const d = `${timeStamp.getHours()}:${timeStamp.getMinutes()}`;
@@ -138,12 +138,16 @@ const HomeChannel = () => {
   } = useContext(ContextAPI);
 
   useEffect(() => {
-    setMessages(JSON.parse(localStorage.getItem("message")));
+    if (!localStorage.getItem("messages")) {
+      return;
+    } else {
+      setMessages(JSON.parse(localStorage.getItem("message")));
+    }
   }, []);
 
   useEffect(() => {
     messageView.current.scrollIntoView();
-  },[]);
+  }, []);
 
   //function to handle the value passed in the Input
   const handleInputValue = () => {
@@ -156,7 +160,7 @@ const HomeChannel = () => {
     if (messageInput === "/motivate") {
       setTimeout(() => {
         setOpenMotivate(true);
-      }, 1200)
+      }, 1200);
     }
     messages.push(inputValue.current.value);
     // setMessageStatus(!messageStatus)
@@ -272,7 +276,12 @@ const HomeChannel = () => {
           </Grid>
           <div ref={messageView}></div>
           <AutoScroll />
-          {openMotivate ? <Motivate openMotivate={openMotivate} setOpenMotivate={setOpenMotivate} /> : null}
+          {openMotivate ? (
+            <Motivate
+              openMotivate={openMotivate}
+              setOpenMotivate={setOpenMotivate}
+            />
+          ) : null}
         </div>
       </div>
       <input

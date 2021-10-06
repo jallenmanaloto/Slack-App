@@ -221,10 +221,14 @@ const Main = () => {
     setAuthKey,
     channelData,
     setChannelData,
+    channelID,
+    setchannelID,
     channelMembers,
     setChannelMembers,
     channelMessage,
     setchannelMessage,
+    fetchFilterMembers,
+    setFetchFilterMembers,
     tokenValue,
     setTokenValue,
     userName,
@@ -235,11 +239,14 @@ const Main = () => {
   const [allChannels, setAllChannels] = useState([]);
 
   //Setting states
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
   const [channelExpand, setChannelExpand] = useState(false);
   const [dmExpand, setDmExpand] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [searchBar, setSearchBar] = useState("");
   const [searchResult, setSearchResult] = useState(false);
+  //state for the modal open
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     const sessionKey = JSON.parse(localStorage.getItem("userKey"));
@@ -261,7 +268,7 @@ const Main = () => {
         setAllChannels([...res.data.data]);
       })
       .catch((err) => {
-        return;
+        console.log(err);
       });
   }, [channelExpand]);
 
@@ -278,14 +285,36 @@ const Main = () => {
     })
       .then((res) => {
         setAllUsers(res.data.data);
+        localStorage.setItem("allUsers", JSON.stringify(allUsers));
       })
       .catch((err) => {
-        return;
+        console.log(err);
       });
-  });
+  }, []);
 
-  //state for the modal open
-  const [modalOpen, setModalOpen] = useState(false);
+  //Retrieving information of a Channel
+  useEffect(() => {
+    if (channelID === "") return;
+    else {
+      axios({
+        method: "GET",
+        url: `http://206.189.91.54/api/v1/channels/${channelID}`,
+        headers: {
+          "access-token": authKey.accessToken,
+          client: authKey.accessClient,
+          expiry: authKey.accessExpiry,
+          uid: authKey.accessUID,
+        },
+      })
+        .then((res) => {
+          const members = res.data.data.channel_members;
+          setChannelMembers(members);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [channelID]);
 
   //Function to handle expansion of Channel
   const handleChannelExpandToggle = () => {
@@ -306,11 +335,8 @@ const Main = () => {
     setSearchBar(e.target.value);
     if (!searchBar) {
       setSearchResult(true);
-      console.log("open search result");
     }
   };
-
-  const [anchorEl, setAnchorEl] = useState(null);
 
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -322,6 +348,7 @@ const Main = () => {
 
   const logOut = () => {
     localStorage.removeItem("userKey");
+    setAuth(false);
     history.push("/");
   };
 
@@ -398,25 +425,9 @@ const Main = () => {
                 {allChannels.map((val, key) => {
                   const getChannelData = (e) => {
                     setChannelData(val);
-                    //Retrieving information of a Channel
-                    axios({
-                      method: "GET",
-                      url: `http://206.189.91.54/api/v1/channels/${val.id}`,
-                      headers: {
-                        "access-token": tokenValue,
-                        client: apiHeaders.client,
-                        expiry: apiHeaders.expiry,
-                        uid: apiData.data?.data?.uid,
-                      },
-                    })
-                      .then((res) => {
-                        setChannelMembers(res.data.data.channel_members);
-                      })
-                      .catch((err) => {
-                        console.log(err);
-                      });
+                    setFetchFilterMembers(!fetchFilterMembers);
+                    setchannelID(val.id);
                   };
-
                   return (
                     <Link
                       key={key}

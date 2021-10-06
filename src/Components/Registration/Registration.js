@@ -2,19 +2,24 @@ import { useRef, useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import { callAPI } from "../API/callAPI";
 import validator from "validator";
-import { Avatar } from "@material-ui/core";
-import { Button } from "@material-ui/core";
-import { Box } from "@material-ui/core";
-import { Checkbox } from "@material-ui/core";
-import { Grid } from "@material-ui/core";
+import {
+  Avatar,
+  Button,
+  Box,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  makeStyles,
+  Snackbar,
+  TextField,
+  Typography,
+} from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert";
 import { Link } from "react-router-dom";
-import { makeStyles } from "@material-ui/core";
-import { Typography } from "@material-ui/core";
-import { TextField } from "@material-ui/core";
 import CatBG from "../../assets/images/CatBG.jpg";
-import { FormControlLabel } from "@material-ui/core";
 import TMiBot from "../../assets/images/TMiBot.svg";
 import Sample from "../../assets/images/sample.jpg";
+import axios from "axios";
 
 const useStyles = makeStyles(() => ({
   containerBackground: {
@@ -95,17 +100,22 @@ const useStyles = makeStyles(() => ({
 const Registration = () => {
   const classes = useStyles();
 
+  //declaring ref for inputs
   const emailInput = useRef();
   const passInput = useRef();
   const confirmPassInput = useRef();
 
+  //declaring states to handle error
   const [errorPass, setErrorPass] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const [error, setError] = useState(false);
 
+  //declaring states to handleinput values
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  //history to push on the next route
   const history = useHistory();
 
   const toLogin = () => {
@@ -133,11 +143,12 @@ const Registration = () => {
     console.log(password);
   };
 
+  const handleEmailValidation = () => {};
+
   const handleRegister = () => {
-    if (password.value !== confirmPassword.value) {
+    if (password !== confirmPassword) {
       console.log("pass mismatch");
       setErrorMsg("Passwords do not match");
-      return;
     } else {
       console.log("pass matched");
       setErrorMsg("Accepted");
@@ -146,16 +157,17 @@ const Registration = () => {
   };
 
   const handleCreateAcct = () => {
-    const data = {
-      url: "auth",
-      email: email,
-      password: password,
-      password_confirmation: confirmPassword,
-    };
-
-    callAPI(data);
-
-    console.log(data);
+    axios({
+      method: "POST",
+      url: "http://206.189.91.54/api/v1/auth",
+      data: {
+        email: email,
+        password: password,
+        password_confirmation: confirmPassword,
+      },
+    })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -275,10 +287,19 @@ const Registration = () => {
           </Box>
         </Grid>
       </Grid>
-
-      <Grid container>
-        <Grid item></Grid>
-      </Grid>
+      <Snackbar
+        style={{width: '100%'}}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open="true" /* {error} */
+        autoHideDuration={4000}
+      >
+        <Alert severity="error" variant="filled">
+          Error on the following:
+          <h5>Email</h5>
+          <h5>User</h5>
+          <h5>Pass</h5>
+        </Alert>
+      </Snackbar>
     </Grid>
   );
 };

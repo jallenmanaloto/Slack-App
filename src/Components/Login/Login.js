@@ -3,14 +3,18 @@ import { useHistory } from "react-router";
 import { callAPI } from "../API/callAPI.js";
 import { Breakpoint } from "@material-ui/core/styles/createBreakpoints";
 import { ContextAPI } from "../Context/ContextAPi.js";
-import { Button } from "@material-ui/core";
-import { Box } from "@material-ui/core";
-import { Checkbox } from "@material-ui/core";
-import { Grid } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core";
-import { Typography } from "@material-ui/core";
-import { TextField } from "@material-ui/core";
-import { FormControlLabel } from "@material-ui/core";
+import {
+  Button,
+  Box,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  makeStyles,
+  Typography,
+  TextField,
+} from "@material-ui/core";
+import { Snackbar } from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert";
 import Sample from "../../assets/images/sample.jpg";
 import CatBG from "../../assets/images/CatBG.jpg";
 import Logo from "../../assets/images/Logo.svg";
@@ -28,6 +32,10 @@ const useStyles = makeStyles(() => ({
     justifyContent: "center",
     alignItems: "center",
     height: "100vh",
+  },
+
+  errorMessage: {
+    width: "100%",
   },
 
   sideImageContainer: {
@@ -108,6 +116,7 @@ const Login = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState(false);
 
   const handleKeyDown = (evt) => {
     evt.key === "Enter" && handleLogin(evt);
@@ -115,6 +124,13 @@ const Login = () => {
 
   const toRegister = () => {
     history.push("/register");
+  };
+
+  const handleErrorDisplay = () => {
+    setErrorMsg(true);
+    setTimeout(() => {
+      setErrorMsg(false);
+    }, 4000);
   };
 
   const handleLogin = (e) => {
@@ -134,9 +150,13 @@ const Login = () => {
         const userDisplayName = email.split("@")[0];
 
         setUserName(userDisplayName);
-        setTokenValue(token);
-        setApiHeaders(res.headers);
-        setApiData(res);
+        // setTokenValue(token);
+        // setApiHeaders(res.headers);
+        // setApiData(res);
+
+        if (res.data.errors) {
+          handleErrorDisplay();
+        }
 
         const authData = {
           accessToken: token,
@@ -148,7 +168,11 @@ const Login = () => {
         setAuth(true);
         history.push("/dashboard");
       })
-      .catch((err) => console.log(err));
+      .then((res) => {
+        const auth = JSON.parse(localStorage.getItem("userKey"));
+        console.log(`auth: ${auth}`);
+      })
+      .catch((err) => handleErrorDisplay());
   };
 
   return (
@@ -164,6 +188,16 @@ const Login = () => {
               alignItems: "center",
             }}
           >
+            {errorMsg ? (
+              <Snackbar
+                anchorOrigin={{ vertical: "top", horizontal: "left" }}
+                open="true"
+              >
+                <Alert severity="error" variant="filled">
+                  Invalid credentials. Try again.
+                </Alert>
+              </Snackbar>
+            ) : null}
             <Typography className={classes.headerLogin}>Sign In</Typography>
 
             <TextField

@@ -224,23 +224,35 @@ const ChannelMember = () => {
     setApiData,
     apiHeaders,
     setApiHeaders,
+    authKey,
+    setAuthKey,
     tokenValue,
     setTokenValue,
     channelData,
     setChannelData,
+    channelID,
+    setchannelID,
     channelMembers,
     setChannelMembers,
     channelMessage,
     setchannelMessage,
+    fetchFilterMembers,
+    setFetchFilterMembers,
   } = useContext(ContextAPI);
 
   useEffect(() => {
     const channelMemberList = channelMembers.map((member) => member.user_id);
-
-    setFilterMember(
-      allUsers.filter((users) => channelMemberList.includes(users.id))
+    const filteredMembers = allUsers.filter((users) =>
+      channelMemberList.includes(users.id)
     );
-  }, [channelData]);
+    setTimeout(() => {
+      setFilterMember([...filteredMembers]);
+      console.log("timeout");
+      console.log(filterMember);
+    }, 300);
+  }, [channelMembers]);
+  console.log("outside");
+  console.log(filterMember);
 
   //function to handle invite of user to the channel
   const inviteUser = () => {
@@ -248,14 +260,14 @@ const ChannelMember = () => {
       url: "http://206.189.91.54/api/v1/channel/add_member",
       method: "POST",
       headers: {
-        "access-token": tokenValue,
-        client: apiHeaders.client,
-        expiry: apiHeaders.expiry,
-        uid: apiData.data?.data?.uid,
+        "access-token": authKey.accessToken,
+        client: authKey.accessClient,
+        expiry: authKey.accessExpiry,
+        uid: authKey.accessUID,
       },
       data: {
         id: channelData.id,
-        member_id: 123,
+        member_id: 123, //value from the input
       },
     })
       .then((res) => {
@@ -278,7 +290,7 @@ const ChannelMember = () => {
   const members = (
     <div onClick={handleClose} className={classes.root}>
       <AvatarGroup max={3}>
-        {filterMember.map((val) => {
+        {channelMembers.map((val) => {
           return (
             <Avatar
               className={classes.user}
@@ -287,32 +299,6 @@ const ChannelMember = () => {
             />
           );
         })}
-
-        {/* <Avatar
-          className={classes.user}
-          alt="Travis Howard"
-          src="/static/images/avatar/2.jpg"
-        />
-        <Avatar
-          className={classes.user}
-          alt="Cindy Baker"
-          src="/static/images/avatar/3.jpg"
-        />
-        <Avatar
-          className={classes.user}
-          alt="Agnes Walker"
-          src="/static/images/avatar/4.jpg"
-        />
-        <Avatar
-          className={classes.user}
-          alt="Trevor Henderson"
-          src="/static/images/avatar/5.jpg"
-        />
-        <Avatar
-          className={classes.user}
-          alt="Trevor Henderson"
-          src="/static/images/avatar/5.jpg"
-        /> */}
       </AvatarGroup>
     </div>
   );
@@ -345,10 +331,10 @@ const ChannelMember = () => {
             }
             return false;
           })
-          .map((val) => {
-            const user = val.uid.split("@")[0];
+          .map((val, key) => {
+            const user = val.uid; /* .split("@")[0]; */
             return (
-              <div key={val.id} className={`${classes.members} addPeople`}>
+              <div key={key} className={`${classes.members} addPeople`}>
                 <Avatar
                   className={classes.memberImg}
                   alt={user}
@@ -432,7 +418,6 @@ const ChannelMember = () => {
         {memberListModal}
       </Modal>
       <Dialog
-        fullWidth="xs"
         maxWidth="xs"
         className={classes.dialog}
         open={dialogDisplay}

@@ -23,6 +23,8 @@ const Chat = () => {
     setApiData,
     apiHeaders,
     setApiHeaders,
+    authKey,
+    setAuthKey,
     tokenValue,
     setTokenValue,
   } = useContext(ContextAPI);
@@ -55,10 +57,10 @@ const Chat = () => {
       method: "Get",
       url: "http://206.189.91.54/api/v1/users",
       headers: {
-        "access-token": tokenValue,
-        client: apiHeaders.client,
-        expiry: apiHeaders.expiry,
-        uid: apiData.data?.data?.uid,
+        "access-token": authKey.accessToken,
+        client: authKey.accessClient,
+        expiry: authKey.accessExpiry,
+        uid: authKey.accessUID,
       },
     })
       .then((res) => {

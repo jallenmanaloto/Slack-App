@@ -15,6 +15,7 @@ function App() {
   const [apiHeaders, setApiHeaders] = useState();
   const [auth, setAuth] = useState(false);
   const [authKey, setAuthKey] = useState([]);
+  const [fetchFilterMembers, setFetchFilterMembers] = useState([]);
   const [tokenValue, setTokenValue] = useState();
   const [channelData, setChannelData] = useState();
   const [channelID, setchannelID] = useState("");
@@ -26,40 +27,6 @@ function App() {
 
   return (
     <div className="App">
-      {/* <Registration/>   */}
-      {/* <ContextAPI.Provider
-        value={{
-          allUsers,
-          setAllUsers,
-          apiData,
-          setApiData,
-          apiHeaders,
-          setApiHeaders,
-          auth,
-          setAuth,
-          channelData,
-          setChannelData,
-          channelMembers,
-          setChannelMembers,
-          channelMessage,
-          setchannelMessage,
-          tokenValue,
-          setTokenValue,
-          userName,
-          setUserName,
-        }}
-      >
-        <Router>
-          <Switch>
-            <Route exact path="/" component={Login}>
-              <Login setUser={setUser} />
-            </Route>
-            <Route exact path="/dashboard" component={Main}>
-              <Chat />
-            </Route>
-          </Switch>
-        </Router>
-      </ContextAPI.Provider> */}
       <ContextAPI.Provider
         value={{
           allUsers,
@@ -74,10 +41,14 @@ function App() {
           setAuthKey,
           channelData,
           setChannelData,
+          channelID,
+          setchannelID,
           channelMembers,
           setChannelMembers,
           channelMessage,
           setchannelMessage,
+          fetchFilterMembers,
+          setFetchFilterMembers,
           tokenValue,
           setTokenValue,
           userName,
