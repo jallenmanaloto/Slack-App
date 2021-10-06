@@ -1,124 +1,178 @@
-import React, { useState, useRef, useContext} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { ContextAPI } from '../Context/ContextAPi';
-import { RetrieveUsersAPI, SendDmAPI, DisplayMsgsAPI } from '../API/DmAPI';
+import React, { useState, useRef, useContext, useEffect } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { ContextAPI } from "../Context/ContextAPi";
+import { RetrieveUsersAPI, SendDmAPI, DisplayMsgsAPI } from "../API/DmAPI";
+import axios from "axios";
+import { SentimentVerySatisfiedTwoTone } from "@material-ui/icons";
 
-const useStyles = makeStyles((theme) => ({
-
-}));
+const useStyles = makeStyles((theme) => ({}));
 
 const Chat = () => {
+  /* const classes = useStyles(); */
+  /* const [to, setTo] = useState(""); */
 
-    const classes = useStyles();
-    const [to, setTo] = useState('');
-    
-    
+  const [usersList, setUsersList] = useState([]);
+  const [sendTo, setSendTo] = useState("");
+  const [inputMsg, setInputMsg] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [receiverId, setReceiverId] = useState('');
+  
+  const [userStorage, setUserStorage] =  useState();
 
-    const [usersList, setUsersList] = useState([]);
-    const [sendTo, setSendTo] = useState('');
-    const [inputMsg, setInputMsg] = useState('');
-    const [messages, setMessages] = useState([]);
+  const sendRef = useRef();
+  const msgRef = useRef();
 
-    const {
-        apiData, 
-        setApiData, 
-        apiHeaders, 
-        setApiHeaders, 
-        tokenValue, 
-        setTokenValue, 
-    } = useContext(ContextAPI);
+  const {
+    apiData,
+    setApiData,
+    apiHeaders,
+    setApiHeaders,
+    authKey,
+    setAuthKey,
+    tokenValue,
+    setTokenValue,
+  } = useContext(ContextAPI);
 
 
-    const displayMsgs = () => {
-        const data = {
-            method: 'Get',
-            url: 'users',
-            'access-tokens': tokenValue,
-            client: apiHeaders.client,
-            expiry: apiHeaders.expiry,
-            uid: apiHeaders.data?.data?.uid,
+  //Get all users
+  useEffect(() => {
+    axios({
+      method: "Get",
+      url: "http://206.189.91.54/api/v1/users",
+      headers: {
+        "access-token": authKey.accessToken,
+        client: authKey.accessClient,
+        expiry: authKey.accessExpiry,
+        uid: authKey.accessUID,
+      },
+    })
+        .then((res) => {
+            setUsersList(res.data.data)
+            
+        })
+        .catch(err => 
+            console.log(err)) 
 
-            /*  receiver_id: .data?.data?.id, */
-            receiver_class: 'user',
+    },[])  
+
+  const getReceiverID = () => {
+    for (let i = 0; i < usersList.length; i++){
+        if (usersList[i].email === sendRef.current.value) {
+            setReceiverId(usersList[i].id)
         }
-
-        DisplayMsgsAPI(data)
-            .then((res) => {
-                setMessages(res.data)
-            })
-            .catch(err => {
-                console.log(err)
-            })
-
     }
+ }
+
+  // Get msgs
+  const getMsgs = async () => {
+    await getReceiverID();
+    axios({
+      method: "Get",
+      url: `http://206.189.91.54/api/v1/messages?receiver_id=${receiverId}}&receiver_class=User`,
+      headers: {
+        'access-token': tokenValue,
+        client: apiHeaders.client,
+        expiry: apiHeaders.expiry,
+        uid: apiData.data?.data?.uid,
+       },
+
+      params: {
+          receiver_id: receiverId,
+          receiver_class: 'User',
+      }
+      })
+      .then((res) => {
+        console.log(res.data.data);
+        setMessages(res.data.data); 
+        setUserStorage(res.data)
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
 
 
-    const getAllUsers = (e) => {
 
-     /*    const data =  {
-            method: 'Get',
-            url: 'users',
-            'access-tokens': tokenValue,
-            client: apiHeaders.client,
-            expiry: apiHeaders.expiry,
-            uid: apiHeaders.data?.data?.uid,
-        }
+ 
     
-        RetrieveUsersAPI(data)
-            .then((res) => {
-                console.log(res)
-                console.log()
-                setUsersList(res.data)
-            })
-            .catch(err => console.log(err)) */
-        
-            console.log(apiHeaders)
-    }
+    console.log(usersList)
+
+    /* console.log(receiverId); */
+    /* console.log(messages);   */
+    /* console.log('here')
+    console.log(userStorage) */
+
     
-    const getReceiver = () => {
 
-
-    }
-
-
-    const sendMsg = (e) => {
+  const sendMsg = (e) => {
+        getReceiverID();
         e.preventDefault();
-
-        const data = {
-            method: 'post',
-            url: 'messages',
-            'access-tokens': tokenValue,
-            client: apiHeaders.client,
-            expiry: apiHeaders.expiry,
-            uid:  apiHeaders.data?.data?.uid,
-
-           /*  receiver_id: .data?.data?.id, */
-            receiver_class: 'user',
-            body: inputMsg,
-        }
-
-        SendDmAPI(data)
+        axios({
+            method: 'Post',
+            url: 'http://206.189.91.54/api/v1/messages',
+            headers: {
+                'access-token': tokenValue,
+                client: apiHeaders.client,
+                expiry: apiHeaders.expiry,
+                uid: apiData.data?.data?.uid,
+            },
+            params: {
+                receiver_id: receiverId,
+                receiver_class: 'User',
+                body: inputMsg,
+            }
+        })
             .then((res) => {
-                console.log(res.body)
+                console.log(res.data);
             })
-    }
+            .catch(err => 
+                console.log(err))    
+    };  
 
-    
-return(
+
+
+  const sendMsg = (e) => {
+    getReceiverID();
+    e.preventDefault();
+
+    axios({
+      method: "Post",
+      url: "http://206.189.91.54/api/v1/messages",
+      headers: {
+        "access-token": tokenValue,
+        client: apiHeaders.client,
+        expiry: apiHeaders.expiry,
+        uid: apiData.data?.data?.uid,
+      },
+      params: {
+        receiver_id: receiverId,
+        receiver_class: "User",
+        body: inputMsg,
+      },
+    })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  return (
     <div>
+      
         <label>Send to:</label>
-        <input></input>
+          <input ref={sendRef}/> 
+          <button onClick={(e) => getMsgs(e)}>Get</button>
+           
+      <label>Msg box</label>
+      <input
+        onChange={(e) => setInputMsg(e.target.value)}
+        value={inputMsg}
+      ></input>
+      <button onClick={(e) => sendMsg(e)}>Send</button>
 
-        <label>Msg box</label>
-        <input></input>
-        <button onClick={(e) => getAllUsers()}>Send</button>
-
-
-        <span>{messages}</span>
+      <span>{messages}</span>
     </div>
-)
-
-
-}
+  );
+};
 
 export default Chat;
