@@ -157,9 +157,10 @@ const Message = () => {
   const [inputMsg, setInputMsg] = useState("");
   const [userStorage, setUserStorage] =  useState();
   const msgRef = useRef();
+  const scrollRef = useRef();
 
   const sendMsg = (e) => {
-    e.preventDefault();
+
     axios({
         method: 'Post',
         url: 'http://206.189.91.54/api/v1/messages',
@@ -177,33 +178,40 @@ const Message = () => {
     })
         .then((res) => {
             console.log(res)
+            refresh();
+            
         })
         .catch(err => 
             console.log(err))    
+    setInputMsg('')
+
+    setTimeout(() => {
+        scrollRef.current.scrollIntoView()
+    },400)
+    
 };  
 
-        useEffect(() => {
-            axios({
-                method: "GET",
-                url: `http://206.189.91.54/api/v1/messages?receiver_id=${receiverID}&receiver_class=User`,
-                headers: {
-                "access-token": authKey.accessToken,
-                client: authKey.accessClient,
-                expiry: authKey.accessExpiry,
-                uid: authKey.accessUID,
-                },
-                params: {
-                receiver_id: receiverID,
-                receiver_class: "User",
-                },
-            })
-                .then((res) => {
-                setUserMessages(res.data?.data);
-                history.push("/dashboard/message");
-                })
-                .catch((err) =>
-                console.log(err.response));
-        })
+const refresh = () => {
+    axios({
+      method: "GET",
+      url: `http://206.189.91.54/api/v1/messages?receiver_id=${receiverID}&receiver_class=User`,
+      headers: {
+        "access-token": authKey.accessToken,
+        client: authKey.accessClient,
+        expiry: authKey.accessExpiry,
+        uid: authKey.accessUID,
+      },
+      params: {
+        receiver_id: receiverID,
+        receiver_class: "User",
+      },
+    })
+      .then((res) => {
+        setUserMessages(res.data?.data);
+      })
+      .catch((err) =>
+       console.log(err.response));
+};
 
 
   return (
@@ -265,17 +273,18 @@ const Message = () => {
                                     </div>
                                 );
                             })}
+                            <div ref={scrollRef}></div>
             </Grid>
           </Grid>
         </div>
       </div>
       <input
-        placeholder="Message @User-name"
+        placeholder='Message here'
         className={classes.input}
         type="text"
         onChange={(e) => setInputMsg(e.target.value)}
         value={inputMsg}
-        /* ref={msgRef} */
+       
       />
       <div className={classes.messageAdornment}>
         <AlternateEmailIcon className={classes.messageIcons} />
