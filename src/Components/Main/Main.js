@@ -235,7 +235,7 @@ const Main = () => {
     setMessages,
     tokenValue,
     setTokenValue,
-    userName,
+    userName /* Integrate to localstorage to avoid losing userdata on refresh */,
     setUserName,
   } = useContext(ContextAPI);
 
@@ -482,68 +482,65 @@ const Main = () => {
 
   return (
     <div>
-      {!auth ? (
-        console.log("not authorized")
-      ) : (
-        <Grid container spacing={3}>
-          <AppBar className={classes.appBar} elevation={0}>
-            <Toolbar className={classes.toolbar}>
-              <Grid item xs={2}>
-                <IconButton
-                  className={classes.menuButton}
-                  onClick={handleDrawerToggle}
-                >
-                  <MenuIcon style={{ color: "#ECF0F1" }} />
-                </IconButton>
-              </Grid>
-              <Grid item xs={7}>
-                <div>
-                  <InputBase
-                    className={classes.input}
-                    placeholder="Search"
-                    value={searchBar}
-                    onChange={handleSearchBarValue}
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <SearchIcon className={classes.searchIcon} />
-                      </InputAdornment>
-                    }
-                  />
-                  {searchBar ? (
-                    <UserSearch
-                      searchResult={searchResult}
-                      searchBar={searchBar}
-                    />
-                  ) : null}
-                </div>
-              </Grid>
-              <Grid
-                className={classes.myAccount}
-                onClick={handleMenuClick}
-                item
-                xs={2}
+      <Grid container spacing={3}>
+        <AppBar className={classes.appBar} elevation={0}>
+          <Toolbar className={classes.toolbar}>
+            <Grid item xs={2}>
+              <IconButton
+                className={classes.menuButton}
+                onClick={handleDrawerToggle}
               >
-                <Avatar
-                  className={classes.accountIcon}
-                  alt={userName}
-                  src="/broken-image.jpg"
+                <MenuIcon style={{ color: "#ECF0F1" }} />
+              </IconButton>
+            </Grid>
+            <Grid item xs={7}>
+              <div>
+                <InputBase
+                  className={classes.input}
+                  placeholder="Search"
+                  value={searchBar}
+                  onChange={handleSearchBarValue}
+                  startAdornment={
+                    <InputAdornment position="start">
+                      <SearchIcon className={classes.searchIcon} />
+                    </InputAdornment>
+                  }
                 />
-                <Typography variant="body1">{userName}</Typography>
-              </Grid>
-              <Menu
-                anchorEl={anchorEl}
-                keepMounted
-                style={{ marginTop: "2em", marginLeft: "6em" }}
-                open={Boolean(anchorEl)}
-                onClose={handleMenuClose}
-              >
-                <MenuItem onClick={openMyProfile}>My Profile</MenuItem>
-                <MenuItem onClick={logOut}>Log out</MenuItem>
-              </Menu>
-            </Toolbar>
-          </AppBar>
-        </Grid>
-      )}
+                {searchBar ? (
+                  <UserSearch
+                    searchResult={searchResult}
+                    searchBar={searchBar}
+                  />
+                ) : null}
+              </div>
+            </Grid>
+            <Grid
+              className={classes.myAccount}
+              onClick={handleMenuClick}
+              item
+              xs={2}
+            >
+              <Avatar
+                className={classes.accountIcon}
+                alt={userName}
+                src="/broken-image.jpg"
+              />
+              <Typography variant="body1">{userName}</Typography>
+            </Grid>
+            <Menu
+              anchorEl={anchorEl}
+              keepMounted
+              style={{ marginTop: "2em", marginLeft: "6em" }}
+              open={Boolean(anchorEl)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem onClick={openMyProfile}>My Profile</MenuItem>
+              <MenuItem onClick={logOut}>Log out</MenuItem>
+            </Menu>
+          </Toolbar>
+        </AppBar>
+      </Grid>
+
       <div>
         <Hidden smUp implementation="css">
           <Drawer

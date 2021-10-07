@@ -192,10 +192,7 @@ const HomeChannel = () => {
   };
 
   return (
-    <div
-      onClick={() => setShowPicker(!showPicker)}
-      className={`${classes.root} scroll-active`}
-    >
+    <div className={`${classes.root} scroll-active`}>
       <div className={classes.channelNameContainer}>
         <Typography className={classes.channelName} variant="h5">
           # My Space
@@ -304,7 +301,7 @@ const HomeChannel = () => {
         className={classes.input}
         ref={inputValue}
         onChange={handleInputValue}
-        onClick={() => setShowPicker(!showPicker)}
+        onClick={() => setShowPicker(false)}
         onKeyDown={handleKeyDown}
         value={messageInput}
         type="text"

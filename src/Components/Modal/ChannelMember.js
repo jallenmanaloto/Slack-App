@@ -255,12 +255,8 @@ const ChannelMember = () => {
     );
     setTimeout(() => {
       setFilterMember([...filteredMembers]);
-      console.log("timeout");
-      console.log(filterMember);
     }, 300);
   }, [channelMembers]);
-  console.log("outside");
-  console.log(filterMember);
 
   //function to handle invite of user to the channel
   const inviteUser = () => {
