@@ -1,6 +1,6 @@
 import React, { useContext, useRef, useState } from "react";
 import axios from "axios";
-import { Link, useHistory } from "react-router-dom";
+import Message from "../UserMessage/Message";
 import { ContextAPI } from "../Context/ContextAPi";
 import { Button, makeStyles, Modal, Typography } from "@material-ui/core";
 
@@ -74,13 +74,14 @@ const DirectMessage = ({ sendMessageModalOpen, setSendMessageModalOpen }) => {
     setTokenValue,
     userMessages,
     setUserMessages,
+    messageDisplay,
+    setMessageDisplay,
     userName /* Integrate to localstorage to avoid losing userdata on refresh */,
     setUserName,
   } = useContext(ContextAPI);
 
   const inputVal = useRef();
   const [inputValue, setInputValue] = useState("");
-  const history = useHistory();
 
   //function to handle close for modal
   const handleClose = () => {
@@ -109,9 +110,10 @@ const DirectMessage = ({ sendMessageModalOpen, setSendMessageModalOpen }) => {
     })
       .then((res) => {
         setUserMessages(res.data?.data);
-        history.push("/dashboard/message");
       })
       .catch((err) => console.log(err.response));
+    setMessageDisplay(true);
+    handleClose();
   };
 
   const sendMessageModal = (
@@ -132,7 +134,9 @@ const DirectMessage = ({ sendMessageModalOpen, setSendMessageModalOpen }) => {
         <Button onClick={retrieveMessage} className={classes.button}>
           Message
         </Button>
-        <Button className={classes.button}>Cancel</Button>
+        <Button onClick={handleClose} className={classes.button}>
+          Cancel
+        </Button>
       </div>
     </div>
   );

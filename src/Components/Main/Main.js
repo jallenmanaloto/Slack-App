@@ -238,6 +238,8 @@ const Main = () => {
     fetchFilterMembers,
     setFetchFilterMembers,
     setMessages,
+    messageDisplay,
+    setMessageDisplay,
     tokenValue,
     setTokenValue,
     userName /* Integrate to localstorage to avoid losing userdata on refresh */,
@@ -337,6 +339,10 @@ const Main = () => {
   //Function to handle toggle of side menu bar on mobile screensize
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+  const handleMessageDisplayClose = () => {
+    setMessageDisplay(false);
   };
 
   //Function to handle values in searchbar
@@ -442,7 +448,11 @@ const Main = () => {
                   style={{ textDecoration: "none" }}
                   to="/dashboard/my-space"
                 >
-                  <ListItem className={classes.mySpace} button>
+                  <ListItem
+                    onClick={handleMessageDisplayClose}
+                    className={classes.mySpace}
+                    button
+                  >
                     {channelList}
                   </ListItem>
                 </Link>
@@ -601,7 +611,7 @@ const Main = () => {
         profileModalOpen={profileModalOpen}
         setProfileModalOpen={setProfileModalOpen}
       />
-      <HomeChannel />
+      {messageDisplay ? <Message /> : <HomeChannel />}
       {sendMessageModalOpen ? (
         <DirectMessage
           sendMessageModalOpen={sendMessageModalOpen}
