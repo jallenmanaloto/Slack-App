@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { ContextAPI } from "./Components/Context/ContextAPi";
 import Channel from "./Components/Channel/Channel";
-import Chat from "./Components/Chat/Chat";
 import HomeChannel from "./Components/Channel/HomeChannel";
 import Login from "./Components/Login/Login";
 import Main from "./Components/Main/Main";
@@ -27,6 +26,8 @@ function App() {
   const [messageDisplay, setMessageDisplay] = useState(false);
   const [userMessages, setUserMessages] = useState([]);
   const [userName, setUserName] = useState([]);
+  const [receiverID, setReceiverID] = useState('');
+  const [receiverUN, setReceiverUN] = useState('');
 
   const [user, setUser] = useState(localStorage.getItem("user"));
 
@@ -66,6 +67,10 @@ function App() {
           setUserMessages,
           userName,
           setUserName,
+          receiverID, 
+          setReceiverID,
+          receiverUN, 
+          setReceiverUN,
         }}
       >
         <Router>

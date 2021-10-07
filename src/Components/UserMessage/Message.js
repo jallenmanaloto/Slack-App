@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { ContextAPI } from "../Context/ContextAPi";
 import Button from "@material-ui/core/Button";
@@ -10,6 +10,7 @@ import ImageOutlinedIcon from "@material-ui/icons/ImageOutlined";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Avatar from "@material-ui/core/Avatar";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,7 +41,9 @@ const useStyles = makeStyles((theme) => ({
     outline: "none",
   },
   sendIcon: {
+    marginRight: "1rem",
     cursor: "pointer",
+    color: "rgba(43, 33, 24, 0.65)",
   },
   contentDisplay: {
     height: "77vh",
@@ -144,13 +147,70 @@ const Message = () => {
     setUserMessages,
     userName /* Integrate to localstorage to avoid losing userdata on refresh */,
     setUserName,
+    receiverID, 
+    setReceiverID,
+    receiverUN, 
+    setReceiverUN,
   } = useContext(ContextAPI);
+
+  const [usersList, setUsersList] = useState([]);
+  const [inputMsg, setInputMsg] = useState("");
+  const [userStorage, setUserStorage] =  useState();
+  const msgRef = useRef();
+
+  const sendMsg = (e) => {
+    e.preventDefault();
+    axios({
+        method: 'Post',
+        url: 'http://206.189.91.54/api/v1/messages',
+        headers: {
+            "access-token": authKey.accessToken,
+            client: authKey.accessClient,
+            expiry: authKey.accessExpiry,
+            uid: authKey.accessUID,
+        },
+        params: {
+            receiver_id: receiverID,
+            receiver_class: 'User',
+            body: inputMsg,
+        }
+    })
+        .then((res) => {
+            console.log(res)
+        })
+        .catch(err => 
+            console.log(err))    
+};  
+
+        useEffect(() => {
+            axios({
+                method: "GET",
+                url: `http://206.189.91.54/api/v1/messages?receiver_id=${receiverID}&receiver_class=User`,
+                headers: {
+                "access-token": authKey.accessToken,
+                client: authKey.accessClient,
+                expiry: authKey.accessExpiry,
+                uid: authKey.accessUID,
+                },
+                params: {
+                receiver_id: receiverID,
+                receiver_class: "User",
+                },
+            })
+                .then((res) => {
+                setUserMessages(res.data?.data);
+                history.push("/dashboard/message");
+                })
+                .catch((err) =>
+                console.log(err.response));
+        })
+
 
   return (
     <div className={`${classes.root} scroll-active`}>
       <div className={classes.userNameContainer}>
         <Typography className={classes.userName} variant="h5">
-          Insert User's name here
+          {receiverUN}
         </Typography>
       </div>
       <div className={classes.contentDisplay}>
@@ -161,12 +221,13 @@ const Message = () => {
                 <div className={classes.welcomeContainer}>
                   <Typography className={classes.welcomeText} variant="h6">
                     This is the very beginning of your chat with{" "}
-                    <strong>@Username</strong>
+                    <strong>{receiverUN}</strong>
                   </Typography>
                 </div>
               </div>
-
-              {/* {{messages.map((val, key) => 
+              {userMessages.map((val, key) => {
+                        const timestamp = new Date(val.created_at);
+                        return (
                                     <div className={classes.message}>
                                         <Avatar 
                                         alt='Miyu Togo'
@@ -178,13 +239,16 @@ const Message = () => {
                                                 marginLeft: '0.8em',
                                                 fontWeight: 'bold'}}
                                             >
-                                               User's name who sent the message should be here 
+                                               {val.sender.uid}
                                             </Typography>
                                             <Typography  
                                             style={{marginLeft: '1em', color: 'rgba(50, 74, 95, 0.7)'}}
                                             variant='subtitle2'
                                             >
-                                                 Insert actual time here 
+                                                {timestamp.toLocaleTimeString([], {
+                                                    hour: "2-digit",
+                                                    minute: "2-digit",
+                                                })}
                                             </Typography>
                                         </div>
                                         <Typography 
@@ -196,10 +260,11 @@ const Message = () => {
                                                     marginTop: '1.5rem',
                                                     marginRight: '5em'}}
                                                 variant='h6'>
-                                              Message sent should be mapped here 
+                                              {val.body}
                                         </Typography>
                                     </div>
-                                )} */}
+                                );
+                            })}
             </Grid>
           </Grid>
         </div>
@@ -208,6 +273,9 @@ const Message = () => {
         placeholder="Message @User-name"
         className={classes.input}
         type="text"
+        onChange={(e) => setInputMsg(e.target.value)}
+        value={inputMsg}
+        /* ref={msgRef} */
       />
       <div className={classes.messageAdornment}>
         <AlternateEmailIcon className={classes.messageIcons} />
@@ -215,7 +283,7 @@ const Message = () => {
         <AttachFileIcon className={classes.messageIcons} />
         <SentimentSatisfiedOutlinedIcon className={classes.messageIcons} />
       </div>
-      <Button type="submit" className={classes.button}>
+      <Button type="submit" className={classes.button} onClick={(e) => sendMsg(e)}>
         <SendIcon className={classes.sendIcon} />
       </Button>
     </div>
