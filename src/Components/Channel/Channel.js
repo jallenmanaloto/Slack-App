@@ -198,7 +198,6 @@ const Channel = () => {
     })
       .then((res) => {
         setchannelMessage(res.data.data);
-        console.log(res);
       })
       .catch((err) => {
         console.log(err);
