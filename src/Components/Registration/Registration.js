@@ -107,7 +107,7 @@ const Registration = () => {
 
   //declaring states to handle error
   const [errorPass, setErrorPass] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState([]);
   const [error, setError] = useState(false);
 
   //declaring states to handleinput values
@@ -143,18 +143,18 @@ const Registration = () => {
     console.log(password);
   };
 
-  const handleEmailValidation = () => {};
+  // const handleEmailValidation = () => {};
 
-  const handleRegister = () => {
-    if (password !== confirmPassword) {
-      console.log("pass mismatch");
-      setErrorMsg("Passwords do not match");
-    } else {
-      console.log("pass matched");
-      setErrorMsg("Accepted");
-      handleCreateAcct();
-    }
-  };
+  // const handleRegister = () => {
+  //   if (password !== confirmPassword) {
+  //     console.log("pass mismatch");
+  //     setErrorMsg("Passwords do not match");
+  //   } else {
+  //     console.log("pass matched");
+  //     setErrorMsg("Accepted");
+  //     handleCreateAcct();
+  //   }
+  // };
 
   const handleCreateAcct = () => {
     axios({
@@ -166,8 +166,12 @@ const Registration = () => {
         password_confirmation: confirmPassword,
       },
     })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .then(/* (res) => console.log(res) */)
+      .catch((err) => {
+        const { errors } = err.response.data;
+        setErrorMsg(errors.full_messages);
+        console.log(errorMsg);
+      });
   };
 
   return (
@@ -193,14 +197,6 @@ const Registration = () => {
               alignItems: "center",
             }}
           >
-            <Grid container>
-              <Typography className={classes.errorMsg}>{errorMsg}</Typography>
-              <Typography className={classes.errorPass}>
-                {" "}
-                {errorPass}
-              </Typography>
-            </Grid>
-
             <Avatar className={classes.avatarOne}>
               <img src={TMiBot} alt="sample" className={classes.TMiBot} />
             </Avatar>
@@ -263,7 +259,7 @@ const Registration = () => {
               type="submit"
               variant="contained"
               className={classes.buttonSignUp}
-              onClick={(e) => handleRegister(e)}
+              onClick={(e) => handleCreateAcct(e)}
             >
               {" "}
               SIGN UP{" "}
@@ -288,17 +284,18 @@ const Registration = () => {
         </Grid>
       </Grid>
       <Snackbar
-        style={{width: '100%'}}
+        style={{ width: "100%" }}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         open="true" /* {error} */
         autoHideDuration={4000}
       >
-        <Alert severity="error" variant="filled">
-          Error on the following:
-          <h5>Email</h5>
-          <h5>User</h5>
-          <h5>Pass</h5>
-        </Alert>
+        {errorMsg.map((val, index) => {
+          return (
+            <Alert severity="error" variant="filled">
+              {val}
+            </Alert>
+          );
+        })}
       </Snackbar>
     </Grid>
   );

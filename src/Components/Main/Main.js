@@ -42,6 +42,7 @@ import { ContextAPI } from "../Context/ContextAPi";
 import UserSearch from "../UserSearch/UserSearch";
 import MyAccount from "../Modal/MyAccount";
 import DirectMessage from "../Modal/DirectMessage";
+import Message from "../UserMessage/Message";
 
 const drawerWidth = 325;
 
@@ -496,6 +497,7 @@ const Main = () => {
         </div>
         <Switch>
           <Route path="/dashboard/channel" component={Channel} />
+          <Route path="/dashboard/message" component={Message} />
         </Switch>
       </Router>
     </div>

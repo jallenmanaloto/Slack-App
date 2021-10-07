@@ -98,12 +98,11 @@ function App() {
             <Route exact path="/" component={Login}>
               <Login setUser={setUser} />
             </Route>
-            <Route exact path="/dashboard" component={HomeChannel}>
-              <Chat />
+            <Route path="/dashboard" component={HomeChannel}>
+              {/* <Chat /> */}
               <Main />
             </Route>
             <Route exact path="/dashboard/channel" component={Channel} />
-            <Route exact path="/dashboard/message" component={Message} />
             <Route exact path="/register" component={Registration} />
             <Route path="*" component={() => "404 NOT FOUND"} />
           </Switch>
