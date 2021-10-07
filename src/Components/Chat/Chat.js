@@ -40,11 +40,20 @@ const Chat = () => {
       method: "Get",
       url: "http://206.189.91.54/api/v1/users",
       headers: {
+
         'access-token': tokenValue,
         client: apiHeaders.client,
         expiry: apiHeaders.expiry,
         uid: apiData.data?.data?.uid,
        },
+
+/*      
+        "access-token": authKey.accessToken,
+        client: authKey.accessClient,
+        expiry: authKey.accessExpiry,
+        uid: authKey.accessUID,
+      }, */
+
     })
         .then((res) => {
             setUsersList(res.data.data)
@@ -83,20 +92,19 @@ const Chat = () => {
       })
       .then((res) => {
         /* console.log(res.data.data) */;
+
         setMessages(res.data.data); 
         setUserStorage(res.data)
       })
       .catch((err) => {
         console.log(err);
       })
-
-      
+     
   }
 
  /*  localStorage.setItem('logs',JSON.stringify(userStorage)); */
 
- 
-    
+   
     console.log(userStorage);
 
     /* console.log(receiverId); */
@@ -104,7 +112,7 @@ const Chat = () => {
     /* console.log('here')
     console.log(userStorage) */
 
-    
+  
 
   const sendMsg = (e) => {
         getReceiverID();
@@ -144,6 +152,7 @@ const Chat = () => {
         value={inputMsg}
       ></input>
       <button onClick={(e) => sendMsg(e)}>Send</button>
+
 
       {/* <ul>{userStorage.map (userStorage => {
           return (
