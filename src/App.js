@@ -1,14 +1,14 @@
 import { useContext, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import "./App.css";
-import Registration from "./Components/Registration/Registration";
-import DirectMessage from "./Components/Modal/DirectMessage";
+import { ContextAPI } from "./Components/Context/ContextAPi";
+import Channel from "./Components/Channel/Channel";
+import Chat from "./Components/Chat/Chat";
+import HomeChannel from "./Components/Channel/HomeChannel";
 import Login from "./Components/Login/Login";
 import Main from "./Components/Main/Main";
-import Channel from "./Components/Channel/Channel";
-import HomeChannel from "./Components/Channel/HomeChannel";
-import { ContextAPI } from "./Components/Context/ContextAPi";
-import Chat from "./Components/Chat/Chat";
+import Message from "./Components/UserMessage/Message";
+import Registration from "./Components/Registration/Registration";
+import "./App.css";
 
 function App() {
   const [allUsers, setAllUsers] = useState([]);
@@ -102,9 +102,8 @@ function App() {
               <Chat />
               <Main />
             </Route>
-            <Route exact path="/dashboard/channel" component={Channel}>
-              <Channel />
-            </Route>
+            <Route exact path="/dashboard/channel" component={Channel} />
+            <Route exact path="/dashboard/message" component={Message} />
             <Route exact path="/register" component={Registration} />
             <Route path="*" component={() => "404 NOT FOUND"} />
           </Switch>
