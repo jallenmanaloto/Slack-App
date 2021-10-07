@@ -1,142 +1,170 @@
-import { makeStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button';
-import SendIcon from '@material-ui/icons/Send';
-import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
-import AttachFileIcon from '@material-ui/icons/AttachFile';
-import SentimentSatisfiedOutlinedIcon from '@material-ui/icons/SentimentSatisfiedOutlined';
-import ImageOutlinedIcon from '@material-ui/icons/ImageOutlined';
-import Typography from '@material-ui/core/Typography'
-import Grid from '@material-ui/core/Grid';
-import Avatar from '@material-ui/core/Avatar';
+import { makeStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import SendIcon from "@material-ui/icons/Send";
+import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";
+import AttachFileIcon from "@material-ui/icons/AttachFile";
+import SentimentSatisfiedOutlinedIcon from "@material-ui/icons/SentimentSatisfiedOutlined";
+import ImageOutlinedIcon from "@material-ui/icons/ImageOutlined";
+import Typography from "@material-ui/core/Typography";
+import Grid from "@material-ui/core/Grid";
+import Avatar from "@material-ui/core/Avatar";
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        [theme.breakpoints.up('sm')]: {
-            width: '83vw',
-            marginLeft: '325px',
-        },
-        position: 'fixed',
-        background: '#ECF0F1',
-        left: '0',
-        top: '64px',
-        bottom: '0',
-        right: '0'
+  root: {
+    [theme.breakpoints.up("sm")]: {
+      width: "83vw",
+      marginLeft: "325px",
     },
-    input: {
-        width: '98%',
-        height: '10%',
-        border: '1px solid black',
-        backgroundColor: '#ECF0F1',
-        position: 'absolute',
-        bottom: 0,
-        marginLeft: '1%',
-        marginBottom: '1rem',
-        paddingLeft: '2em',
-        paddingBottom: '2.5em',
-        borderRadius: '4px',
-        fontSize: '1rem',
-        outline: 'none'
-    },
-    sendIcon: {
-        cursor: 'pointer'
-    },
-    contentDisplay: {
-        height: '77vh',
-        width: 'calc(100% + 1px)',
-        overflowY: 'scroll'
-    },
-    userNameContainer: {
-        height: '5vh',
-        width: 'calc(100% + 1px)',
-        marginTop: '1rem',
-        borderBottom: '1px solid rgba(43, 33, 24, 0.25)',
-        display: 'flex',
-        alignItems: 'center'
-    },
-    userName: {
-        marginLeft: '1.8rem',
-        color: 'rgba(63, 63, 63, 1)'
-    },
-    mySpace: {
-        marginTop: '0.8rem',
-    },
-    bot:{
-        height: '3em',
-        width: '3em'
-    },
-    user: {
-        height: '1.7em',
-        width: '1.7em',
-        backgroundColor: 'lightcoral'
-    },
-    message: {
-        display: 'flex',
-        borderTop: '1px solid rgba(50, 74, 95, 0.25)',
-        padding: '2rem 2rem'
-    },
-    button: {
-        position: 'absolute',
-        right: 0
-    },
-    welcomeContainer: {
-        display: 'flex',
-        flexDirection: 'column'
-    },
-    welcome: {
-        display: 'flex',
-        marginTop: '1em',
-        marginLeft: '1.8rem',
-        paddingBottom: '3em',
-        paddingTop: '50vh'
-    },
-    welcomeText: {
-        fontSize: '1.06rem',
-        color: '#3F3F3F',
-        marginLeft: '1.4em',
-        marginRight: '5em'
-    },
-    messageAdornment: {
-        position: 'absolute',
-        bottom: '1.5rem',
-        left: '2.2em',
-        width: 'max-content'
-    },
-    messageIcons: {
-        color: 'rgba(43, 33, 24, 0.65)',
-        cursor: 'pointer',
-        height: '1.3rem',
-        width: '1.3rem',
-        marginLeft: '0.8rem'
-    }
+    position: "fixed",
+    background: "#ECF0F1",
+    left: "0",
+    top: "64px",
+    bottom: "0",
+    right: "0",
+  },
+  input: {
+    width: "98%",
+    height: "10%",
+    border: "1px solid black",
+    backgroundColor: "#ECF0F1",
+    position: "absolute",
+    bottom: 0,
+    marginLeft: "1%",
+    marginBottom: "1rem",
+    paddingLeft: "2em",
+    paddingBottom: "2.5em",
+    borderRadius: "4px",
+    fontSize: "1rem",
+    outline: "none",
+  },
+  sendIcon: {
+    cursor: "pointer",
+  },
+  contentDisplay: {
+    height: "77vh",
+    width: "calc(100% + 1px)",
+    overflowY: "scroll",
+  },
+  userNameContainer: {
+    height: "5vh",
+    width: "calc(100% + 1px)",
+    marginTop: "1rem",
+    borderBottom: "1px solid rgba(43, 33, 24, 0.25)",
+    display: "flex",
+    alignItems: "center",
+  },
+  userName: {
+    marginLeft: "1.8rem",
+    color: "rgba(63, 63, 63, 1)",
+  },
+  mySpace: {
+    marginTop: "0.8rem",
+  },
+  bot: {
+    height: "3em",
+    width: "3em",
+  },
+  user: {
+    height: "1.7em",
+    width: "1.7em",
+    backgroundColor: "lightcoral",
+  },
+  message: {
+    display: "flex",
+    borderTop: "1px solid rgba(50, 74, 95, 0.25)",
+    padding: "2rem 2rem",
+  },
+  button: {
+    position: "absolute",
+    right: 0,
+  },
+  welcomeContainer: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  welcome: {
+    display: "flex",
+    marginTop: "1em",
+    marginLeft: "1.8rem",
+    paddingBottom: "3em",
+    paddingTop: "50vh",
+  },
+  welcomeText: {
+    fontSize: "1.06rem",
+    color: "#3F3F3F",
+    marginLeft: "1.4em",
+    marginRight: "5em",
+  },
+  messageAdornment: {
+    position: "absolute",
+    bottom: "1.5rem",
+    left: "2.2em",
+    width: "max-content",
+  },
+  messageIcons: {
+    color: "rgba(43, 33, 24, 0.65)",
+    cursor: "pointer",
+    height: "1.3rem",
+    width: "1.3rem",
+    marginLeft: "0.8rem",
+  },
 }));
 
-
 const Message = () => {
+  const classes = useStyles();
+  const {
+    allChannels,
+    setAllChannels,
+    allUsers,
+    setAllUsers,
+    apiData,
+    setApiData,
+    apiHeaders,
+    setApiHeaders,
+    auth,
+    setAuth,
+    authKey,
+    setAuthKey,
+    channelData,
+    setChannelData,
+    channelID,
+    setchannelID,
+    channelMembers,
+    setChannelMembers,
+    channelMessage,
+    setchannelMessage,
+    fetchFilterMembers,
+    setFetchFilterMembers,
+    setMessages,
+    tokenValue,
+    setTokenValue,
+    userMessages, //CONTAINS THE MESSAGES FROM A USER
+    setUserMessages,
+    userName /* Integrate to localstorage to avoid losing userdata on refresh */,
+    setUserName,
+  } = useContext(ContextAPI);
 
-    const classes = useStyles();
+  return (
+    <div className={`${classes.root} scroll-active`}>
+      <div className={classes.userNameContainer}>
+        <Typography className={classes.userName} variant="h5">
+          Insert User's name here
+        </Typography>
+      </div>
+      <div className={classes.contentDisplay}>
+        <div className={classes.mySpace}>
+          <Grid>
+            <Grid item xs={12}>
+              <div className={classes.welcome}>
+                <div className={classes.welcomeContainer}>
+                  <Typography className={classes.welcomeText} variant="h6">
+                    This is the very beginning of your chat with{" "}
+                    <strong>@Username</strong>
+                  </Typography>
+                </div>
+              </div>
 
-    return (
-        <div className={`${classes.root} scroll-active`}>
-            <div className={classes.userNameContainer}>
-                <Typography className={classes.userName} variant='h5'>
-                   Insert User's name here
-                </Typography>
-            </div>
-            <div className={classes.contentDisplay}>
-                <div className={classes.mySpace}>
-                    <Grid> 
-                        <Grid item xs={12}> 
-                            <div className={classes.welcome}>
-                                <div className={classes.welcomeContainer}>
-                                    <Typography 
-                                    className={classes.welcomeText}
-                                    variant='h6'>
-                                        This is the very beginning of your chat with <strong>@Username</strong>
-                                    </Typography>
-                                </div>
-                            </div>
-
-                              {/* {{messages.map((val, key) => 
+              {/* {{messages.map((val, key) => 
                                     <div className={classes.message}>
                                         <Avatar 
                                         alt='Miyu Togo'
@@ -170,29 +198,26 @@ const Message = () => {
                                         </Typography>
                                     </div>
                                 )} */}
-                                
-                        </Grid>
-                    </Grid>
-                </div>
-            </div>
-                <input 
-                    placeholder='Message @User-name'
-                    className= {classes.input} 
-                    type="text" 
-                />
-                <div className={classes.messageAdornment}>
-                    <AlternateEmailIcon className={classes.messageIcons} />
-                    <ImageOutlinedIcon className={classes.messageIcons}  />
-                    <AttachFileIcon className={classes.messageIcons}  />
-                    <SentimentSatisfiedOutlinedIcon className={classes.messageIcons}  />
-                </div>
-                <Button
-                type='submit'
-                className={classes.button}>
-                    <SendIcon className={classes.sendIcon} />
-                </Button>
+            </Grid>
+          </Grid>
         </div>
-    )
-}
+      </div>
+      <input
+        placeholder="Message @User-name"
+        className={classes.input}
+        type="text"
+      />
+      <div className={classes.messageAdornment}>
+        <AlternateEmailIcon className={classes.messageIcons} />
+        <ImageOutlinedIcon className={classes.messageIcons} />
+        <AttachFileIcon className={classes.messageIcons} />
+        <SentimentSatisfiedOutlinedIcon className={classes.messageIcons} />
+      </div>
+      <Button type="submit" className={classes.button}>
+        <SendIcon className={classes.sendIcon} />
+      </Button>
+    </div>
+  );
+};
 
-export default Message
+export default Message;

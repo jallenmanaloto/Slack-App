@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
 import Registration from "./Components/Registration/Registration";
+import DirectMessage from "./Components/Modal/DirectMessage";
 import Login from "./Components/Login/Login";
 import Main from "./Components/Main/Main";
 import Channel from "./Components/Channel/Channel";
@@ -23,6 +24,7 @@ function App() {
   const [channelID, setchannelID] = useState("");
   const [channelMessage, setchannelMessage] = useState([]);
   const [channelMembers, setChannelMembers] = useState([]);
+  const [userMessages, setUserMessages] = useState([]);
   const [userName, setUserName] = useState([]);
 
   const [user, setUser] = useState(localStorage.getItem("user"));
@@ -30,7 +32,7 @@ function App() {
   return (
     <div className="App">
       {/* <Registration/>   */}
-      <ContextAPI.Provider value={{allUsers,
+      {/* <ContextAPI.Provider value={{allUsers,
           setAllUsers,
           apiData,
           setApiData,
@@ -45,8 +47,8 @@ function App() {
           tokenValue,
           setTokenValue,
           userName,
-          setUserName,}} >
-          <Router>
+          setUserName,}} > */}
+      {/* <Router>
             <Switch>
                 <Route exact path='/' component={Login}>
                     <Login setUser={setUser} />
@@ -55,8 +57,8 @@ function App() {
                     <Chat />
                 </Route>
               </Switch>
-          </Router>
-{/* 
+          </Router> */}
+
       <ContextAPI.Provider
         value={{
           allChannels,
@@ -85,6 +87,8 @@ function App() {
           setMessages,
           tokenValue,
           setTokenValue,
+          userMessages,
+          setUserMessages,
           userName,
           setUserName,
         }}
@@ -105,7 +109,7 @@ function App() {
             <Route path="*" component={() => "404 NOT FOUND"} />
           </Switch>
         </Router>
-      </ContextAPI.Provider> /*}
+      </ContextAPI.Provider>
     </div>
   );
 }

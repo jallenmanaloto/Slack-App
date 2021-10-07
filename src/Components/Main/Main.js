@@ -41,6 +41,7 @@ import Channel from "../Channel/Channel";
 import { ContextAPI } from "../Context/ContextAPi";
 import UserSearch from "../UserSearch/UserSearch";
 import MyAccount from "../Modal/MyAccount";
+import DirectMessage from "../Modal/DirectMessage";
 
 const drawerWidth = 325;
 
@@ -176,8 +177,11 @@ const useStyles = makeStyles((theme) => ({
   userDM: {
     fontSize: "0.95rem",
     fontWeight: "lighter",
-    marginLeft: "0.2rem",
-    marginTop: "-1.3rem",
+    marginLeft: "-1rem",
+    paddingTop: "-1rem",
+    display: "flex",
+    alignItems: "center",
+    cursor: "pointer",
   },
   channelList: {
     fontSize: "0.95rem",
@@ -249,6 +253,7 @@ const Main = () => {
   //state for the modal open
   const [modalOpen, setModalOpen] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
+  const [sendMessageModalOpen, setSendMessageModalOpen] = useState(false);
 
   useEffect(() => {
     const sessionKey = JSON.parse(localStorage.getItem("userKey"));
@@ -292,7 +297,8 @@ const Main = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [authKey]);
+  console.log(allUsers);
 
   //Retrieving information of a Channel
   useEffect(() => {
@@ -340,6 +346,11 @@ const Main = () => {
     }
   };
 
+  //function to handle open of Send Message Modal
+  const handleSendMessageModal = () => {
+    setSendMessageModalOpen(true);
+  };
+
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -361,8 +372,13 @@ const Main = () => {
 
   const userDM = (
     <div className={classes.subMessages}>
-      <Typography className={classes.userDM} variant="subtitle1">
-        Sample User
+      <Typography
+        onClick={handleSendMessageModal}
+        className={classes.userDM}
+        variant="subtitle1"
+      >
+        <AddIcon />
+        Send Message
       </Typography>
     </div>
   );
@@ -466,7 +482,12 @@ const Main = () => {
               </ListItemIcon>
               <ListItemText primary="Direct Messages" />
             </ListItem>
-            <Collapse in={dmExpand} timeout="auto" unmountOnExit>
+            <Collapse
+              style={{ marginTop: "-1rem" }}
+              in={dmExpand}
+              timeout="auto"
+              unmountOnExit
+            >
               <List>
                 <ListItem button>{userDM}</ListItem>
               </List>
@@ -579,6 +600,12 @@ const Main = () => {
         setProfileModalOpen={setProfileModalOpen}
       />
       <HomeChannel />
+      {sendMessageModalOpen ? (
+        <DirectMessage
+          sendMessageModalOpen={sendMessageModalOpen}
+          setSendMessageModalOpen={setSendMessageModalOpen}
+        />
+      ) : null}
     </div>
   );
 };
