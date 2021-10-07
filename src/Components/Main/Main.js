@@ -42,6 +42,7 @@ import { ContextAPI } from "../Context/ContextAPi";
 import UserSearch from "../UserSearch/UserSearch";
 import MyAccount from "../Modal/MyAccount";
 import DirectMessage from "../Modal/DirectMessage";
+import Message from "../UserMessage/Message";
 
 const drawerWidth = 325;
 
@@ -237,6 +238,8 @@ const Main = () => {
     fetchFilterMembers,
     setFetchFilterMembers,
     setMessages,
+    messageDisplay,
+    setMessageDisplay,
     tokenValue,
     setTokenValue,
     userName /* Integrate to localstorage to avoid losing userdata on refresh */,
@@ -336,6 +339,10 @@ const Main = () => {
   //Function to handle toggle of side menu bar on mobile screensize
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+  const handleMessageDisplayClose = () => {
+    setMessageDisplay(false);
   };
 
   //Function to handle values in searchbar
@@ -441,7 +448,11 @@ const Main = () => {
                   style={{ textDecoration: "none" }}
                   to="/dashboard/my-space"
                 >
-                  <ListItem className={classes.mySpace} button>
+                  <ListItem
+                    onClick={handleMessageDisplayClose}
+                    className={classes.mySpace}
+                    button
+                  >
                     {channelList}
                   </ListItem>
                 </Link>
@@ -496,6 +507,7 @@ const Main = () => {
         </div>
         <Switch>
           <Route path="/dashboard/channel" component={Channel} />
+          <Route path="/dashboard/message" component={Message} />
         </Switch>
       </Router>
     </div>
@@ -602,7 +614,7 @@ const Main = () => {
         profileModalOpen={profileModalOpen}
         setProfileModalOpen={setProfileModalOpen}
       />
-      <HomeChannel />
+      {messageDisplay ? <Message /> : <HomeChannel />}
       {sendMessageModalOpen ? (
         <DirectMessage
           sendMessageModalOpen={sendMessageModalOpen}

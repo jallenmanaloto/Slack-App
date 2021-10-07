@@ -23,6 +23,7 @@ function App() {
   const [channelID, setchannelID] = useState("");
   const [channelMessage, setchannelMessage] = useState([]);
   const [channelMembers, setChannelMembers] = useState([]);
+  const [messageDisplay, setMessageDisplay] = useState(false);
   const [userMessages, setUserMessages] = useState([]);
   const [userName, setUserName] = useState([]);
   const [receiverID, setReceiverID] = useState('');
@@ -32,34 +33,6 @@ function App() {
 
   return (
     <div className="App">
-      {/* <Registration/>   */}
-      {/* <ContextAPI.Provider value={{allUsers,
-          setAllUsers,
-          apiData,
-          setApiData,
-          apiHeaders,
-          setApiHeaders,
-          channelData,
-          setChannelData,
-          channelMembers,
-          setChannelMembers,
-          channelMessage,
-          setchannelMessage,
-          tokenValue,
-          setTokenValue,
-          userName,
-          setUserName,}} > */}
-      {/* <Router>
-            <Switch>
-                <Route exact path='/' component={Login}>
-                    <Login setUser={setUser} />
-                </Route>
-                <Route exact path='/dashboard' component={Main}>
-                    <Chat />
-                </Route>
-              </Switch>
-          </Router> */}
-
       <ContextAPI.Provider
         value={{
           allChannels,
@@ -86,6 +59,8 @@ function App() {
           setFetchFilterMembers,
           messages,
           setMessages,
+          messageDisplay,
+          setMessageDisplay,
           tokenValue,
           setTokenValue,
           userMessages,
@@ -103,13 +78,10 @@ function App() {
             <Route exact path="/" component={Login}>
               <Login setUser={setUser} />
             </Route>
-            <Route exact path="/dashboard" component={HomeChannel}>
-              <Message />
-              <Main />
-            </Route>
-            <Route exact path="/dashboard/channel" component={Channel} />
-            <Route exact path="/dashboard/message" component={Message} />
-            <Route exact path="/register" component={Registration} />
+            <Route path="/dashboard/channel" component={Channel} />
+            <Route path="/dashboard/message" component={Message} />
+            <Route path="/register" component={Registration} />
+            <Route path="/dashboard" component={Main} />
             <Route path="*" component={() => "404 NOT FOUND"} />
           </Switch>
         </Router>

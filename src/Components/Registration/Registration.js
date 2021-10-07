@@ -105,9 +105,12 @@ const Registration = () => {
   const passInput = useRef();
   const confirmPassInput = useRef();
 
+  //declaring state to open success snackbar
+  const [success, setSuccess] = useState(false);
+
   //declaring states to handle error
   const [errorPass, setErrorPass] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState([]);
   const [error, setError] = useState(false);
 
   //declaring states to handleinput values
@@ -122,38 +125,19 @@ const Registration = () => {
     history.push("/");
   };
 
-  const handlePasswordStrength = (password) => {
-    if (
-      validator.isStrongPassword(password, {
-        minLength: 8,
-        minLowercase: 1,
-        minUppercase: 1,
-        minSymbols: 1,
-        minNumbers: 1,
-      })
-    ) {
-      setErrorPass("Strong Password");
-      console.log("Input Accepted (STRONG)");
-      setPassword(password);
-    } else {
-      setErrorPass("Weak Password");
-      console.log("Input Accepted (WEAK)");
-      setPassword(password);
+  const handleErrorClose = (event, reason) => {
+    if (reason == "clickaway") {
+      return;
     }
-    console.log(password);
+    setError(false);
+    setErrorMsg([]);
   };
 
-  const handleEmailValidation = () => {};
-
-  const handleRegister = () => {
-    if (password !== confirmPassword) {
-      console.log("pass mismatch");
-      setErrorMsg("Passwords do not match");
-    } else {
-      console.log("pass matched");
-      setErrorMsg("Accepted");
-      handleCreateAcct();
+  const handleSuccessClose = (event, reason) => {
+    if (reason == "clickaway") {
+      return;
     }
+    setSuccess(false);
   };
 
   const handleCreateAcct = () => {
@@ -166,10 +150,21 @@ const Registration = () => {
         password_confirmation: confirmPassword,
       },
     })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .then((res) => {
+        setSuccess(true);
+        console.log(res);
+      })
+      .catch((err) => {
+        const { errors } = err.response.data;
+        setErrorMsg(errors.full_messages);
+        setError(!error);
+      });
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
   };
-
+  console.log("errorMsg");
+  console.log(errorMsg);
   return (
     <Grid container className={classes.containerBackground}>
       <Grid
@@ -193,14 +188,6 @@ const Registration = () => {
               alignItems: "center",
             }}
           >
-            <Grid container>
-              <Typography className={classes.errorMsg}>{errorMsg}</Typography>
-              <Typography className={classes.errorPass}>
-                {" "}
-                {errorPass}
-              </Typography>
-            </Grid>
-
             <Avatar className={classes.avatarOne}>
               <img src={TMiBot} alt="sample" className={classes.TMiBot} />
             </Avatar>
@@ -263,7 +250,7 @@ const Registration = () => {
               type="submit"
               variant="contained"
               className={classes.buttonSignUp}
-              onClick={(e) => handleRegister(e)}
+              onClick={(e) => handleCreateAcct(e)}
             >
               {" "}
               SIGN UP{" "}
@@ -288,16 +275,23 @@ const Registration = () => {
         </Grid>
       </Grid>
       <Snackbar
-        style={{width: '100%'}}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        open="true" /* {error} */
+        open={error}
         autoHideDuration={4000}
+        onClose={handleErrorClose}
       >
         <Alert severity="error" variant="filled">
-          Error on the following:
-          <h5>Email</h5>
-          <h5>User</h5>
-          <h5>Pass</h5>
+          {errorMsg[0]}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={success}
+        autoHideDuration={4000}
+        onClose={handleSuccessClose}
+      >
+        <Alert severity="success" variant="filled">
+          Account successfully created!
         </Alert>
       </Snackbar>
     </Grid>
