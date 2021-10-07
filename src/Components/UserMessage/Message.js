@@ -11,6 +11,7 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Avatar from "@material-ui/core/Avatar";
 import axios from "axios";
+import Picker from "emoji-picker-react";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -83,6 +84,11 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     right: 0,
   },
+  emojiPicker: {
+    paddingBottom: "4em",
+    position: "absolute",
+    top: "0",
+  },
   welcomeContainer: {
     display: "flex",
     flexDirection: "column",
@@ -147,51 +153,48 @@ const Message = () => {
     setUserMessages,
     userName /* Integrate to localstorage to avoid losing userdata on refresh */,
     setUserName,
-    receiverID, 
+    receiverID,
     setReceiverID,
-    receiverUN, 
+    receiverUN,
     setReceiverUN,
   } = useContext(ContextAPI);
 
   const [usersList, setUsersList] = useState([]);
   const [inputMsg, setInputMsg] = useState("");
-  const [userStorage, setUserStorage] =  useState();
+  const [showPicker, setShowPicker] = useState(false);
+  const [userStorage, setUserStorage] = useState();
   const msgRef = useRef();
   const scrollRef = useRef();
 
   const sendMsg = (e) => {
-
     axios({
-        method: 'Post',
-        url: 'http://206.189.91.54/api/v1/messages',
-        headers: {
-            "access-token": authKey.accessToken,
-            client: authKey.accessClient,
-            expiry: authKey.accessExpiry,
-            uid: authKey.accessUID,
-        },
-        params: {
-            receiver_id: receiverID,
-            receiver_class: 'User',
-            body: inputMsg,
-        }
+      method: "Post",
+      url: "http://206.189.91.54/api/v1/messages",
+      headers: {
+        "access-token": authKey.accessToken,
+        client: authKey.accessClient,
+        expiry: authKey.accessExpiry,
+        uid: authKey.accessUID,
+      },
+      params: {
+        receiver_id: receiverID,
+        receiver_class: "User",
+        body: inputMsg,
+      },
     })
-        .then((res) => {
-            console.log(res)
-            refresh();
-            
-        })
-        .catch(err => 
-            console.log(err))    
-    setInputMsg('')
+      .then((res) => {
+        console.log(res);
+        refresh();
+      })
+      .catch((err) => console.log(err));
+    setInputMsg("");
 
     setTimeout(() => {
-        scrollRef.current.scrollIntoView()
-    },400)
-    
-};  
+      scrollRef.current.scrollIntoView();
+    }, 400);
+  };
 
-const refresh = () => {
+  const refresh = () => {
     axios({
       method: "GET",
       url: `http://206.189.91.54/api/v1/messages?receiver_id=${receiverID}&receiver_class=User`,
@@ -209,10 +212,13 @@ const refresh = () => {
       .then((res) => {
         setUserMessages(res.data?.data);
       })
-      .catch((err) =>
-       console.log(err.response));
-};
+      .catch((err) => console.log(err.response));
+  };
 
+  const onEmojiClick = (event, emojiObject) => {
+    setInputMsg((prev) => prev + emojiObject.emoji);
+    setShowPicker(false);
+  };
 
   return (
     <div className={`${classes.root} scroll-active`}>
@@ -234,67 +240,93 @@ const refresh = () => {
                 </div>
               </div>
               {userMessages.map((val, key) => {
-                        const timestamp = new Date(val.created_at);
-                        return (
-                                    <div className={classes.message}>
-                                        <Avatar 
-                                        alt='Miyu Togo'
-                                        src='/broken-image.jpg'
-                                        className={classes.user} />
-                                        <div style={{display: 'flex'}}>
-                                            <Typography
-                                            style={{
-                                                marginLeft: '0.8em',
-                                                fontWeight: 'bold'}}
-                                            >
-                                               {val.sender.uid}
-                                            </Typography>
-                                            <Typography  
-                                            style={{marginLeft: '1em', color: 'rgba(50, 74, 95, 0.7)'}}
-                                            variant='subtitle2'
-                                            >
-                                                {timestamp.toLocaleTimeString([], {
-                                                    hour: "2-digit",
-                                                    minute: "2-digit",
-                                                })}
-                                            </Typography>
-                                        </div>
-                                        <Typography 
-                                                style={{
-                                                    position: 'relative',
-                                                    fontSize: '1.06rem',
-                                                    color: '#3F3F3F',
-                                                    marginLeft: '-9.1em',
-                                                    marginTop: '1.5rem',
-                                                    marginRight: '5em'}}
-                                                variant='h6'>
-                                              {val.body}
-                                        </Typography>
-                                    </div>
-                                );
-                            })}
-                            <div ref={scrollRef}></div>
+                const timestamp = new Date(val.created_at);
+                return (
+                  <div className={classes.message}>
+                    <Avatar
+                      alt="Miyu Togo"
+                      src="/broken-image.jpg"
+                      className={classes.user}
+                    />
+                    <div style={{ display: "flex" }}>
+                      <Typography
+                        style={{
+                          marginLeft: "0.8em",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {val.sender.uid}
+                      </Typography>
+                      <Typography
+                        style={{
+                          marginLeft: "1em",
+                          color: "rgba(50, 74, 95, 0.7)",
+                        }}
+                        variant="subtitle2"
+                      >
+                        {timestamp.toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </Typography>
+                    </div>
+                    <Typography
+                      style={{
+                        position: "relative",
+                        fontSize: "1.06rem",
+                        color: "#3F3F3F",
+                        marginLeft: "-14.2em",
+                        marginTop: "1.5rem",
+                        marginRight: "5em",
+                      }}
+                      variant="h6"
+                    >
+                      {val.body}
+                    </Typography>
+                  </div>
+                );
+              })}
+              <div ref={scrollRef}></div>
             </Grid>
           </Grid>
         </div>
       </div>
       <input
-        placeholder='Message here'
+        placeholder="Message here"
         className={classes.input}
         type="text"
         onChange={(e) => setInputMsg(e.target.value)}
+        onClick={() => setShowPicker(false)}
         value={inputMsg}
-       
       />
       <div className={classes.messageAdornment}>
         <AlternateEmailIcon className={classes.messageIcons} />
         <ImageOutlinedIcon className={classes.messageIcons} />
         <AttachFileIcon className={classes.messageIcons} />
-        <SentimentSatisfiedOutlinedIcon className={classes.messageIcons} />
+        <SentimentSatisfiedOutlinedIcon
+          onClick={() => setShowPicker(!showPicker)}
+          className={classes.messageIcons}
+        />
       </div>
-      <Button type="submit" className={classes.button} onClick={(e) => sendMsg(e)}>
+      <Button
+        type="submit"
+        className={classes.button}
+        onClick={(e) => sendMsg(e)}
+      >
         <SendIcon className={classes.sendIcon} />
       </Button>
+      {showPicker && (
+        <Picker
+          className={classes.emojiPicker}
+          pickerStyle={{
+            width: "23%",
+            position: "absolute",
+            bottom: "7em",
+            left: "1.2rem",
+          }}
+          onEmojiClick={onEmojiClick}
+        />
+      )}
     </div>
   );
 };

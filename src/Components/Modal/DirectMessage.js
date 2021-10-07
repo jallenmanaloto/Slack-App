@@ -17,12 +17,15 @@ const useStyles = makeStyles({
     width: "25vw",
   },
   button: {
-    border: "1px solid blue",
+    border: "1px solid rgba(43, 41, 40, 0.2)",
   },
   buttonContainer: {
-    width: "100%",
+    position: "absolute",
+    left: "50%",
+    transform: "translateX(-50%)",
+    width: "50%",
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "space-between",
   },
   container: {
     display: "flex",
@@ -41,6 +44,8 @@ const useStyles = makeStyles({
     border: "1px solid rgba(43, 41, 40, 0.6)",
     borderRadius: "5px",
     outline: "none",
+    paddingLeft: "1.5em",
+    fontSize: "1.1rem",
   },
 });
 
@@ -139,13 +144,14 @@ const DirectMessage = ({ sendMessageModalOpen, setSendMessageModalOpen }) => {
     <div className={classes.root}>
       <div className={classes.container}>
         <Typography className={classes.head} variant="h5">
-          Enter ID or Email
+          Send a direct message
         </Typography>
         <input
           onChange={handleGetReceiverID}
           value={inputValue}
           ref={inputVal}
           className={classes.input}
+          placeholder="Enter email address"
           type="text"
         />
       </div>
