@@ -105,6 +105,9 @@ const Registration = () => {
   const passInput = useRef();
   const confirmPassInput = useRef();
 
+  //declaring state to open success snackbar
+  const [success, setSuccess] = useState(false);
+
   //declaring states to handle error
   const [errorPass, setErrorPass] = useState("");
   const [errorMsg, setErrorMsg] = useState([]);
@@ -122,39 +125,20 @@ const Registration = () => {
     history.push("/");
   };
 
-  const handlePasswordStrength = (password) => {
-    if (
-      validator.isStrongPassword(password, {
-        minLength: 8,
-        minLowercase: 1,
-        minUppercase: 1,
-        minSymbols: 1,
-        minNumbers: 1,
-      })
-    ) {
-      setErrorPass("Strong Password");
-      console.log("Input Accepted (STRONG)");
-      setPassword(password);
-    } else {
-      setErrorPass("Weak Password");
-      console.log("Input Accepted (WEAK)");
-      setPassword(password);
+  const handleErrorClose = (event, reason) => {
+    if (reason == "clickaway") {
+      return;
     }
-    console.log(password);
+    setError(false);
+    setErrorMsg([]);
   };
 
-  // const handleEmailValidation = () => {};
-
-  // const handleRegister = () => {
-  //   if (password !== confirmPassword) {
-  //     console.log("pass mismatch");
-  //     setErrorMsg("Passwords do not match");
-  //   } else {
-  //     console.log("pass matched");
-  //     setErrorMsg("Accepted");
-  //     handleCreateAcct();
-  //   }
-  // };
+  const handleSuccessClose = (event, reason) => {
+    if (reason == "clickaway") {
+      return;
+    }
+    setSuccess(false);
+  };
 
   const handleCreateAcct = () => {
     axios({
@@ -166,14 +150,21 @@ const Registration = () => {
         password_confirmation: confirmPassword,
       },
     })
-      .then(/* (res) => console.log(res) */)
+      .then((res) => {
+        setSuccess(true);
+        console.log(res);
+      })
       .catch((err) => {
         const { errors } = err.response.data;
         setErrorMsg(errors.full_messages);
-        console.log(errorMsg);
+        setError(!error);
       });
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
   };
-
+  console.log("errorMsg");
+  console.log(errorMsg);
   return (
     <Grid container className={classes.containerBackground}>
       <Grid
@@ -284,18 +275,24 @@ const Registration = () => {
         </Grid>
       </Grid>
       <Snackbar
-        style={{ width: "100%" }}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        open="true" /* {error} */
+        open={error}
         autoHideDuration={4000}
+        onClose={handleErrorClose}
       >
-        {errorMsg.map((val, index) => {
-          return (
-            <Alert severity="error" variant="filled">
-              {val}
-            </Alert>
-          );
-        })}
+        <Alert severity="error" variant="filled">
+          {errorMsg[0]}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={success}
+        autoHideDuration={4000}
+        onClose={handleSuccessClose}
+      >
+        <Alert severity="success" variant="filled">
+          Account successfully created!
+        </Alert>
       </Snackbar>
     </Grid>
   );
