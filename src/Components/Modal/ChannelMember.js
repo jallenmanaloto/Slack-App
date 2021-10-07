@@ -118,6 +118,10 @@ const useStyles = makeStyles({
     cursor: "pointer",
     height: "3.7rem",
   },
+  memberContainer: {
+    overflowY: 'scroll',
+    height: '47vh',
+  },
   memberImg: {
     height: "1.7em",
     width: "1.7em",
@@ -126,6 +130,7 @@ const useStyles = makeStyles({
   },
   memberListContainer: {
     paddingTop: "5em",
+    
   },
   memberName: {
     marginLeft: "1rem",
@@ -326,6 +331,7 @@ const ChannelMember = () => {
           <PersonAddIcon className={classes.addUserIcon} />
           <h4 className={classes.memberName}>Add people</h4>
         </div>
+        <div className={classes.memberContainer}>
         {filterMember
           .filter((val) => {
             if (searchTerm === "") {
@@ -348,6 +354,8 @@ const ChannelMember = () => {
               </div>
             );
           })}
+        </div>
+        
       </div>
     </div>
   );
