@@ -48,7 +48,7 @@ const Chat = () => {
     })
         .then((res) => {
             setUsersList(res.data.data)
-            
+            getReceiverID();
         })
         .catch(err => 
             console.log(err)) 
@@ -62,13 +62,15 @@ const Chat = () => {
         }
     }
  }
+ 
+
 
   // Get msgs
   const getMsgs = async () => {
     await getReceiverID();
     axios({
       method: "Get",
-      url: `http://206.189.91.54/api/v1/messages?receiver_id=${receiverId}}&receiver_class=User`,
+      url: `http://206.189.91.54/api/v1/messages?receiver_id=${receiverId}&receiver_class=User`,
       headers: {
         'access-token': tokenValue,
         client: apiHeaders.client,
@@ -82,27 +84,24 @@ const Chat = () => {
       }
       })
       .then((res) => {
-        /* console.log(res.data.data) */;
         setMessages(res.data.data); 
         setUserStorage(res.data)
+        localStorage.setItem('logs',JSON.stringify(userStorage)); 
       })
       .catch((err) => {
         console.log(err);
       })
-
-      
   }
 
- /*  localStorage.setItem('logs',JSON.stringify(userStorage)); */
 
- 
-    
-    console.log(userStorage);
 
-    /* console.log(receiverId); */
+/*   const logDetails = localStorage.getItem('logs',JSON.parse(userStorage)); */
+
+    /* console.log(usersList) */
     /* console.log(messages);   */
-    /* console.log('here')
-    console.log(userStorage) */
+    /* console.log('here')*/
+
+    console.log(userStorage) 
 
     
 
@@ -145,14 +144,15 @@ const Chat = () => {
       ></input>
       <button onClick={(e) => sendMsg(e)}>Send</button>
 
-      {/* <ul>{userStorage.map (userStorage => {
-          return (
-            <li key={userStorage.id}>
-              {userStorage.email} - {userStorage.body}
-            </li>
-          )
-          })}
-      </ul> */}
+     {/*  <ul>
+          {userStorage.map((val, key) => {
+            return (
+              <li key={key}>
+                {val.email} - {val.body}
+              </li>
+            )
+            })}
+      </ul>  */}  
     </div>
   );
 };
