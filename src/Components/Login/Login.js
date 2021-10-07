@@ -3,14 +3,18 @@ import { useHistory } from "react-router";
 import { callAPI } from "../API/callAPI.js";
 import { Breakpoint } from "@material-ui/core/styles/createBreakpoints";
 import { ContextAPI } from "../Context/ContextAPi.js";
-import { Button } from "@material-ui/core";
-import { Box } from "@material-ui/core";
-import { Checkbox } from "@material-ui/core";
-import { Grid } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core";
-import { Typography } from "@material-ui/core";
-import { TextField } from "@material-ui/core";
-import { FormControlLabel } from "@material-ui/core";
+import {
+  Button,
+  Box,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  makeStyles,
+  Typography,
+  TextField,
+} from "@material-ui/core";
+import { Snackbar } from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert";
 import Sample from "../../assets/images/sample.jpg";
 import CatBG from "../../assets/images/CatBG.jpg";
 import Logo from "../../assets/images/Logo.svg";
@@ -28,6 +32,10 @@ const useStyles = makeStyles(() => ({
     justifyContent: "center",
     alignItems: "center",
     height: "100vh",
+  },
+
+  errorMessage: {
+    width: "100%",
   },
 
   sideImageContainer: {
@@ -76,6 +84,7 @@ const useStyles = makeStyles(() => ({
   footerTwo: {
     marginTop: "10px",
     fontSize: "1em",
+    cursor: "pointer",
   },
 }));
 
@@ -91,12 +100,15 @@ const Login = () => {
     setApiData,
     apiHeaders,
     setApiHeaders,
+    auth,
+    setAuth,
     channelData,
     setChannelData,
     channelMembers,
     setChannelMembers,
     channelMessage,
     setchannelMessage,
+    setMessages,
     tokenValue,
     setTokenValue,
     userName,
@@ -105,9 +117,21 @@ const Login = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState(false);
 
   const handleKeyDown = (evt) => {
     evt.key === "Enter" && handleLogin(evt);
+  };
+
+  const toRegister = () => {
+    history.push("/register");
+  };
+
+  const handleErrorDisplay = () => {
+    setErrorMsg(true);
+    setTimeout(() => {
+      setErrorMsg(false);
+    }, 4000);
   };
 
   const handleLogin = (e) => {
@@ -123,16 +147,37 @@ const Login = () => {
       .then((res) => {
         const { "access-token": token } = res.headers;
         const { email } = res.data.data;
+        const { uid } = res.data.data;
         const userDisplayName = email.split("@")[0];
+
         setUserName(userDisplayName);
-        setTokenValue(token);
-        setApiHeaders(res.headers);
-        setApiData(res);
-        console.log(res);
+
+        // if (!JSON.parse(localStorage.getItem("messages"))) {
+        //   return;
+        // } else {
+        //   setMessages(JSON.parse(localStorage.getItem("message")));
+        // }
+
+        if (res.data.errors) {
+          handleErrorDisplay();
+        }
+
+        const authData = {
+          accessToken: token,
+          accessClient: res.headers.client,
+          accessExpiry: res.headers.expiry,
+          accessUID: uid,
+        };
+        localStorage.setItem("userKey", JSON.stringify(authData));
+        setAuth(true);
         history.push("/dashboard");
       })
-      .catch((err) => console.log(err));
+      .then((res) => {
+        const auth = JSON.parse(localStorage.getItem("userKey"));
+      })
+      .catch((err) => handleErrorDisplay());
   };
+
   return (
     <Grid container className={classes.containerBackground}>
       <Grid container className={classes.containerDiv}>
@@ -146,6 +191,16 @@ const Login = () => {
               alignItems: "center",
             }}
           >
+            {errorMsg ? (
+              <Snackbar
+                anchorOrigin={{ vertical: "top", horizontal: "left" }}
+                open="true"
+              >
+                <Alert severity="error" variant="filled">
+                  Invalid credentials. Try again.
+                </Alert>
+              </Snackbar>
+            ) : null}
             <Typography className={classes.headerLogin}>Sign In</Typography>
 
             <TextField
@@ -199,7 +254,10 @@ const Login = () => {
                 {" "}
                 Don't have an account?{" "}
               </Typography>
-              <Typography className={classes.footerTwo}> Sign up</Typography>
+              <Typography onClick={toRegister} className={classes.footerTwo}>
+                {" "}
+                Sign up
+              </Typography>
             </Grid>
           </Box>
         </Grid>
@@ -215,22 +273,6 @@ const Login = () => {
         </Grid>
       </Grid>
     </Grid>
-
-    /*             <div>
-            <form>
-                <label>Email</label>
-                <input type='email'
-                    ref={emailInput}
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}></input>
-                <label>Password</label>
-                <input type='password'  
-                    ref={passInput} 
-                    value={password} 
-                    onChange={(e) => setPassword(e.target.value)} ></input>
-                <button onClick={(e) => handleLogin(e)}>Submit</button>
-            </form>
-            </div> */
   );
 };
 

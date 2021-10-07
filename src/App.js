@@ -1,19 +1,23 @@
-import { useContext, useState } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import './App.css';
-import Registration from './Components/Registration/Registration'; 
-import Login from './Components/Login/Login';
-import Main from './Components/Main/Main'
-import Channel from './Components/Channel/Channel';
-import HomeChannel from './Components/Channel/HomeChannel'
-import { ContextAPI } from './Components/Context/ContextAPi';
-import Chat from'./Components/Chat/Chat'
-
+import { useContext, useState } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import "./App.css";
+import Registration from "./Components/Registration/Registration";
+import Login from "./Components/Login/Login";
+import Main from "./Components/Main/Main";
+import Channel from "./Components/Channel/Channel";
+import HomeChannel from "./Components/Channel/HomeChannel";
+import { ContextAPI } from "./Components/Context/ContextAPi";
+import Chat from "./Components/Chat/Chat";
 
 function App() {
   const [allUsers, setAllUsers] = useState([]);
-  const [apiData, setApiData] = useState({});
+  const [allChannels, setAllChannels] = useState([]);
+  const [apiData, setApiData] = useState([]);
   const [apiHeaders, setApiHeaders] = useState();
+  const [auth, setAuth] = useState(false);
+  const [authKey, setAuthKey] = useState([]);
+  const [fetchFilterMembers, setFetchFilterMembers] = useState([]);
+  const [messages, setMessages] = useState([]);
   const [tokenValue, setTokenValue] = useState();
   const [channelData, setChannelData] = useState();
   const [channelID, setchannelID] = useState("");
@@ -25,7 +29,6 @@ function App() {
 
   return (
     <div className="App">
-
       {/* <Registration/>   */}
       <ContextAPI.Provider value={{allUsers,
           setAllUsers,
@@ -42,7 +45,7 @@ function App() {
           tokenValue,
           setTokenValue,
           userName,
-          setUserName,}} >
+          setUserName,} >
           <Router>
             <Switch>
                 <Route exact path='/' component={Login}>
@@ -56,18 +59,30 @@ function App() {
 {/* 
       <ContextAPI.Provider
         value={{
+          allChannels,
+          setAllChannels,
           allUsers,
           setAllUsers,
           apiData,
           setApiData,
           apiHeaders,
           setApiHeaders,
+          auth,
+          setAuth,
+          authKey,
+          setAuthKey,
           channelData,
           setChannelData,
+          channelID,
+          setchannelID,
           channelMembers,
           setChannelMembers,
           channelMessage,
           setchannelMessage,
+          fetchFilterMembers,
+          setFetchFilterMembers,
+          messages,
+          setMessages,
           tokenValue,
           setTokenValue,
           userName,
@@ -79,17 +94,18 @@ function App() {
             <Route exact path="/" component={Login}>
               <Login setUser={setUser} />
             </Route>
-            <Route exact path="/dashboard" component={Chat }>
+            <Route exact path="/dashboard" component={HomeChannel}>
               <Chat />
-             <Main/> 
+              <Main />
             </Route>
-             <Route exact path="/dashboard/channel" component={Channel}>
+            <Route exact path="/dashboard/channel" component={Channel}>
               <Channel />
-            </Route> 
+            </Route>
+            <Route exact path="/register" component={Registration} />
+            <Route path="*" component={() => "404 NOT FOUND"} />
           </Switch>
-        </Router>  */}
-
-      </ContextAPI.Provider>
+        </Router>
+      </ContextAPI.Provider> /*}
     </div>
   );
 }

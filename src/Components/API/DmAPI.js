@@ -7,7 +7,7 @@ export const RetrieveUsersAPI = (data) => {
         method: data.method,
         url: data.url,
         headers: {
-            'access-tokens': data['access-tokens'],
+            'access-token': data['access-token'],
             client: data.client,
             expiry: data.expiry,
             uid: data.uid,
@@ -26,7 +26,7 @@ export const SendDmAPI = (data) => {
             body: data.inputMsg
         },
         headers: {
-            'access-tokens': data['access-tokens'],
+            'access-token': data['access-token'],
             uid: data.uid,
             expiry: data.expiry,
             client: data.client,
@@ -39,7 +39,7 @@ export const DisplayMsgsAPI = (data) => {
         method: data.method,
         url: data.url,
         headers: {
-            'access-tokens': data['access-tokens'],
+            'access-token': data['access-token'],
             uid: data.uid,
             expiry: data.expiry,
             client: data.client,

@@ -156,12 +156,17 @@ const Channel = () => {
     setApiData,
     apiHeaders,
     setApiHeaders,
+    authKey,
+    setAuthKey,
     channelData,
     setChannelData,
+    channelID,
+    setchannelID,
     channelMembers,
     setChannelMembers,
     channelMessage,
     setchannelMessage,
+    fetchFilterMembers,
     tokenValue,
     setTokenValue,
     userName,
@@ -181,10 +186,10 @@ const Channel = () => {
       method: "GET",
       url: `http://206.189.91.54/api/v1/messages?receiver_id=${channelData.id}&receiver_class=Channel`,
       headers: {
-        "access-token": tokenValue,
-        client: apiHeaders.client,
-        expiry: apiHeaders.expiry,
-        uid: apiData.data?.data?.uid,
+        "access-token": authKey.accessToken,
+        client: authKey.accessClient,
+        expiry: authKey.accessExpiry,
+        uid: authKey.accessUID,
       },
       params: {
         receiver_id: channelData.data?.data?.id,
@@ -193,11 +198,12 @@ const Channel = () => {
     })
       .then((res) => {
         setchannelMessage(res.data.data);
+        console.log(res);
       })
       .catch((err) => {
         console.log(err);
       });
-  });
+  }, [channelID, newMessage]);
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -215,10 +221,10 @@ const Channel = () => {
       method: "POST",
       url: "http://206.189.91.54/api/v1/messages",
       headers: {
-        "access-token": tokenValue,
-        client: apiHeaders.client,
-        expiry: apiHeaders.expiry,
-        uid: apiData.data?.data?.uid,
+        "access-token": authKey.accessToken,
+        client: authKey.accessClient,
+        expiry: authKey.accessExpiry,
+        uid: authKey.accessUID,
       },
       data: {
         receiver_id: channelData.id,

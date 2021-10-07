@@ -24,7 +24,8 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import AccountCircle from "@material-ui/icons/AccountCircle";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import MenuIcon from "@material-ui/icons/Menu";
 import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";
@@ -39,6 +40,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Channel from "../Channel/Channel";
 import { ContextAPI } from "../Context/ContextAPi";
 import UserSearch from "../UserSearch/UserSearch";
+import MyAccount from "../Modal/MyAccount";
 
 const drawerWidth = 325;
 
@@ -208,43 +210,60 @@ const Main = () => {
   const classes = useStyles();
   const history = useHistory();
   const {
+    allChannels,
+    setAllChannels,
     allUsers,
     setAllUsers,
     apiData,
     setApiData,
     apiHeaders,
     setApiHeaders,
+    auth,
+    setAuth,
+    authKey,
+    setAuthKey,
     channelData,
     setChannelData,
+    channelID,
+    setchannelID,
     channelMembers,
     setChannelMembers,
     channelMessage,
     setchannelMessage,
+    fetchFilterMembers,
+    setFetchFilterMembers,
+    setMessages,
     tokenValue,
     setTokenValue,
     userName,
     setUserName,
   } = useContext(ContextAPI);
 
-  //Container to store all fetched channels
-  const [allChannels, setAllChannels] = useState([]);
-
   //Setting states
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
   const [channelExpand, setChannelExpand] = useState(false);
   const [dmExpand, setDmExpand] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [searchBar, setSearchBar] = useState("");
   const [searchResult, setSearchResult] = useState(false);
+  //state for the modal open
+  const [modalOpen, setModalOpen] = useState(false);
+  const [profileModalOpen, setProfileModalOpen] = useState(false);
+
+  useEffect(() => {
+    const sessionKey = JSON.parse(localStorage.getItem("userKey"));
+    setAuthKey(sessionKey);
+  }, []);
 
   useEffect(() => {
     axios({
       method: "GET",
       url: "http://206.189.91.54/api/v1/channels",
       headers: {
-        "access-token": tokenValue,
-        client: apiHeaders.client,
-        expiry: apiHeaders.expiry,
-        uid: apiData.data?.data?.uid,
+        "access-token": authKey.accessToken,
+        client: authKey.accessClient,
+        expiry: authKey.accessExpiry,
+        uid: authKey.accessUID,
       },
     })
       .then((res) => {
@@ -255,26 +274,49 @@ const Main = () => {
       });
   }, [channelExpand]);
 
-  const getAllUser = () => {
+  useEffect(() => {
     axios({
       method: "GET",
       url: "http://206.189.91.54/api/v1/users",
       headers: {
-        "access-token": tokenValue,
-        client: apiHeaders.client,
-        expiry: apiHeaders.expiry,
-        uid: apiData.data?.data?.uid, //user id
+        "access-token": authKey.accessToken,
+        client: authKey.accessClient,
+        expiry: authKey.accessExpiry,
+        uid: authKey.accessUID,
       },
     })
       .then((res) => {
         setAllUsers(res.data.data);
-        console.log(allUsers);
+        localStorage.setItem("allUsers", JSON.stringify(allUsers));
       })
-      .catch((err) => console.log(err));
-  };
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
-  //state for the modal open
-  const [modalOpen, setModalOpen] = useState(false);
+  //Retrieving information of a Channel
+  useEffect(() => {
+    if (channelID === "") return;
+    else {
+      axios({
+        method: "GET",
+        url: `http://206.189.91.54/api/v1/channels/${channelID}`,
+        headers: {
+          "access-token": authKey.accessToken,
+          client: authKey.accessClient,
+          expiry: authKey.accessExpiry,
+          uid: authKey.accessUID,
+        },
+      })
+        .then((res) => {
+          const members = res.data.data.channel_members;
+          setChannelMembers(members);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [channelID]);
 
   //Function to handle expansion of Channel
   const handleChannelExpandToggle = () => {
@@ -295,8 +337,26 @@ const Main = () => {
     setSearchBar(e.target.value);
     if (!searchBar) {
       setSearchResult(true);
-      console.log("open search result");
     }
+  };
+
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const openMyProfile = () => {
+    setProfileModalOpen(true);
+    setAnchorEl(null);
+  };
+
+  const logOut = () => {
+    localStorage.removeItem("userKey");
+    setAuth(false);
+    history.push("/");
   };
 
   const userDM = (
@@ -372,28 +432,12 @@ const Main = () => {
                 {allChannels.map((val, key) => {
                   const getChannelData = (e) => {
                     setChannelData(val);
-
-                    //Retrieving information of a Channel
-                    axios({
-                      method: "GET",
-                      url: `http://206.189.91.54/api/v1/channels/${val.id}`,
-                      headers: {
-                        "access-token": tokenValue,
-                        client: apiHeaders.client,
-                        expiry: apiHeaders.expiry,
-                        uid: apiData.data?.data?.uid,
-                      },
-                    })
-                      .then((res) => {
-                        setChannelMembers(res.data.data.channel_members);
-                      })
-                      .catch((err) => {
-                        console.log(err);
-                      });
+                    setFetchFilterMembers(!fetchFilterMembers);
+                    setchannelID(val.id);
                   };
-
                   return (
                     <Link
+                      key={key}
                       style={{ textDecoration: "none" }}
                       to={`/dashboard/channel/${val.id}`}
                     >
@@ -438,50 +482,68 @@ const Main = () => {
 
   return (
     <div>
-      <Grid container spacing={3}>
-        <AppBar className={classes.appBar} elevation={0}>
-          <Toolbar className={classes.toolbar}>
-            <Grid item xs={2}>
-              <IconButton
-                className={classes.menuButton}
-                onClick={handleDrawerToggle}
-              >
-                <MenuIcon style={{ color: "#ECF0F1" }} />
-              </IconButton>
-            </Grid>
-            <Grid item xs={7}>
-              <div>
-                <InputBase
-                  className={classes.input}
-                  placeholder="Search"
-                  value={searchBar}
-                  onChange={handleSearchBarValue}
-                  onClick={getAllUser}
-                  startAdornment={
-                    <InputAdornment position="start">
-                      <SearchIcon className={classes.searchIcon} />
-                    </InputAdornment>
-                  }
-                />
-                {searchBar ? (
-                  <UserSearch
-                    searchResult={searchResult}
-                    searchBar={searchBar}
+      {!auth ? (
+        console.log("not authorized")
+      ) : (
+        <Grid container spacing={3}>
+          <AppBar className={classes.appBar} elevation={0}>
+            <Toolbar className={classes.toolbar}>
+              <Grid item xs={2}>
+                <IconButton
+                  className={classes.menuButton}
+                  onClick={handleDrawerToggle}
+                >
+                  <MenuIcon style={{ color: "#ECF0F1" }} />
+                </IconButton>
+              </Grid>
+              <Grid item xs={7}>
+                <div>
+                  <InputBase
+                    className={classes.input}
+                    placeholder="Search"
+                    value={searchBar}
+                    onChange={handleSearchBarValue}
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <SearchIcon className={classes.searchIcon} />
+                      </InputAdornment>
+                    }
                   />
-                ) : null}
-              </div>
-            </Grid>
-            <Grid className={classes.myAccount} item xs={2}>
-              <Avatar
-                className={classes.accountIcon}
-                alt={userName}
-                src="/broken-image.jpg"
-              />
-              <Typography variant="body1">{userName}</Typography>
-            </Grid>
-          </Toolbar>
-        </AppBar>
-      </Grid>
+                  {searchBar ? (
+                    <UserSearch
+                      searchResult={searchResult}
+                      searchBar={searchBar}
+                    />
+                  ) : null}
+                </div>
+              </Grid>
+              <Grid
+                className={classes.myAccount}
+                onClick={handleMenuClick}
+                item
+                xs={2}
+              >
+                <Avatar
+                  className={classes.accountIcon}
+                  alt={userName}
+                  src="/broken-image.jpg"
+                />
+                <Typography variant="body1">{userName}</Typography>
+              </Grid>
+              <Menu
+                anchorEl={anchorEl}
+                keepMounted
+                style={{ marginTop: "2em", marginLeft: "6em" }}
+                open={Boolean(anchorEl)}
+                onClose={handleMenuClose}
+              >
+                <MenuItem onClick={openMyProfile}>My Profile</MenuItem>
+                <MenuItem onClick={logOut}>Log out</MenuItem>
+              </Menu>
+            </Toolbar>
+          </AppBar>
+        </Grid>
+      )}
       <div>
         <Hidden smUp implementation="css">
           <Drawer
@@ -514,6 +576,11 @@ const Main = () => {
       {modalOpen ? (
         <AddChannelModal setModalOpen={modalOpen} closeModal={setModalOpen} />
       ) : null}
+      {}
+      <MyAccount
+        profileModalOpen={profileModalOpen}
+        setProfileModalOpen={setProfileModalOpen}
+      />
       <HomeChannel />
     </div>
   );

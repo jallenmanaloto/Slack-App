@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import axios from "axios";
 import {
   AppBar,
@@ -10,6 +10,7 @@ import {
   DialogContentText,
   DialogTitle,
   Modal,
+  Snackbar,
   Tab,
   Tabs,
   Typography,
@@ -24,8 +25,15 @@ const useStyles = makeStyles({
   root: {
     position: "absolute",
     right: "5rem",
-    top: "1rem",
+    top: "0.6rem",
     cursor: "pointer",
+    minWidth: "7em",
+    minHeight: "2.9em",
+    background: "lightgray",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: "32.5px",
   },
   addPeople: {
     height: "30vh",
@@ -181,6 +189,7 @@ const ChannelMember = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [dialogInput, setDialogInput] = useState("");
   const [tabIndex, setTabIndex] = useState(0);
+  const [filterMember, setFilterMember] = useState([]);
 
   //declaring reference for the input to search member
   const searchMember = useRef();
@@ -217,19 +226,41 @@ const ChannelMember = () => {
 
   //declaring Contexts for API data
   const {
+    allUsers,
+    setAllUsers,
     apiData,
     setApiData,
     apiHeaders,
     setApiHeaders,
+    authKey,
+    setAuthKey,
     tokenValue,
     setTokenValue,
     channelData,
     setChannelData,
+    channelID,
+    setchannelID,
     channelMembers,
     setChannelMembers,
     channelMessage,
     setchannelMessage,
+    fetchFilterMembers,
+    setFetchFilterMembers,
   } = useContext(ContextAPI);
+
+  useEffect(() => {
+    const channelMemberList = channelMembers.map((member) => member.user_id);
+    const filteredMembers = allUsers.filter((users) =>
+      channelMemberList.includes(users.id)
+    );
+    setTimeout(() => {
+      setFilterMember([...filteredMembers]);
+      console.log("timeout");
+      console.log(filterMember);
+    }, 300);
+  }, [channelMembers]);
+  console.log("outside");
+  console.log(filterMember);
 
   //function to handle invite of user to the channel
   const inviteUser = () => {
@@ -237,18 +268,17 @@ const ChannelMember = () => {
       url: "http://206.189.91.54/api/v1/channel/add_member",
       method: "POST",
       headers: {
-        "access-token": tokenValue,
-        client: apiHeaders.client,
-        expiry: apiHeaders.expiry,
-        uid: apiData.data?.data?.uid,
+        "access-token": authKey.accessToken,
+        client: authKey.accessClient,
+        expiry: authKey.accessExpiry,
+        uid: authKey.accessUID,
       },
       data: {
         id: channelData.id,
-        member_id: 123,
+        member_id: 123, //value from the input
       },
     })
       .then((res) => {
-        console.log(channelData);
         //handling errors received
         if (res.data.errors) {
           setErrorMessage(res.data.errors);
@@ -267,40 +297,16 @@ const ChannelMember = () => {
 
   const members = (
     <div onClick={handleClose} className={classes.root}>
-      <AvatarGroup max={4}>
-        {channelMessage.map((val) => {
-          <Avatar
-            className={classes.user}
-            alt={val.sender.uid}
-            src="/static/images/avatar/1.jpg"
-          />;
+      <AvatarGroup max={3}>
+        {channelMembers.map((val) => {
+          return (
+            <Avatar
+              className={classes.user}
+              alt={val.uid}
+              src="/static/images/avatar/1.jpg"
+            />
+          );
         })}
-
-        <Avatar
-          className={classes.user}
-          alt="Travis Howard"
-          src="/static/images/avatar/2.jpg"
-        />
-        <Avatar
-          className={classes.user}
-          alt="Cindy Baker"
-          src="/static/images/avatar/3.jpg"
-        />
-        <Avatar
-          className={classes.user}
-          alt="Agnes Walker"
-          src="/static/images/avatar/4.jpg"
-        />
-        <Avatar
-          className={classes.user}
-          alt="Trevor Henderson"
-          src="/static/images/avatar/5.jpg"
-        />
-        <Avatar
-          className={classes.user}
-          alt="Trevor Henderson"
-          src="/static/images/avatar/5.jpg"
-        />
       </AvatarGroup>
     </div>
   );
@@ -324,25 +330,25 @@ const ChannelMember = () => {
           <PersonAddIcon className={classes.addUserIcon} />
           <h4 className={classes.memberName}>Add people</h4>
         </div>
-        {channelMembers
+        {filterMember
           .filter((val) => {
-            const user = val.user_id;
             if (searchTerm === "") {
               return val;
-            } else if (JSON.stringify(user).includes(searchTerm)) {
+            } else if (JSON.stringify(val).includes(searchTerm)) {
               return val;
             }
             return false;
           })
-          .map((val) => {
+          .map((val, key) => {
+            const user = val.uid; /* .split("@")[0]; */
             return (
-              <div key={val.user_id} className={`${classes.members} addPeople`}>
+              <div key={key} className={`${classes.members} addPeople`}>
                 <Avatar
                   className={classes.memberImg}
-                  alt={val.user_id}
+                  alt={user}
                   src={val.user_id}
                 />
-                <h4 className={classes.memberName}>{val.user_id}</h4>
+                <h4 className={classes.memberName}>{user}</h4>
               </div>
             );
           })}
@@ -420,8 +426,7 @@ const ChannelMember = () => {
         {memberListModal}
       </Modal>
       <Dialog
-        fullWidth="xs"
-        maxWidth="xs"
+        maxWidth="sm"
         className={classes.dialog}
         open={dialogDisplay}
         onClose={handleDialogDisplay}
@@ -438,9 +443,18 @@ const ChannelMember = () => {
             placeholder="Enter a user id"
           ></input>
           {errorDisplay ? (
-            <Alert className={classes.errors} severity="error">
-              {errorMessage}
-            </Alert>
+            <Snackbar
+              anchorOrigin={{ vertical: "top", horizontal: "center" }}
+              open="true"
+            >
+              <Alert
+                className={classes.errors}
+                severity="error"
+                variant="filled"
+              >
+                {errorMessage}
+              </Alert>
+            </Snackbar>
           ) : null}
         </DialogContent>
         <DialogActions>

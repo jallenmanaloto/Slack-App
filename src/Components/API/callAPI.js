@@ -13,7 +13,7 @@ export const callAPI = (data) => {
             'password_confirmation': data.password_confirmation,
         },
         headers: {
-            'access-tokens': data['access-tokens'],
+            'access-token': data['access-token'],
             uid: data.uid,
             expiry: data.expiry,
             client: data.client,
