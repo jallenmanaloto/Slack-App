@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { ContextAPI } from "../Context/ContextAPi";
 import Button from "@material-ui/core/Button";
@@ -10,6 +10,7 @@ import ImageOutlinedIcon from "@material-ui/icons/ImageOutlined";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Avatar from "@material-ui/core/Avatar";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -144,7 +145,66 @@ const Message = () => {
     setUserMessages,
     userName /* Integrate to localstorage to avoid losing userdata on refresh */,
     setUserName,
+    receiverID, 
+    setReceiverID,
   } = useContext(ContextAPI);
+
+  const [usersList, setUsersList] = useState([]);
+  const [inputMsg, setInputMsg] = useState("");
+  const [receiverId, setReceiverId] = useState('');
+  const [userStorage, setUserStorage] =  useState();
+  const msgRef = useRef();
+
+  const getMsgs = async () => {
+    axios({
+      method: "Get",
+      url: `http://206.189.91.54/api/v1/messages?receiver_id=${receiverId}}&receiver_class=User`,
+        headers: {
+            'access-token': authKey.accesToken,
+            client: authKey.client,
+            expiry: authKey.expiry,
+            uid: authKey.accessUID,
+        },
+        params: {
+            receiver_id: receiverID,
+            receiver_class: 'User',
+        }
+        })
+      .then((res) => { 
+        /* console.log(res.data.data) */;
+        setMessages(res.data.data); 
+        setUserStorage(res.data)
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+     
+  }
+
+  const sendMsg = (e) => {
+    e.preventDefault();
+    axios({
+        method: 'Post',
+        url: 'http://206.189.91.54/api/v1/messages',
+        headers: {
+            'access-token': authKey.accesToken,
+            client: authKey.client,
+            expiry: authKey.expiry,
+            uid: authKey.accessUID,
+        },
+        params: {
+            receiver_id: receiverID,
+            receiver_class: 'User',
+            body: inputMsg,
+        }
+    })
+        .then((res) => {
+
+        })
+        .catch(err => 
+            console.log(err))    
+};  
+
 
   return (
     <div className={`${classes.root} scroll-active`}>
@@ -208,6 +268,8 @@ const Message = () => {
         placeholder="Message @User-name"
         className={classes.input}
         type="text"
+        onChange={(e) => setInputMsg(e.target.value)}
+        value={inputMsg}
       />
       <div className={classes.messageAdornment}>
         <AlternateEmailIcon className={classes.messageIcons} />

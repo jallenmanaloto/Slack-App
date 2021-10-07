@@ -592,7 +592,10 @@ const Main = () => {
         </Hidden>
       </div>
       {modalOpen ? (
-        <AddChannelModal setModalOpen={modalOpen} closeModal={setModalOpen} />
+        <AddChannelModal 
+          setModalOpen={modalOpen} 
+          closeModal={setModalOpen} 
+        />
       ) : null}
       {}
       <MyAccount

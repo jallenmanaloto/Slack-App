@@ -2,6 +2,7 @@ import React, { useContext, useRef, useState } from 'react'
 import axios from 'axios';
 import { ContextAPI } from '../Context/ContextAPi';
 import { Button, makeStyles, Modal, Typography } from "@material-ui/core";
+import { useHistory } from 'react-router';
 
 const useStyles = makeStyles({
     root: {
@@ -75,11 +76,21 @@ const DirectMessage = ({sendMessageModalOpen, setSendMessageModalOpen}) => {
         setUserMessages,
         userName /* Integrate to localstorage to avoid losing userdata on refresh */,
         setUserName,
+        receiverID, 
+        setReceiverID,
       } = useContext(ContextAPI);
 
     const inputVal = useRef();
     const [inputValue, setInputValue] = useState('');
     
+    const history = useHistory();
+
+    const getReceiverID = () => {
+        for (let i = 0; i < allUsers.length; i++){
+            if (allUsers[i].email === inputVal.current.value) {
+                setReceiverID(allUsers[i].id)
+            } 
+     }
 
     //function to handle close for modal
     const handleClose = () => {
@@ -88,6 +99,11 @@ const DirectMessage = ({sendMessageModalOpen, setSendMessageModalOpen}) => {
 
     const handleInputValue =() => {
         setInputValue(inputVal.current.value)
+    }
+
+    const handleGetReceiverID = () => {
+        handleInputValue();
+        getReceiverID();
     }
 
     //function to retrieve message with a user
@@ -102,14 +118,17 @@ const DirectMessage = ({sendMessageModalOpen, setSendMessageModalOpen}) => {
                 uid: authKey.accessUID,
             },
             params: {
-                receiver_id: inputValue,
+                receiver_id: receiverID,
                 receiver_class: 'User'
             },
         })
         .then(res => {
             setUserMessages(res.data?.data)
+            /* history.push('/dashboard/message')  */
+            /* handleClose(); */
         })
-        .catch(err => console.log(err.response))
+        .catch(err => 
+            console.log(err.response))
     }
 
     const sendMessageModal =(
@@ -118,7 +137,7 @@ const DirectMessage = ({sendMessageModalOpen, setSendMessageModalOpen}) => {
                 <Typography className={classes.head} variant='h5'>
                     Enter ID or Email
                 </Typography>
-                <input onChange={handleInputValue} value={inputValue} ref={inputVal} className={classes.input} type="text" />
+                <input onChange={handleGetReceiverID} value={inputValue} ref={inputVal} className={classes.input} type="text" />
             </div>
             <div className={classes.buttonContainer}>
             <Button onClick={retrieveMessage} className={classes.button}>Message</Button>
@@ -135,6 +154,6 @@ const DirectMessage = ({sendMessageModalOpen, setSendMessageModalOpen}) => {
             </Modal>
         </div>
     )
-}
+}}
 
-export default DirectMessage
+export default DirectMessage;
