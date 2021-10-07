@@ -1,6 +1,7 @@
 import React, { useContext, useRef, useState } from "react";
 import axios from "axios";
 import { Link, useHistory } from "react-router-dom";
+import Message from "../UserMessage/Message";
 import { ContextAPI } from "../Context/ContextAPi";
 import { Button, makeStyles, Modal, Typography } from "@material-ui/core";
 
@@ -42,7 +43,6 @@ const useStyles = makeStyles({
     outline: "none",
   },
 
-
 });
 
 const DirectMessage = ({ sendMessageModalOpen, setSendMessageModalOpen }) => {
@@ -76,17 +76,23 @@ const DirectMessage = ({ sendMessageModalOpen, setSendMessageModalOpen }) => {
     setTokenValue,
     userMessages,
     setUserMessages,
+
     userName /* Integrate to localstorage to avoid losing userdata on refresh */,
     setUserName,
     receiverID, 
     setReceiverID,
     receiverUN, 
     setReceiverUN,
+    messageDisplay,
+    setMessageDisplay,
+    userName /* Integrate to localstorage to avoid losing userdata on refresh */,
+    setUserName,
   } = useContext(ContextAPI);
 
   const inputVal = useRef();
   const [inputValue, setInputValue] = useState("");
   const history = useHistory();
+
 
   //function to handle close for modal
   const handleClose = () => {
@@ -133,6 +139,8 @@ const DirectMessage = ({ sendMessageModalOpen, setSendMessageModalOpen }) => {
       })
       .catch((err) =>
        console.log(err.response));
+      setMessageDisplay(true);
+      handleClose();
   };
 
   const sendMessageModal = (
@@ -143,6 +151,7 @@ const DirectMessage = ({ sendMessageModalOpen, setSendMessageModalOpen }) => {
         </Typography>
         <input
           onChange={handleGetReceiverID}
+
           value={inputValue}
           ref={inputVal}
           className={classes.input}
@@ -153,7 +162,9 @@ const DirectMessage = ({ sendMessageModalOpen, setSendMessageModalOpen }) => {
         <Button onClick={retrieveMessage} className={classes.button}>
           Message
         </Button>
-        <Button className={classes.button}>Cancel</Button>
+        <Button onClick={handleClose} className={classes.button}>
+          Cancel
+        </Button>
       </div>
     </div>
   );
