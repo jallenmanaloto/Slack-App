@@ -42,7 +42,6 @@ const useStyles = makeStyles({
     borderRadius: "5px",
     outline: "none",
   },
-
 });
 
 const DirectMessage = ({ sendMessageModalOpen, setSendMessageModalOpen }) => {
@@ -76,12 +75,9 @@ const DirectMessage = ({ sendMessageModalOpen, setSendMessageModalOpen }) => {
     setTokenValue,
     userMessages,
     setUserMessages,
-
-    userName /* Integrate to localstorage to avoid losing userdata on refresh */,
-    setUserName,
-    receiverID, 
+    receiverID,
     setReceiverID,
-    receiverUN, 
+    receiverUN,
     setReceiverUN,
     messageDisplay,
     setMessageDisplay,
@@ -92,7 +88,6 @@ const DirectMessage = ({ sendMessageModalOpen, setSendMessageModalOpen }) => {
   const inputVal = useRef();
   const [inputValue, setInputValue] = useState("");
   const history = useHistory();
-
 
   //function to handle close for modal
   const handleClose = () => {
@@ -105,17 +100,16 @@ const DirectMessage = ({ sendMessageModalOpen, setSendMessageModalOpen }) => {
  */
   const handleGetReceiverID = () => {
     setInputValue(inputVal.current.value);
-    for (let i = 0; i < allUsers.length; i++){
-        if (allUsers[i].email === inputVal.current.value) {
-            setReceiverID(allUsers[i].id);
-            setReceiverUN(allUsers[i].email);
-        }  else if  (allUsers[i].id === inputVal.current.value) {
-            setReceiverID(allUsers[i].id);
-            setReceiverUN(allUsers[i].email);
-        }
+    for (let i = 0; i < allUsers.length; i++) {
+      if (allUsers[i].email === inputVal.current.value) {
+        setReceiverID(allUsers[i].id);
+        setReceiverUN(allUsers[i].email);
+      } else if (allUsers[i].id === inputVal.current.value) {
+        setReceiverID(allUsers[i].id);
+        setReceiverUN(allUsers[i].email);
+      }
     }
- }
-
+  };
 
   //function to retrieve message with a user
   const retrieveMessage = () => {
@@ -135,12 +129,10 @@ const DirectMessage = ({ sendMessageModalOpen, setSendMessageModalOpen }) => {
     })
       .then((res) => {
         setUserMessages(res.data?.data);
-        history.push("/dashboard/message");
       })
-      .catch((err) =>
-       console.log(err.response));
-      setMessageDisplay(true);
-      handleClose();
+      .catch((err) => console.log(err.response));
+    setMessageDisplay(true);
+    handleClose();
   };
 
   const sendMessageModal = (
@@ -151,7 +143,6 @@ const DirectMessage = ({ sendMessageModalOpen, setSendMessageModalOpen }) => {
         </Typography>
         <input
           onChange={handleGetReceiverID}
-
           value={inputValue}
           ref={inputVal}
           className={classes.input}
