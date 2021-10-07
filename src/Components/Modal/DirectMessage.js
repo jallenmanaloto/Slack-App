@@ -112,7 +112,7 @@ const DirectMessage = ({ sendMessageModalOpen, setSendMessageModalOpen }) => {
 
 
   //function to retrieve message with a user
-  useEffect(() => {
+  const retrieveMessage = () => {
     axios({
       method: "GET",
       url: `http://206.189.91.54/api/v1/messages?receiver_id=${receiverID}&receiver_class=User`,
@@ -133,7 +133,7 @@ const DirectMessage = ({ sendMessageModalOpen, setSendMessageModalOpen }) => {
       })
       .catch((err) =>
        console.log(err.response));
-  });
+  };
 
   const sendMessageModal = (
     <div className={classes.root}>

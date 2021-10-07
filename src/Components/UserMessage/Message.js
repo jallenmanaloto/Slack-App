@@ -182,6 +182,30 @@ const Message = () => {
             console.log(err))    
 };  
 
+        useEffect(() => {
+            axios({
+                method: "GET",
+                url: `http://206.189.91.54/api/v1/messages?receiver_id=${receiverID}&receiver_class=User`,
+                headers: {
+                "access-token": authKey.accessToken,
+                client: authKey.accessClient,
+                expiry: authKey.accessExpiry,
+                uid: authKey.accessUID,
+                },
+                params: {
+                receiver_id: receiverID,
+                receiver_class: "User",
+                },
+            })
+                .then((res) => {
+                setUserMessages(res.data?.data);
+                history.push("/dashboard/message");
+                })
+                .catch((err) =>
+                console.log(err.response));
+        })
+
+
   return (
     <div className={`${classes.root} scroll-active`}>
       <div className={classes.userNameContainer}>
