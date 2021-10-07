@@ -27,7 +27,22 @@ function App() {
     <div className="App">
 
       {/* <Registration/>   */}
-      <ContextAPI.Provider value={{apiData, setApiData, apiHeaders, setApiHeaders, tokenValue, setTokenValue, channelData, setChannelData}} >
+      <ContextAPI.Provider value={{allUsers,
+          setAllUsers,
+          apiData,
+          setApiData,
+          apiHeaders,
+          setApiHeaders,
+          channelData,
+          setChannelData,
+          channelMembers,
+          setChannelMembers,
+          channelMessage,
+          setchannelMessage,
+          tokenValue,
+          setTokenValue,
+          userName,
+          setUserName,}} >
           <Router>
             <Switch>
                 <Route exact path='/' component={Login}>
@@ -38,7 +53,7 @@ function App() {
                 </Route>
               </Switch>
           </Router>
-{/*
+{/* 
       <ContextAPI.Provider
         value={{
           allUsers,
@@ -66,14 +81,14 @@ function App() {
             </Route>
             <Route exact path="/dashboard" component={Chat }>
               <Chat />
-              {/* <Main/> */}
+             <Main/> 
             </Route>
-         {/*    <Route exact path="/dashboard/channel" component={Channel}>
+             <Route exact path="/dashboard/channel" component={Channel}>
               <Channel />
-            </Route> */}
+            </Route> 
           </Switch>
-        </Router>
-/*}
+        </Router>  */}
+
       </ContextAPI.Provider>
     </div>
   );

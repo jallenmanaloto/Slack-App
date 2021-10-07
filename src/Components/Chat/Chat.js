@@ -40,11 +40,11 @@ const Chat = () => {
       method: "Get",
       url: "http://206.189.91.54/api/v1/users",
       headers: {
-        "access-token": authKey.accessToken,
-        client: authKey.accessClient,
-        expiry: authKey.accessExpiry,
-        uid: authKey.accessUID,
-      },
+        'access-token': tokenValue,
+        client: apiHeaders.client,
+        expiry: apiHeaders.expiry,
+        uid: apiData.data?.data?.uid,
+       },
     })
         .then((res) => {
             setUsersList(res.data.data)
@@ -82,20 +82,22 @@ const Chat = () => {
       }
       })
       .then((res) => {
-        console.log(res.data.data);
+        /* console.log(res.data.data) */;
         setMessages(res.data.data); 
         setUserStorage(res.data)
       })
       .catch((err) => {
         console.log(err);
       })
+
+      
   }
 
-
+ /*  localStorage.setItem('logs',JSON.stringify(userStorage)); */
 
  
     
-    console.log(usersList)
+    console.log(userStorage);
 
     /* console.log(receiverId); */
     /* console.log(messages);   */
@@ -123,38 +125,11 @@ const Chat = () => {
             }
         })
             .then((res) => {
-                console.log(res.data);
+               /*  console.log(res.data); */
             })
             .catch(err => 
                 console.log(err))    
     };  
-
-
-
-  const sendMsg = (e) => {
-    getReceiverID();
-    e.preventDefault();
-
-    axios({
-      method: "Post",
-      url: "http://206.189.91.54/api/v1/messages",
-      headers: {
-        "access-token": tokenValue,
-        client: apiHeaders.client,
-        expiry: apiHeaders.expiry,
-        uid: apiData.data?.data?.uid,
-      },
-      params: {
-        receiver_id: receiverId,
-        receiver_class: "User",
-        body: inputMsg,
-      },
-    })
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => console.log(err));
-  };
 
   return (
     <div>
@@ -170,7 +145,14 @@ const Chat = () => {
       ></input>
       <button onClick={(e) => sendMsg(e)}>Send</button>
 
-      <span>{messages}</span>
+      {/* <ul>{userStorage.map (userStorage => {
+          return (
+            <li key={userStorage.id}>
+              {userStorage.email} - {userStorage.body}
+            </li>
+          )
+          })}
+      </ul> */}
     </div>
   );
 };
