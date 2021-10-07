@@ -330,10 +330,12 @@ const Main = () => {
   //Function to handle expansion of Channel
   const handleChannelExpandToggle = () => {
     setChannelExpand(!channelExpand);
+    setMessageDisplay(false);
   };
   //Function to handle expansion of Direct Messages
   const handleDmExpandToggle = () => {
     setDmExpand(!dmExpand);
+    setMessageDisplay(false);
   };
 
   //Function to handle toggle of side menu bar on mobile screensize
@@ -461,6 +463,7 @@ const Main = () => {
                     setChannelData(val);
                     setFetchFilterMembers(!fetchFilterMembers);
                     setchannelID(val.id);
+                    setMessageDisplay(false);
                   };
                   return (
                     <Link
@@ -604,10 +607,7 @@ const Main = () => {
         </Hidden>
       </div>
       {modalOpen ? (
-        <AddChannelModal 
-          setModalOpen={modalOpen} 
-          closeModal={setModalOpen} 
-        />
+        <AddChannelModal setModalOpen={modalOpen} closeModal={setModalOpen} />
       ) : null}
       {}
       <MyAccount
