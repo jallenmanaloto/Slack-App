@@ -15,6 +15,7 @@ import TMiBot from "../../assets/images/TMiBot.svg";
 import AutoScroll from "./AutoScroll";
 import axios from "axios";
 import ChannelMember from "../Modal/ChannelMember";
+import Picker from "emoji-picker-react";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,6 +62,11 @@ const useStyles = makeStyles((theme) => ({
     borderBottom: "1px solid rgba(43, 33, 24, 0.25)",
     display: "flex",
     alignItems: "center",
+  },
+  emojiPicker: {
+    paddingBottom: "4em",
+    position: "absolute",
+    top: "0",
   },
   channelName: {
     marginLeft: "1.8rem",
@@ -179,6 +185,7 @@ const Channel = () => {
   const [messageInput, setMessageInput] = useState("");
   const [newMessage, setNewMessage] = useState(false);
   const [messages, setMessages] = useState([]);
+  const [showPicker, setShowPicker] = useState(false);
 
   //retrieving messages on a channel
   useEffect(() => {
@@ -239,6 +246,11 @@ const Channel = () => {
     setTimeout(() => {
       messageView.current.scrollIntoView();
     }, 400);
+  };
+
+  const onEmojiClick = (event, emojiObject) => {
+    setMessageInput((prev) => prev + emojiObject.emoji);
+    setShowPicker(false);
   };
 
   return (
@@ -335,6 +347,7 @@ const Channel = () => {
         ref={inputValue}
         onChange={handleInputValues}
         onKeyDown={handleKeyDown}
+        onClick={() => setShowPicker(false)}
         value={messageInput}
         type="text"
       />
@@ -342,11 +355,26 @@ const Channel = () => {
         <AlternateEmailIcon className={classes.messageIcons} />
         <ImageOutlinedIcon className={classes.messageIcons} />
         <AttachFileIcon className={classes.messageIcons} />
-        <SentimentSatisfiedOutlinedIcon className={classes.messageIcons} />
+        <SentimentSatisfiedOutlinedIcon
+          onClick={() => setShowPicker(!showPicker)}
+          className={classes.messageIcons}
+        />
       </div>
       <Button type="submit" onClick={sendMessage} className={classes.button}>
         <SendIcon className={classes.sendIcon} />
       </Button>
+      {showPicker && (
+        <Picker
+          className={classes.emojiPicker}
+          pickerStyle={{
+            width: "23%",
+            position: "absolute",
+            bottom: "7em",
+            left: "1.2rem",
+          }}
+          onEmojiClick={onEmojiClick}
+        />
+      )}
     </div>
   );
 };

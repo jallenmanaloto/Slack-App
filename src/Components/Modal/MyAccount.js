@@ -15,23 +15,27 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "10px",
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
+    alignItems: "start",
     padding: "2rem",
+    outline: "none",
   },
   accountIcon: {
     height: "5.5em",
     width: "5.5em",
     color: "#1A335A",
+    position: "absolute",
+    right: "1.2em",
+    top: "3rem",
   },
   body: {
     paddingTop: "2rem",
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
+    alignItems: "start",
   },
   chip: {
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "start",
     flexWrap: "wrap",
     padding: "1rem",
     "& > *": {
@@ -76,8 +80,13 @@ const MyAccount = ({ profileModalOpen, setProfileModalOpen }) => {
 
   const classes = useStyles();
 
+  const time = new Date().toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
   const handleMyAccount = () => {
-    setProfileModalOpen(false);
+    setProfileModalOpen(channelData);
   };
 
   const body = (
@@ -93,13 +102,13 @@ const MyAccount = ({ profileModalOpen, setProfileModalOpen }) => {
         <Typography className={classes.header} variant="body1">
           Local Time
         </Typography>
-        <Typography variant="body1">TIME</Typography>
+        <Typography variant="body1">{time}</Typography>
       </div>
       <div className={classes.body}>
         <Typography className={classes.header} variant="body1">
           Email Address
         </Typography>
-        <Typography variant="body1">EMAIL</Typography>
+        <Typography variant="body1">{authKey.accessUID}</Typography>
       </div>
       <div className={classes.body}>
         <Typography className={classes.header} variant="body1">
