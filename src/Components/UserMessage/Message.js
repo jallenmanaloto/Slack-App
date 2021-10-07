@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { ContextAPI } from "../Context/ContextAPi";
 import Button from "@material-ui/core/Button";
@@ -41,7 +41,9 @@ const useStyles = makeStyles((theme) => ({
     outline: "none",
   },
   sendIcon: {
+    marginRight: "1rem",
     cursor: "pointer",
+    color: "rgba(43, 33, 24, 0.65)",
   },
   contentDisplay: {
     height: "77vh",
@@ -147,39 +149,14 @@ const Message = () => {
     setUserName,
     receiverID, 
     setReceiverID,
+    receiverUN, 
+    setReceiverUN,
   } = useContext(ContextAPI);
 
   const [usersList, setUsersList] = useState([]);
   const [inputMsg, setInputMsg] = useState("");
-  const [receiverId, setReceiverId] = useState('');
   const [userStorage, setUserStorage] =  useState();
   const msgRef = useRef();
-
-  const getMsgs = async () => {
-    axios({
-      method: "Get",
-      url: `http://206.189.91.54/api/v1/messages?receiver_id=${receiverId}}&receiver_class=User`,
-        headers: {
-            'access-token': authKey.accesToken,
-            client: authKey.client,
-            expiry: authKey.expiry,
-            uid: authKey.accessUID,
-        },
-        params: {
-            receiver_id: receiverID,
-            receiver_class: 'User',
-        }
-        })
-      .then((res) => { 
-        /* console.log(res.data.data) */;
-        setMessages(res.data.data); 
-        setUserStorage(res.data)
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-     
-  }
 
   const sendMsg = (e) => {
     e.preventDefault();
@@ -187,9 +164,9 @@ const Message = () => {
         method: 'Post',
         url: 'http://206.189.91.54/api/v1/messages',
         headers: {
-            'access-token': authKey.accesToken,
-            client: authKey.client,
-            expiry: authKey.expiry,
+            "access-token": authKey.accessToken,
+            client: authKey.accessClient,
+            expiry: authKey.accessExpiry,
             uid: authKey.accessUID,
         },
         params: {
@@ -199,18 +176,17 @@ const Message = () => {
         }
     })
         .then((res) => {
-
+            console.log(res)
         })
         .catch(err => 
             console.log(err))    
 };  
 
-
   return (
     <div className={`${classes.root} scroll-active`}>
       <div className={classes.userNameContainer}>
         <Typography className={classes.userName} variant="h5">
-          Insert User's name here
+          {receiverUN}
         </Typography>
       </div>
       <div className={classes.contentDisplay}>
@@ -221,12 +197,13 @@ const Message = () => {
                 <div className={classes.welcomeContainer}>
                   <Typography className={classes.welcomeText} variant="h6">
                     This is the very beginning of your chat with{" "}
-                    <strong>@Username</strong>
+                    <strong>{receiverUN}</strong>
                   </Typography>
                 </div>
               </div>
-
-              {/* {{messages.map((val, key) => 
+              {userMessages.map((val, key) => {
+                        const timestamp = new Date(val.created_at);
+                        return (
                                     <div className={classes.message}>
                                         <Avatar 
                                         alt='Miyu Togo'
@@ -238,13 +215,16 @@ const Message = () => {
                                                 marginLeft: '0.8em',
                                                 fontWeight: 'bold'}}
                                             >
-                                               User's name who sent the message should be here 
+                                               {val.sender.uid}
                                             </Typography>
                                             <Typography  
                                             style={{marginLeft: '1em', color: 'rgba(50, 74, 95, 0.7)'}}
                                             variant='subtitle2'
                                             >
-                                                 Insert actual time here 
+                                                {timestamp.toLocaleTimeString([], {
+                                                    hour: "2-digit",
+                                                    minute: "2-digit",
+                                                })}
                                             </Typography>
                                         </div>
                                         <Typography 
@@ -256,10 +236,11 @@ const Message = () => {
                                                     marginTop: '1.5rem',
                                                     marginRight: '5em'}}
                                                 variant='h6'>
-                                              Message sent should be mapped here 
+                                              {val.body}
                                         </Typography>
                                     </div>
-                                )} */}
+                                );
+                            })}
             </Grid>
           </Grid>
         </div>
@@ -270,6 +251,7 @@ const Message = () => {
         type="text"
         onChange={(e) => setInputMsg(e.target.value)}
         value={inputMsg}
+        /* ref={msgRef} */
       />
       <div className={classes.messageAdornment}>
         <AlternateEmailIcon className={classes.messageIcons} />
@@ -277,7 +259,7 @@ const Message = () => {
         <AttachFileIcon className={classes.messageIcons} />
         <SentimentSatisfiedOutlinedIcon className={classes.messageIcons} />
       </div>
-      <Button type="submit" className={classes.button}>
+      <Button type="submit" className={classes.button} onClick={(e) => sendMsg(e)}>
         <SendIcon className={classes.sendIcon} />
       </Button>
     </div>

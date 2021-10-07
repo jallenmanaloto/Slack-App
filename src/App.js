@@ -26,6 +26,7 @@ function App() {
   const [userMessages, setUserMessages] = useState([]);
   const [userName, setUserName] = useState([]);
   const [receiverID, setReceiverID] = useState('');
+  const [receiverUN, setReceiverUN] = useState('');
 
   const [user, setUser] = useState(localStorage.getItem("user"));
 
@@ -93,6 +94,8 @@ function App() {
           setUserName,
           receiverID, 
           setReceiverID,
+          receiverUN, 
+          setReceiverUN,
         }}
       >
         <Router>
