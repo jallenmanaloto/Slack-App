@@ -268,7 +268,7 @@ const ChannelMember = () => {
   //function to handle invite of user to the channel
   const inviteUser = () => {
     axios({
-      url: "https://slackapi.avionschoo/api/v1/channel/add_member",
+      url: "https://slackapi.avionschool.com/api/v1/channel/add_member",
       method: "POST",
       headers: {
         "access-token": authKey.accessToken,

@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+
 import { makeStyles } from "@material-ui/core/styles";
 import { ContextAPI } from "../Context/ContextAPi";
 
@@ -26,15 +27,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
-
 const UserSearch = ({
   openUserModal,
   setOpenUserModal,
   searchBar,
   setSearchBar,
 }) => {
-  
   const classes = useStyles();
   const {
     allUsers,
@@ -57,7 +55,7 @@ const UserSearch = ({
   } = useContext(ContextAPI);
 
   //declaring all users fetched from API
-  const userSearch = [...JSON.stringify(allUsers)];
+  const userSearch = [...allUsers];
 
   return (
     <div className={classes.root}>

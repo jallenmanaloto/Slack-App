@@ -298,6 +298,7 @@ const Main = () => {
     })
       .then((res) => {
         setAllUsers(res.data.data);
+        console.log(allUsers);
         localStorage.setItem("allUsers", JSON.stringify(allUsers));
       })
       .catch((err) => {
