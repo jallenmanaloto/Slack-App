@@ -143,7 +143,7 @@ const Registration = () => {
   const handleCreateAcct = () => {
     axios({
       method: "POST",
-      url: "http://206.189.91.54/api/v1/auth",
+      url: "https://slackapi.avionschool.com/api/v1/auth",
       data: {
         email: email,
         password: password,

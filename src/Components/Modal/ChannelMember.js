@@ -119,8 +119,8 @@ const useStyles = makeStyles({
     height: "3.7rem",
   },
   memberContainer: {
-    overflowY: 'scroll',
-    height: '47vh',
+    overflowY: "scroll",
+    height: "47vh",
   },
   memberImg: {
     height: "1.7em",
@@ -130,7 +130,6 @@ const useStyles = makeStyles({
   },
   memberListContainer: {
     paddingTop: "5em",
-    
   },
   memberName: {
     marginLeft: "1rem",
@@ -266,7 +265,7 @@ const ChannelMember = () => {
   //function to handle invite of user to the channel
   const inviteUser = () => {
     axios({
-      url: "http://206.189.91.54/api/v1/channel/add_member",
+      url: "https://slackapi.avionschoo/api/v1/channel/add_member",
       method: "POST",
       headers: {
         "access-token": authKey.accessToken,
@@ -332,30 +331,29 @@ const ChannelMember = () => {
           <h4 className={classes.memberName}>Add people</h4>
         </div>
         <div className={classes.memberContainer}>
-        {filterMember
-          .filter((val) => {
-            if (searchTerm === "") {
-              return val;
-            } else if (JSON.stringify(val).includes(searchTerm)) {
-              return val;
-            }
-            return false;
-          })
-          .map((val, key) => {
-            const user = val.uid; /* .split("@")[0]; */
-            return (
-              <div key={key} className={`${classes.members} addPeople`}>
-                <Avatar
-                  className={classes.memberImg}
-                  alt={user}
-                  src={val.user_id}
-                />
-                <h4 className={classes.memberName}>{user}</h4>
-              </div>
-            );
-          })}
+          {filterMember
+            .filter((val) => {
+              if (searchTerm === "") {
+                return val;
+              } else if (JSON.stringify(val).includes(searchTerm)) {
+                return val;
+              }
+              return false;
+            })
+            .map((val, key) => {
+              const user = val.uid; /* .split("@")[0]; */
+              return (
+                <div key={key} className={`${classes.members} addPeople`}>
+                  <Avatar
+                    className={classes.memberImg}
+                    alt={user}
+                    src={val.user_id}
+                  />
+                  <h4 className={classes.memberName}>{user}</h4>
+                </div>
+              );
+            })}
         </div>
-        
       </div>
     </div>
   );

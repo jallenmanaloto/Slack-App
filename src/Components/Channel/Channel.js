@@ -225,7 +225,7 @@ const Channel = () => {
     //push the input value to api
     axios({
       method: "POST",
-      url: "http://206.189.91.54/api/v1/messages",
+      url: "https://slackapi.avionschool.com/api/v1/messages",
       headers: {
         "access-token": authKey.accessToken,
         client: authKey.accessClient,

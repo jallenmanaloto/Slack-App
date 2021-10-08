@@ -197,7 +197,7 @@ const Message = () => {
   const refresh = () => {
     axios({
       method: "GET",
-      url: `http://206.189.91.54/api/v1/messages?receiver_id=${receiverID}&receiver_class=User`,
+      url: `https://slackapi.avionschool.com/api/v1/messages?receiver_id=${receiverID}&receiver_class=User`,
       headers: {
         "access-token": authKey.accessToken,
         client: authKey.accessClient,

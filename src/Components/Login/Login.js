@@ -138,7 +138,7 @@ const Login = () => {
     e.preventDefault();
     axios({
       method: "POST",
-      url: "http://206.189.91.54/api/v1/auth/sign_in",
+      url: "https://slackapi.avionschool.com/api/v1/auth/sign_in",
       data: {
         email: email,
         password: password,
@@ -151,17 +151,9 @@ const Login = () => {
         const userDisplayName = email.split("@")[0];
 
         setUserName(userDisplayName);
-
-        // if (!JSON.parse(localStorage.getItem("messages"))) {
-        //   return;
-        // } else {
-        //   setMessages(JSON.parse(localStorage.getItem("message")));
-        // }
-
         if (res.data.errors) {
           handleErrorDisplay();
         }
-
         const authData = {
           accessToken: token,
           accessClient: res.headers.client,
@@ -175,7 +167,10 @@ const Login = () => {
       .then((res) => {
         const auth = JSON.parse(localStorage.getItem("userKey"));
       })
-      .catch((err) => handleErrorDisplay());
+      .catch((err) => {
+        handleErrorDisplay();
+      });
+    console.log(email, password);
   };
 
   return (
