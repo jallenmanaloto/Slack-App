@@ -43,6 +43,7 @@ import UserSearch from "../UserSearch/UserSearch";
 import MyAccount from "../Modal/MyAccount";
 import DirectMessage from "../Modal/DirectMessage";
 import Message from "../UserMessage/Message";
+import AllUserSearch from "../Modal/AllUserSearch";
 
 const drawerWidth = 325;
 
@@ -257,6 +258,8 @@ const Main = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
   const [sendMessageModalOpen, setSendMessageModalOpen] = useState(false);
+  //declaring state to open modal for individual user information
+  const [openUserModal, setOpenUserModal] = useState(false);
 
   useEffect(() => {
     const sessionKey = JSON.parse(localStorage.getItem("userKey"));
@@ -301,7 +304,6 @@ const Main = () => {
         console.log(err);
       });
   }, [authKey]);
-  console.log(allUsers);
 
   //Retrieving information of a Channel
   useEffect(() => {
@@ -544,6 +546,9 @@ const Main = () => {
                 />
                 {searchBar ? (
                   <UserSearch
+                    openUserModal={openUserModal}
+                    setOpenUserModal={setOpenUserModal}
+                    setSearchBar={setSearchBar}
                     searchResult={searchResult}
                     searchBar={searchBar}
                   />
@@ -619,6 +624,12 @@ const Main = () => {
         <DirectMessage
           sendMessageModalOpen={sendMessageModalOpen}
           setSendMessageModalOpen={setSendMessageModalOpen}
+        />
+      ) : null}
+      {openUserModal ? (
+        <AllUserSearch
+          openUserModal={openUserModal}
+          setOpenUserModal={setOpenUserModal}
         />
       ) : null}
     </div>
