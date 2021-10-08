@@ -34,7 +34,6 @@ const UserSearch = ({
   setSearchBar,
 }) => {
   const classes = useStyles();
-
   const {
     allUsers,
     setAllUsers,
@@ -56,7 +55,7 @@ const UserSearch = ({
   } = useContext(ContextAPI);
 
   //declaring all users fetched from API
-  const userSearch = [...JSON.stringify(allUsers)];
+  const userSearch = [...allUsers];
 
   return (
     <div className={classes.root}>

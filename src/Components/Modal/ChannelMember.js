@@ -166,7 +166,7 @@ const useStyles = makeStyles({
   },
   searchIcon: {
     position: "absolute",
-    marginTop: "1.7rem",
+    top: "-3.5em",
     marginLeft: "3.5rem",
     height: "1.3rem",
     width: "1.3rem",
@@ -268,7 +268,7 @@ const ChannelMember = () => {
   //function to handle invite of user to the channel
   const inviteUser = () => {
     axios({
-      url: "https://slackapi.avionschoo/api/v1/channel/add_member",
+      url: "https://slackapi.avionschool.com/api/v1/channel/add_member",
       method: "POST",
       headers: {
         "access-token": authKey.accessToken,
@@ -278,7 +278,7 @@ const ChannelMember = () => {
       },
       data: {
         id: channelData.id,
-        member_id: 123, //value from the input
+        member_id: searchTerm,
       },
     })
       .then((res) => {
