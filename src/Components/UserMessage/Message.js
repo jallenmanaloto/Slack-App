@@ -244,15 +244,17 @@ const Message = () => {
                 const timestamp = new Date(val.created_at);
                 return (
                   <div className={classes.message}>
+                    <div>
                     <Avatar
                       alt="Miyu Togo"
                       src="/broken-image.jpg"
                       className={classes.user}
                     />
+                    </div>
+                    <div style={{marginLeft: '0.8em'}}>
                     <div style={{ display: "flex" }}>
                       <Typography
                         style={{
-                          marginLeft: "0.8em",
                           fontWeight: "bold",
                         }}
                       >
@@ -276,14 +278,12 @@ const Message = () => {
                         position: "relative",
                         fontSize: "1.06rem",
                         color: "#3F3F3F",
-                        marginLeft: "-14.2em",
-                        marginTop: "1.5rem",
-                        marginRight: "5em",
                       }}
                       variant="h6"
                     >
                       {val.body}
                     </Typography>
+                    </div>
                   </div>
                 );
               })}
