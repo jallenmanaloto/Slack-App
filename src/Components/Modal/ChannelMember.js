@@ -69,6 +69,9 @@ const useStyles = makeStyles({
     alignItems: "center",
     cursor: "pointer",
     height: "3.7rem",
+    width: "100%",
+    marginTop: "-3.5em",
+    position: "absolute",
   },
   aboutSubHeader: {
     marginLeft: "2rem",
@@ -129,7 +132,7 @@ const useStyles = makeStyles({
     marginLeft: "2.4rem",
   },
   memberListContainer: {
-    paddingTop: "5em",
+    marginTop: "8em",
   },
   memberName: {
     marginLeft: "1rem",
@@ -140,7 +143,7 @@ const useStyles = makeStyles({
     left: "50%",
     transform: "translateX(-50%)",
     width: "85%",
-    marginTop: "1.2rem",
+    marginTop: "-6.2em",
     height: "2.4rem",
     border: "1px solid #C6C2C2",
     borderRadius: "4px",
@@ -324,12 +327,12 @@ const ChannelMember = () => {
       />
       <div
         onClick={handleDialogDisplay}
-        className={classes.memberListContainer}
+        className={`${classes.addMembers} addPeople`}
       >
-        <div className={`${classes.addMembers} addPeople`}>
-          <PersonAddIcon className={classes.addUserIcon} />
-          <h4 className={classes.memberName}>Add people</h4>
-        </div>
+        <PersonAddIcon className={classes.addUserIcon} />
+        <h4 className={classes.memberName}>Add people</h4>
+      </div>
+      <div className={classes.memberListContainer}>
         <div className={classes.memberContainer}>
           {filterMember
             .filter((val) => {
