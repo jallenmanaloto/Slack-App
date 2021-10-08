@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
+import Unauthorized from "../Unauthorized/Unauthorized";
 import {
   BrowserRouter as Router,
   Switch,
@@ -521,119 +522,127 @@ const Main = () => {
 
   return (
     <div>
-      {auth ? console.log("auth open") : console.log("auth close")}
-      <Grid container spacing={3}>
-        <AppBar className={classes.appBar} elevation={0}>
-          <Toolbar className={classes.toolbar}>
-            <Grid item xs={2}>
-              <IconButton
-                className={classes.menuButton}
-                onClick={handleDrawerToggle}
-              >
-                <MenuIcon style={{ color: "#ECF0F1" }} />
-              </IconButton>
-            </Grid>
-            <Grid item xs={7}>
-              <div>
-                <InputBase
-                  className={classes.input}
-                  placeholder="Search"
-                  value={searchBar}
-                  onChange={handleSearchBarValue}
-                  startAdornment={
-                    <InputAdornment position="start">
-                      <SearchIcon className={classes.searchIcon} />
-                    </InputAdornment>
-                  }
-                />
-                {searchBar ? (
-                  <UserSearch
-                    openUserModal={openUserModal}
-                    setOpenUserModal={setOpenUserModal}
-                    setSearchBar={setSearchBar}
-                    searchResult={searchResult}
-                    searchBar={searchBar}
+      {!auth ? (
+        history.push("404")
+      ) : (
+        <>
+          <Grid container spacing={3}>
+            <AppBar className={classes.appBar} elevation={0}>
+              <Toolbar className={classes.toolbar}>
+                <Grid item xs={2}>
+                  <IconButton
+                    className={classes.menuButton}
+                    onClick={handleDrawerToggle}
+                  >
+                    <MenuIcon style={{ color: "#ECF0F1" }} />
+                  </IconButton>
+                </Grid>
+                <Grid item xs={7}>
+                  <div>
+                    <InputBase
+                      className={classes.input}
+                      placeholder="Search"
+                      value={searchBar}
+                      onChange={handleSearchBarValue}
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <SearchIcon className={classes.searchIcon} />
+                        </InputAdornment>
+                      }
+                    />
+                    {searchBar ? (
+                      <UserSearch
+                        openUserModal={openUserModal}
+                        setOpenUserModal={setOpenUserModal}
+                        setSearchBar={setSearchBar}
+                        searchResult={searchResult}
+                        searchBar={searchBar}
+                      />
+                    ) : null}
+                  </div>
+                </Grid>
+                <Grid
+                  className={classes.myAccount}
+                  onClick={handleMenuClick}
+                  item
+                  xs={2}
+                >
+                  <Avatar
+                    className={classes.accountIcon}
+                    alt={userName}
+                    src="/broken-image.jpg"
                   />
-                ) : null}
-              </div>
-            </Grid>
-            <Grid
-              className={classes.myAccount}
-              onClick={handleMenuClick}
-              item
-              xs={2}
-            >
-              <Avatar
-                className={classes.accountIcon}
-                alt={userName}
-                src="/broken-image.jpg"
-              />
-              <Typography variant="body1">{userName}</Typography>
-            </Grid>
-            <Menu
-              anchorEl={anchorEl}
-              keepMounted
-              style={{ marginTop: "2em", marginLeft: "6em" }}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-            >
-              <MenuItem onClick={openMyProfile}>My Profile</MenuItem>
-              <MenuItem onClick={logOut}>Log out</MenuItem>
-            </Menu>
-          </Toolbar>
-        </AppBar>
-      </Grid>
+                  <Typography variant="body1">{userName}</Typography>
+                </Grid>
+                <Menu
+                  anchorEl={anchorEl}
+                  keepMounted
+                  style={{ marginTop: "2em", marginLeft: "6em" }}
+                  open={Boolean(anchorEl)}
+                  onClose={handleMenuClose}
+                >
+                  <MenuItem onClick={openMyProfile}>My Profile</MenuItem>
+                  <MenuItem onClick={logOut}>Log out</MenuItem>
+                </Menu>
+              </Toolbar>
+            </AppBar>
+          </Grid>
 
-      <div>
-        <Hidden smUp implementation="css">
-          <Drawer
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-            variant="temporary"
-            anchor="left"
-            ModalProps={{
-              keepMounted: true,
-            }}
-            open={mobileOpen}
-            onClose={handleDrawerToggle}
-          >
-            {drawer}
-          </Drawer>
-        </Hidden>
-        <Hidden xsDown implementation="css">
-          <Drawer
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-            variant="permanent"
-            open
-          >
-            {drawer}
-          </Drawer>
-        </Hidden>
-      </div>
-      {modalOpen ? (
-        <AddChannelModal setModalOpen={modalOpen} closeModal={setModalOpen} />
-      ) : null}
-      {}
-      <MyAccount
-        profileModalOpen={profileModalOpen}
-        setProfileModalOpen={setProfileModalOpen}
-      />
-      {messageDisplay ? <Message /> : <HomeChannel />}
-      {sendMessageModalOpen ? (
-        <DirectMessage
-          sendMessageModalOpen={sendMessageModalOpen}
-          setSendMessageModalOpen={setSendMessageModalOpen}
-        />
-      ) : null}
-      {openUserModal ? (
-        <AllUserSearch
-          openUserModal={openUserModal}
-          setOpenUserModal={setOpenUserModal}
-        />
-      ) : null}
+          <div>
+            <Hidden smUp implementation="css">
+              <Drawer
+                classes={{
+                  paper: classes.drawerPaper,
+                }}
+                variant="temporary"
+                anchor="left"
+                ModalProps={{
+                  keepMounted: true,
+                }}
+                open={mobileOpen}
+                onClose={handleDrawerToggle}
+              >
+                {drawer}
+              </Drawer>
+            </Hidden>
+            <Hidden xsDown implementation="css">
+              <Drawer
+                classes={{
+                  paper: classes.drawerPaper,
+                }}
+                variant="permanent"
+                open
+              >
+                {drawer}
+              </Drawer>
+            </Hidden>
+          </div>
+          {modalOpen ? (
+            <AddChannelModal
+              setModalOpen={modalOpen}
+              closeModal={setModalOpen}
+            />
+          ) : null}
+          {}
+          <MyAccount
+            profileModalOpen={profileModalOpen}
+            setProfileModalOpen={setProfileModalOpen}
+          />
+          {messageDisplay ? <Message /> : <HomeChannel />}
+          {sendMessageModalOpen ? (
+            <DirectMessage
+              sendMessageModalOpen={sendMessageModalOpen}
+              setSendMessageModalOpen={setSendMessageModalOpen}
+            />
+          ) : null}
+          {openUserModal ? (
+            <AllUserSearch
+              openUserModal={openUserModal}
+              setOpenUserModal={setOpenUserModal}
+            />
+          ) : null}
+        </>
+      )}
     </div>
   );
 };
