@@ -128,6 +128,7 @@ const Message = () => {
     setAllChannels,
     allUsers,
     setAllUsers,
+    allUsersInfo,
     apiData,
     setApiData,
     apiHeaders,
@@ -234,8 +235,8 @@ const Message = () => {
               <div className={classes.welcome}>
                 <div className={classes.welcomeContainer}>
                   <Typography className={classes.welcomeText} variant="h6">
-                    This is the very beginning of your chat with{" "}
-                    <strong>{receiverUN}</strong>
+                    This is the very beginning of your chat with{""}
+                    <strong>{` ${receiverUN}`}</strong>
                   </Typography>
                 </div>
               </div>
