@@ -1,5 +1,10 @@
 import { useContext, useState } from "react";
-import { HashRouter as Router, Route, Switch } from "react-router-dom";
+import {
+  HashRouter as Router,
+  Route,
+  Switch,
+  useHistory,
+} from "react-router-dom";
 import { ContextAPI } from "./Components/Context/ContextAPi";
 import Channel from "./Components/Channel/Channel";
 import HomeChannel from "./Components/Channel/HomeChannel";
@@ -7,6 +12,7 @@ import Login from "./Components/Login/Login";
 import Main from "./Components/Main/Main";
 import Message from "./Components/UserMessage/Message";
 import Registration from "./Components/Registration/Registration";
+import Unauthorized from "./Components/Unauthorized/Unauthorized";
 import "./App.css";
 
 function App() {
@@ -32,6 +38,7 @@ function App() {
   const [receiverUN, setReceiverUN] = useState("");
 
   const [user, setUser] = useState(localStorage.getItem("user"));
+  const history = useHistory();
 
   return (
     <div className="App">
@@ -88,7 +95,8 @@ function App() {
             <Route path="/dashboard/message" component={Message} />
             <Route path="/register" component={Registration} />
             <Route path="/dashboard" component={Main} />
-            <Route path="*" component={() => "404 NOT FOUND"} />
+            <Route exact path="/404" component={Unauthorized} />
+            <Route exact path="*" component={Unauthorized} />
           </Switch>
         </Router>
       </ContextAPI.Provider>
