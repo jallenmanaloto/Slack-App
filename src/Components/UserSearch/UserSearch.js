@@ -76,7 +76,6 @@ const UserSearch = ({
               setAllUsersInfo(val);
               setOpenUserModal(true);
               setSearchBar("");
-              console.log(val);
             }}
           >
             {val.uid}

@@ -28,6 +28,7 @@ function App() {
   const [userMessages, setUserMessages] = useState([]);
   const [userName, setUserName] = useState([]);
   const [receiverID, setReceiverID] = useState("");
+  const [receiverName, setReceiverName] = useState("");
   const [receiverUN, setReceiverUN] = useState("");
 
   const [user, setUser] = useState(localStorage.getItem("user"));
@@ -72,6 +73,8 @@ function App() {
           setUserName,
           receiverID,
           setReceiverID,
+          receiverName,
+          setReceiverName,
           receiverUN,
           setReceiverUN,
         }}
