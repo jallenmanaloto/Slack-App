@@ -170,7 +170,7 @@ const Message = () => {
   const sendMsg = (e) => {
     axios({
       method: "Post",
-      url: "http://206.189.91.54/api/v1/messages",
+      url: "https://slackapi.avionschool.com/api/v1/messages",
       headers: {
         "access-token": authKey.accessToken,
         client: authKey.accessClient,
@@ -220,7 +220,13 @@ const Message = () => {
     setInputMsg((prev) => prev + emojiObject.emoji);
     setShowPicker(false);
   };
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      sendMsg();
+    }
+  };
 
+  console.log(userMessages)
   return (
     <div className={`${classes.root} scroll-active`}>
       <div className={classes.userNameContainer}>
@@ -296,6 +302,7 @@ const Message = () => {
         placeholder="Message here"
         className={classes.input}
         type="text"
+        onKeyDown={handleKeyDown}
         onChange={(e) => setInputMsg(e.target.value)}
         onClick={() => setShowPicker(false)}
         value={inputMsg}
