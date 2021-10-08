@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import { ContextAPI } from "./Components/Context/ContextAPi";
 import Channel from "./Components/Channel/Channel";
 import HomeChannel from "./Components/Channel/HomeChannel";
