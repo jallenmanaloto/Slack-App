@@ -170,7 +170,6 @@ const Login = () => {
       .catch((err) => {
         handleErrorDisplay();
       });
-    console.log(email, password);
   };
 
   return (

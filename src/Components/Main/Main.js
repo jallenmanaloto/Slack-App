@@ -520,6 +520,7 @@ const Main = () => {
 
   return (
     <div>
+      {auth ? console.log("auth open") : console.log("auth close")}
       <Grid container spacing={3}>
         <AppBar className={classes.appBar} elevation={0}>
           <Toolbar className={classes.toolbar}>
