@@ -166,7 +166,7 @@ const useStyles = makeStyles({
   },
   searchIcon: {
     position: "absolute",
-    marginTop: "1.7rem",
+    top: "-3.5em",
     marginLeft: "3.5rem",
     height: "1.3rem",
     width: "1.3rem",
@@ -278,7 +278,7 @@ const ChannelMember = () => {
       },
       data: {
         id: channelData.id,
-        member_id: 123, //value from the input
+        member_id: searchTerm,
       },
     })
       .then((res) => {

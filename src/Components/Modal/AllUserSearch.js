@@ -1,7 +1,15 @@
 import React, { useCallback, useContext, useState } from "react";
 import axios from "axios";
 import { ContextAPI } from "../Context/ContextAPi";
-import { makeStyles, Modal, Typography } from "@material-ui/core";
+import {
+  FormControl,
+  InputLabel,
+  makeStyles,
+  Modal,
+  MenuItem,
+  Select,
+  Typography,
+} from "@material-ui/core";
 import FaceIcon from "@material-ui/icons/Face";
 import sendMsg from "../UserMessage/Message";
 
@@ -54,6 +62,33 @@ const useStyles = makeStyles({
   info: {
     paddingLeft: "1rem",
   },
+  inviteButton: {
+    marginTop: '1.4rem',
+    padding: '0.5rem 0',
+    cursor: 'pointer'
+  },
+  inviteToChannel: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    background: "#ECF0F1",
+    height: "22vh",
+    width: "15vw",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: 'space-between',
+    alignItems: "center",
+    padding: "1rem",
+    borderRadius: "5px",
+  },
+  selectOptions: {
+    height: '2em',
+    overflowY: 'scroll'
+  },
+  options: {
+    width: "80%",
+  },
   userInfo: {
     display: "flex",
     color: "#2B2118",
@@ -64,6 +99,7 @@ const AllUserSearch = ({ openUserModal, setOpenUserModal }) => {
   const classes = useStyles();
 
   const {
+    allChannels,
     allUsersInfo,
     authKey,
     setMessageDisplay,
@@ -75,10 +111,21 @@ const AllUserSearch = ({ openUserModal, setOpenUserModal }) => {
   } = useContext(ContextAPI);
 
   const userInfoName = allUsersInfo.uid.split("@")[0];
+  const [inviteToChannel, setInviteToChannel] = useState(false);
+  const [channelName, setChannelName] = useState("");
 
   //close the modal
   const handleUserModal = () => {
     setOpenUserModal(false);
+  };
+
+  //close invite to channel modal
+  const handleInviteToChannel = () => {
+    setInviteToChannel(false);
+  };
+
+  const handleChannelChange = (event) => {
+    setChannelName(event.target.value);
   };
 
   //function to route to message
@@ -123,17 +170,55 @@ const AllUserSearch = ({ openUserModal, setOpenUserModal }) => {
         </div>
       </div>
       <div className={classes.buttonContainer}>
-        <button className={classes.button}>Invite to Channel</button>
+        <button
+          onClick={() => setInviteToChannel(true)}
+          className={classes.button}
+        >
+          Invite to Channel
+        </button>
         <button onClick={sendMessageToUser} className={classes.button}>
           Message
         </button>
       </div>
     </div>
   );
+
+  const MenuProps ={
+    PaperProps: {
+      style: {
+        maxHeight: 180,
+        width: 250,
+      }
+    }
+  }
+
+  const inviteToChannelModal = (
+    <div className={classes.inviteToChannel}>
+      <Typography variant="h5">Choose a channel</Typography>
+      <FormControl className={classes.options}>
+        <InputLabel shrink>Channel list</InputLabel>
+        <Select multiple MenuProps={MenuProps} value={allChannels}>
+          {allChannels.map((val, key) => {
+            console.log(val)
+            return(
+                <MenuItem key={key}>
+                  {val.name}
+                </MenuItem>
+            )
+          })}
+        </Select>
+        <button className={classes.inviteButton}>Invite</button>
+      </FormControl>
+    </div>
+  );
+
   return (
     <div>
       <Modal open={openUserModal} onClose={handleUserModal}>
         {userModal}
+      </Modal>
+      <Modal open={inviteToChannel} onClose={handleInviteToChannel}>
+        {inviteToChannelModal}
       </Modal>
     </div>
   );

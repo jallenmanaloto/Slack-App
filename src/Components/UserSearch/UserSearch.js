@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-
 import { makeStyles } from "@material-ui/core/styles";
 import { ContextAPI } from "../Context/ContextAPi";
 
@@ -27,14 +26,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+
 const UserSearch = ({
   openUserModal,
   setOpenUserModal,
   searchBar,
   setSearchBar,
 }) => {
+  
   const classes = useStyles();
-
   const {
     allUsers,
     setAllUsers,
