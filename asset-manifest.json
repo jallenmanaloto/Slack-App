@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/Slack-App/static/css/main.af032943.chunk.css",
+    "main.js": "/Slack-App/static/js/main.bbf91a83.chunk.js",
+    "main.js.map": "/Slack-App/static/js/main.bbf91a83.chunk.js.map",
+    "runtime-main.js": "/Slack-App/static/js/runtime-main.e88b86f5.js",
+    "runtime-main.js.map": "/Slack-App/static/js/runtime-main.e88b86f5.js.map",
+    "static/js/2.70b7257b.chunk.js": "/Slack-App/static/js/2.70b7257b.chunk.js",
+    "static/js/2.70b7257b.chunk.js.map": "/Slack-App/static/js/2.70b7257b.chunk.js.map",
+    "static/js/3.b84f7bce.chunk.js": "/Slack-App/static/js/3.b84f7bce.chunk.js",
+    "static/js/3.b84f7bce.chunk.js.map": "/Slack-App/static/js/3.b84f7bce.chunk.js.map",
+    "index.html": "/Slack-App/index.html",
+    "static/css/main.af032943.chunk.css.map": "/Slack-App/static/css/main.af032943.chunk.css.map",
+    "static/js/2.70b7257b.chunk.js.LICENSE.txt": "/Slack-App/static/js/2.70b7257b.chunk.js.LICENSE.txt",
+    "static/media/CatBG.1435b4c2.jpg": "/Slack-App/static/media/CatBG.1435b4c2.jpg",
+    "static/media/Logo.7f82d04e.svg": "/Slack-App/static/media/Logo.7f82d04e.svg",
+    "static/media/TMiBot.d00e8ce6.svg": "/Slack-App/static/media/TMiBot.d00e8ce6.svg",
+    "static/media/sample.32430a93.jpg": "/Slack-App/static/media/sample.32430a93.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.e88b86f5.js",
+    "static/js/2.70b7257b.chunk.js",
+    "static/css/main.af032943.chunk.css",
+    "static/js/main.bbf91a83.chunk.js"
+  ]
+}
