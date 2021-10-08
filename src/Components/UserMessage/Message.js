@@ -170,7 +170,7 @@ const Message = () => {
   const sendMsg = (e) => {
     axios({
       method: "Post",
-      url: "http://206.189.91.54/api/v1/messages",
+      url: "https://slackapi.avionschool.com/api/v1/messages",
       headers: {
         "access-token": authKey.accessToken,
         client: authKey.accessClient,
@@ -220,7 +220,13 @@ const Message = () => {
     setInputMsg((prev) => prev + emojiObject.emoji);
     setShowPicker(false);
   };
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      sendMsg();
+    }
+  };
 
+  console.log(userMessages)
   return (
     <div className={`${classes.root} scroll-active`}>
       <div className={classes.userNameContainer}>
@@ -244,15 +250,17 @@ const Message = () => {
                 const timestamp = new Date(val.created_at);
                 return (
                   <div className={classes.message}>
+                    <div>
                     <Avatar
                       alt="Miyu Togo"
                       src="/broken-image.jpg"
                       className={classes.user}
                     />
+                    </div>
+                    <div style={{marginLeft: '0.8em'}}>
                     <div style={{ display: "flex" }}>
                       <Typography
                         style={{
-                          marginLeft: "0.8em",
                           fontWeight: "bold",
                         }}
                       >
@@ -276,14 +284,12 @@ const Message = () => {
                         position: "relative",
                         fontSize: "1.06rem",
                         color: "#3F3F3F",
-                        marginLeft: "-14.2em",
-                        marginTop: "1.5rem",
-                        marginRight: "5em",
                       }}
                       variant="h6"
                     >
                       {val.body}
                     </Typography>
+                    </div>
                   </div>
                 );
               })}
@@ -296,6 +302,7 @@ const Message = () => {
         placeholder="Message here"
         className={classes.input}
         type="text"
+        onKeyDown={handleKeyDown}
         onChange={(e) => setInputMsg(e.target.value)}
         onClick={() => setShowPicker(false)}
         value={inputMsg}

@@ -103,7 +103,6 @@ const AllUserSearch = ({ openUserModal, setOpenUserModal }) => {
         setReceiverUN(userInfoName);
       })
       .catch((err) => console.log(err.response));
-    handleUserModal();
   };
 
   const userModal = (
