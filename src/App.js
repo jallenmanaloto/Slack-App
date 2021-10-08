@@ -10,8 +10,9 @@ import Registration from "./Components/Registration/Registration";
 import "./App.css";
 
 function App() {
-  const [allUsers, setAllUsers] = useState([]);
   const [allChannels, setAllChannels] = useState([]);
+  const [allUsers, setAllUsers] = useState([]);
+  const [allUsersInfo, setAllUsersInfo] = useState();
   const [apiData, setApiData] = useState([]);
   const [apiHeaders, setApiHeaders] = useState();
   const [auth, setAuth] = useState(false);
@@ -26,8 +27,8 @@ function App() {
   const [messageDisplay, setMessageDisplay] = useState(false);
   const [userMessages, setUserMessages] = useState([]);
   const [userName, setUserName] = useState([]);
-  const [receiverID, setReceiverID] = useState('');
-  const [receiverUN, setReceiverUN] = useState('');
+  const [receiverID, setReceiverID] = useState("");
+  const [receiverUN, setReceiverUN] = useState("");
 
   const [user, setUser] = useState(localStorage.getItem("user"));
 
@@ -39,6 +40,8 @@ function App() {
           setAllChannels,
           allUsers,
           setAllUsers,
+          allUsersInfo,
+          setAllUsersInfo,
           apiData,
           setApiData,
           apiHeaders,
@@ -67,9 +70,9 @@ function App() {
           setUserMessages,
           userName,
           setUserName,
-          receiverID, 
+          receiverID,
           setReceiverID,
-          receiverUN, 
+          receiverUN,
           setReceiverUN,
         }}
       >

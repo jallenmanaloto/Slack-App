@@ -1,4 +1,5 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
+
 import { makeStyles } from "@material-ui/core/styles";
 import { ContextAPI } from "../Context/ContextAPi";
 
@@ -9,28 +10,35 @@ const useStyles = makeStyles((theme) => ({
     },
     maxHeight: "20vh",
     width: "43vw",
-    background: '#ECF0F1',
+    background: "#ECF0F1",
     position: "absolute",
     zIndex: "10",
     width: "56.6%",
     borderBottomLeftRadius: "12px",
     borderBottomRightRadius: "12px",
-    border: '1px solid rgba(120, 120, 120, 0.7)',
-    overflowY: 'scroll'
+    border: "1px solid rgba(120, 120, 120, 0.7)",
+    overflowY: "scroll",
   },
   searchResults: {
-    marginLeft: '3em',
-    marginTop: '1em',
-    color: '#2B2118'
+    marginLeft: "3em",
+    marginTop: "1em",
+    color: "#2B2118",
+    cursor: "pointer",
   },
 }));
 
-const UserSearch = ({ searchBar, searchResult }) => {
+const UserSearch = ({
+  openUserModal,
+  setOpenUserModal,
+  searchBar,
+  setSearchBar,
+}) => {
   const classes = useStyles();
 
   const {
     allUsers,
     setAllUsers,
+    setAllUsersInfo,
     apiData,
     setApiData,
     apiHeaders,
@@ -47,24 +55,35 @@ const UserSearch = ({ searchBar, searchResult }) => {
     setUserName,
   } = useContext(ContextAPI);
 
-  const userSearch = [...JSON.stringify(allUsers)]
+  //declaring all users fetched from API
+  const userSearch = [...JSON.stringify(allUsers)];
 
-  return <div className={classes.root}>
-    {allUsers
-    .filter((val) => {
-      if (searchBar === '') {
-        return val;
-      } else if (JSON.stringify(val.uid).includes(searchBar)) {
-        return val;
-      }
-      return false;
-    })
-    .map((val) => [
-      <div className={classes.searchResults}>
-        {val.uid}
-      </div>
-    ])}
-    </div>;
+  return (
+    <div className={classes.root}>
+      {allUsers
+        .filter((val) => {
+          if (searchBar === "") {
+            return val;
+          } else if (JSON.stringify(val.uid).includes(searchBar)) {
+            return val;
+          }
+          return false;
+        })
+        .map((val) => [
+          <div
+            className={classes.searchResults}
+            onClick={() => {
+              setAllUsersInfo(val);
+              setOpenUserModal(true);
+              setSearchBar("");
+              console.log(val);
+            }}
+          >
+            {val.uid}
+          </div>,
+        ])}
+    </div>
+  );
 };
 
 export default UserSearch;
