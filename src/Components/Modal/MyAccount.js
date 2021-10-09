@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "start",
     flexWrap: "wrap",
-    padding: "1rem",
+    padding: "1rem 0",
     "& > *": {
       margin: theme.spacing(0.5),
     },
