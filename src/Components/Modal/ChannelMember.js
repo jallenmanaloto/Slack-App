@@ -232,28 +232,8 @@ const ChannelMember = () => {
   };
 
   //declaring Contexts for API data
-  const {
-    allUsers,
-    setAllUsers,
-    apiData,
-    setApiData,
-    apiHeaders,
-    setApiHeaders,
-    authKey,
-    setAuthKey,
-    tokenValue,
-    setTokenValue,
-    channelData,
-    setChannelData,
-    channelID,
-    setchannelID,
-    channelMembers,
-    setChannelMembers,
-    channelMessage,
-    setchannelMessage,
-    fetchFilterMembers,
-    setFetchFilterMembers,
-  } = useContext(ContextAPI);
+  const { allUsers, authKey, channelData, channelMembers, setChannelMembers } =
+    useContext(ContextAPI);
 
   useEffect(() => {
     const channelMemberList = channelMembers.map((member) => member.user_id);

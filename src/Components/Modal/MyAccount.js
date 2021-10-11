@@ -49,34 +49,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MyAccount = ({ profileModalOpen, setProfileModalOpen }) => {
-  const {
-    allChannels,
-    setAllChannels,
-    allUsers,
-    setAllUsers,
-    apiData,
-    setApiData,
-    apiHeaders,
-    setApiHeaders,
-    auth,
-    setAuth,
-    authKey,
-    setAuthKey,
-    channelData,
-    setChannelData,
-    channelID,
-    setchannelID,
-    channelMembers,
-    setChannelMembers,
-    channelMessage,
-    setchannelMessage,
-    fetchFilterMembers,
-    setFetchFilterMembers,
-    tokenValue,
-    setTokenValue,
-    userName,
-    setUserName,
-  } = useContext(ContextAPI);
+  const { allChannels, authKey, channelData, userName } =
+    useContext(ContextAPI);
 
   const classes = useStyles();
 

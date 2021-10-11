@@ -19,8 +19,6 @@ function App() {
   const [allChannels, setAllChannels] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
   const [allUsersInfo, setAllUsersInfo] = useState();
-  const [apiData, setApiData] = useState([]);
-  const [apiHeaders, setApiHeaders] = useState();
   const [auth, setAuth] = useState(false);
   const [authKey, setAuthKey] = useState([]);
   const [fetchFilterMembers, setFetchFilterMembers] = useState([]);
@@ -50,10 +48,6 @@ function App() {
           setAllUsers,
           allUsersInfo,
           setAllUsersInfo,
-          apiData,
-          setApiData,
-          apiHeaders,
-          setApiHeaders,
           auth,
           setAuth,
           authKey,

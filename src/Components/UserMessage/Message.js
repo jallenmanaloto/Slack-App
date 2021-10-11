@@ -124,40 +124,11 @@ const useStyles = makeStyles((theme) => ({
 const Message = () => {
   const classes = useStyles();
   const {
-    allChannels,
-    setAllChannels,
-    allUsers,
-    setAllUsers,
-    allUsersInfo,
-    apiData,
-    setApiData,
-    apiHeaders,
-    setApiHeaders,
-    auth,
-    setAuth,
     authKey,
-    setAuthKey,
-    channelData,
-    setChannelData,
-    channelID,
-    setchannelID,
-    channelMembers,
-    setChannelMembers,
-    channelMessage,
-    setchannelMessage,
-    fetchFilterMembers,
-    setFetchFilterMembers,
-    setMessages,
-    tokenValue,
-    setTokenValue,
     userMessages, //CONTAINS THE MESSAGES FROM A USER
     setUserMessages,
-    userName /* Integrate to localstorage to avoid losing userdata on refresh */,
-    setUserName,
     receiverID,
-    setReceiverID,
     receiverUN,
-    setReceiverUN,
   } = useContext(ContextAPI);
 
   const [usersList, setUsersList] = useState([]);
@@ -226,7 +197,7 @@ const Message = () => {
     }
   };
 
-  console.log(userMessages)
+  console.log(userMessages);
   return (
     <div className={`${classes.root} scroll-active`}>
       <div className={classes.userNameContainer}>
@@ -251,44 +222,44 @@ const Message = () => {
                 return (
                   <div className={classes.message}>
                     <div>
-                    <Avatar
-                      alt="Miyu Togo"
-                      src="/broken-image.jpg"
-                      className={classes.user}
-                    />
+                      <Avatar
+                        alt="Miyu Togo"
+                        src="/broken-image.jpg"
+                        className={classes.user}
+                      />
                     </div>
-                    <div style={{marginLeft: '0.8em'}}>
-                    <div style={{ display: "flex" }}>
+                    <div style={{ marginLeft: "0.8em" }}>
+                      <div style={{ display: "flex" }}>
+                        <Typography
+                          style={{
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {val.sender.uid}
+                        </Typography>
+                        <Typography
+                          style={{
+                            marginLeft: "1em",
+                            color: "rgba(50, 74, 95, 0.7)",
+                          }}
+                          variant="subtitle2"
+                        >
+                          {timestamp.toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </Typography>
+                      </div>
                       <Typography
                         style={{
-                          fontWeight: "bold",
+                          position: "relative",
+                          fontSize: "1.06rem",
+                          color: "#3F3F3F",
                         }}
+                        variant="h6"
                       >
-                        {val.sender.uid}
+                        {val.body}
                       </Typography>
-                      <Typography
-                        style={{
-                          marginLeft: "1em",
-                          color: "rgba(50, 74, 95, 0.7)",
-                        }}
-                        variant="subtitle2"
-                      >
-                        {timestamp.toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </Typography>
-                    </div>
-                    <Typography
-                      style={{
-                        position: "relative",
-                        fontSize: "1.06rem",
-                        color: "#3F3F3F",
-                      }}
-                      variant="h6"
-                    >
-                      {val.body}
-                    </Typography>
                     </div>
                   </div>
                 );

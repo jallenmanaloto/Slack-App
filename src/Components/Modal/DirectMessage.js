@@ -53,41 +53,13 @@ const DirectMessage = ({ sendMessageModalOpen, setSendMessageModalOpen }) => {
   const classes = useStyles();
 
   const {
-    allChannels,
-    setAllChannels,
     allUsers,
-    setAllUsers,
-    apiData,
-    setApiData,
-    apiHeaders,
-    setApiHeaders,
-    auth,
-    setAuth,
     authKey,
-    setAuthKey,
-    channelData,
-    setChannelData,
-    channelID,
-    setchannelID,
-    channelMembers,
-    setChannelMembers,
-    channelMessage,
-    setchannelMessage,
-    fetchFilterMembers,
-    setFetchFilterMembers,
-    setMessages,
-    tokenValue,
-    setTokenValue,
-    userMessages,
     setUserMessages,
     receiverID,
     setReceiverID,
-    receiverUN,
     setReceiverUN,
-    messageDisplay,
     setMessageDisplay,
-    userName /* Integrate to localstorage to avoid losing userdata on refresh */,
-    setUserName,
   } = useContext(ContextAPI);
 
   const inputVal = useRef();
@@ -99,10 +71,6 @@ const DirectMessage = ({ sendMessageModalOpen, setSendMessageModalOpen }) => {
     setSendMessageModalOpen(false);
   };
 
-  /* const handleInputValue = () => {
-    setInputValue(inputVal.current.value);
-  };
- */
   const handleGetReceiverID = () => {
     setInputValue(inputVal.current.value);
     for (let i = 0; i < allUsers.length; i++) {
