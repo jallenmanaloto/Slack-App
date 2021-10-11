@@ -34,28 +34,7 @@ const UserSearch = ({
   setSearchBar,
 }) => {
   const classes = useStyles();
-  const {
-    allUsers,
-    setAllUsers,
-    setAllUsersInfo,
-    apiData,
-    setApiData,
-    apiHeaders,
-    setApiHeaders,
-    channelData,
-    setChannelData,
-    channelMembers,
-    setChannelMembers,
-    channelMessage,
-    setchannelMessage,
-    tokenValue,
-    setTokenValue,
-    userName,
-    setUserName,
-  } = useContext(ContextAPI);
-
-  //declaring all users fetched from API
-  const userSearch = [...allUsers];
+  const { allUsers, setAllUsersInfo } = useContext(ContextAPI);
 
   return (
     <div className={classes.root}>

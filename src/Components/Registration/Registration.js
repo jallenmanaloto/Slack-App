@@ -163,8 +163,7 @@ const Registration = () => {
     setPassword("");
     setConfirmPassword("");
   };
-  console.log("errorMsg");
-  console.log(errorMsg);
+
   return (
     <Grid container className={classes.containerBackground}>
       <Grid

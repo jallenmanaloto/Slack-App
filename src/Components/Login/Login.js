@@ -95,25 +95,7 @@ const Login = () => {
 
   const emailInput = useRef();
   const passInput = useRef();
-  const {
-    apiData,
-    setApiData,
-    apiHeaders,
-    setApiHeaders,
-    auth,
-    setAuth,
-    channelData,
-    setChannelData,
-    channelMembers,
-    setChannelMembers,
-    channelMessage,
-    setchannelMessage,
-    setMessages,
-    tokenValue,
-    setTokenValue,
-    userName,
-    setUserName,
-  } = useContext(ContextAPI);
+  const { setAuth, setUserName } = useContext(ContextAPI);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

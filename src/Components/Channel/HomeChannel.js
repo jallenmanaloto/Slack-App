@@ -121,28 +121,7 @@ const HomeChannel = () => {
   const d = `${timeStamp.getHours()}:${timeStamp.getMinutes()}`;
   const time = d.toString();
 
-  const {
-    allUsers,
-    setAllUsers,
-    apiData,
-    setApiData,
-    apiHeaders,
-    setApiHeaders,
-    auth,
-    setAuth,
-    authKey,
-    setAuthKey,
-    channelData,
-    setChannelData,
-    channelMembers,
-    setChannelMembers,
-    channelMessage,
-    setchannelMessage,
-    tokenValue,
-    setTokenValue,
-    userName,
-    setUserName,
-  } = useContext(ContextAPI);
+  const { userName } = useContext(ContextAPI);
 
   useEffect(() => {
     if (!localStorage.getItem("messages")) {

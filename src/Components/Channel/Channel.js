@@ -157,27 +157,8 @@ const StyledBadge = withStyles((theme) => ({
 
 const Channel = () => {
   // declaring values for context
-  const {
-    apiData,
-    setApiData,
-    apiHeaders,
-    setApiHeaders,
-    authKey,
-    setAuthKey,
-    channelData,
-    setChannelData,
-    channelID,
-    setchannelID,
-    channelMembers,
-    setChannelMembers,
-    channelMessage,
-    setchannelMessage,
-    fetchFilterMembers,
-    tokenValue,
-    setTokenValue,
-    userName,
-    setUserName,
-  } = useContext(ContextAPI);
+  const { authKey, channelData, channelID, channelMessage, setchannelMessage } =
+    useContext(ContextAPI);
 
   const classes = useStyles();
   const inputValue = useRef();
@@ -191,7 +172,7 @@ const Channel = () => {
   useEffect(() => {
     axios({
       method: "GET",
-      url: `http://206.189.91.54/api/v1/messages?receiver_id=${channelData.id}&receiver_class=Channel`,
+      url: `https://slackapi.avionschool.com/api/v1/messages?receiver_id=${channelData.id}&receiver_class=Channel`,
       headers: {
         "access-token": authKey.accessToken,
         client: authKey.accessClient,
@@ -292,7 +273,7 @@ const Channel = () => {
                     >
                       <Avatar
                         alt={val.sender.uid}
-                        src="/broken-image.jpg"
+                        src=""
                         className={classes.user}
                       />
                     </StyledBadge>

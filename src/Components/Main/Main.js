@@ -221,31 +221,19 @@ const Main = () => {
     setAllChannels,
     allUsers,
     setAllUsers,
-    apiData,
-    setApiData,
-    apiHeaders,
-    setApiHeaders,
     auth,
     setAuth,
     authKey,
     setAuthKey,
-    channelData,
     setChannelData,
     channelID,
     setchannelID,
-    channelMembers,
     setChannelMembers,
-    channelMessage,
-    setchannelMessage,
     fetchFilterMembers,
     setFetchFilterMembers,
-    setMessages,
     messageDisplay,
     setMessageDisplay,
-    tokenValue,
-    setTokenValue,
     userName /* Integrate to localstorage to avoid losing userdata on refresh */,
-    setUserName,
   } = useContext(ContextAPI);
 
   //Setting states
@@ -279,7 +267,15 @@ const Main = () => {
       },
     })
       .then((res) => {
-        setAllChannels([...res.data.data]);
+        const { data } = res;
+
+        if (data.data) {
+          console.log("not empty");
+          setAllChannels([...res.data.data]);
+        } else {
+          console.log("empty array");
+          setAllChannels([]);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -299,7 +295,6 @@ const Main = () => {
     })
       .then((res) => {
         setAllUsers(res.data.data);
-        console.log(allUsers);
         localStorage.setItem("allUsers", JSON.stringify(allUsers));
       })
       .catch((err) => {
@@ -621,6 +616,7 @@ const Main = () => {
             <AddChannelModal
               setModalOpen={modalOpen}
               closeModal={setModalOpen}
+              setChannelExpand={setChannelExpand}
             />
           ) : null}
           {}

@@ -103,14 +103,8 @@ const AllUserSearch = ({ openUserModal, setOpenUserModal }) => {
   const {
     allChannels,
     allUsersInfo,
-    setAllUsers,
     authKey,
-    channelID,
-    setChannelID,
     setMessageDisplay,
-    receiverID,
-    setReceiverID,
-    userMessages,
     setUserMessages,
     setReceiverUN,
   } = useContext(ContextAPI);

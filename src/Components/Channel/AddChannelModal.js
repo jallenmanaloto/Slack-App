@@ -83,17 +83,8 @@ const useStyles = makeStyles({
   },
 });
 
-const AddChannelModal = ({ setModalOpen, closeModal }) => {
-  const {
-    apiData,
-    setApiData,
-    apiHeaders,
-    setApiHeaders,
-    tokenValue,
-    setTokenValue,
-    channelData,
-    setChannelData,
-  } = useContext(ContextAPI); //fetch api responses => data.token, etc.
+const AddChannelModal = ({ setModalOpen, closeModal, setChannelExpand }) => {
+  const { authKey, setChannelData } = useContext(ContextAPI); //fetch api responses => data.token, etc.
   const classes = useStyles();
 
   const channelName = useRef();
@@ -140,10 +131,10 @@ const AddChannelModal = ({ setModalOpen, closeModal }) => {
       method: "POST",
       url: "https://slackapi.avionschool.com/api/v1/channels",
       headers: {
-        "access-token": tokenValue,
-        client: apiHeaders.client,
-        expiry: apiHeaders.expiry,
-        uid: apiData.data?.data?.uid,
+        "access-token": authKey.accessToken,
+        client: authKey.accessClient,
+        expiry: authKey.accessExpiry,
+        uid: authKey.accessUID,
       },
       data: {
         name: nameInputValue,
@@ -152,6 +143,7 @@ const AddChannelModal = ({ setModalOpen, closeModal }) => {
     })
       .then((res) => {
         setChannelData(res);
+        setChannelExpand(false);
       })
       .catch((err) => {
         console.log(err);
